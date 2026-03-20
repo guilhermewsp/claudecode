@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ØnStack — Mockups — #f9f7f3 #fab23a #222222</title>
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200;300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:#111;color:#222;}
+.page{max-width:1300px;margin:0 auto;padding:40px 20px;}
+.ox{font-family:'Oxanium';font-weight:400;letter-spacing:0.20em;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(250,178,58,0.15),transparent);margin:40px 0;}
+.sl{font-size:8px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:#fab23a;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.sl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(250,178,58,0.2),transparent);}
+
+/* ══ HERO ══ */
+.hero-section{background:#f9f7f3;border-radius:20px;overflow:hidden;margin-bottom:24px;border:1px solid rgba(0,0,0,0.04);}
+.hero-nav{padding:16px 32px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(0,0,0,0.05);}
+.hero-nav .logo{font-family:'Oxanium';font-weight:400;font-size:15px;letter-spacing:0.18em;color:#222;}
+.hero-nav .links{display:flex;gap:28px;font-size:13px;color:#888;font-weight:400;}
+.hero-nav .cta{font-size:12px;color:#f9f7f3;background:#222;padding:8px 20px;border-radius:8px;font-weight:500;}
+.hero-body{padding:80px 48px;text-align:center;}
+.hero-body h1{font-family:'Oxanium';font-weight:400;font-size:46px;letter-spacing:0.02em;line-height:1.15;color:#222;margin-bottom:16px;}
+.hero-body h1 b{color:#fab23a;font-weight:400;}
+.hero-body p{font-size:15px;color:#777;max-width:440px;margin:0 auto 28px;line-height:1.6;}
+.hero-body .btns{display:flex;gap:12px;justify-content:center;}
+.hero-body .btn-p{background:#222;color:#f9f7f3;padding:12px 28px;border-radius:8px;font-size:13px;font-weight:500;}
+.hero-body .btn-s{background:transparent;color:#222;padding:12px 28px;border-radius:8px;font-size:13px;border:1px solid rgba(0,0,0,0.12);}
+
+/* ══ DARK HERO ══ */
+.hero-dark{background:#222;border-radius:20px;overflow:hidden;margin-bottom:24px;}
+.hero-dark .hero-nav{border-bottom:1px solid rgba(255,255,255,0.06);}
+.hero-dark .hero-nav .logo{color:#f9f7f3;}
+.hero-dark .hero-nav .links{color:#666;}
+.hero-dark .hero-nav .cta{background:#fab23a;color:#222;}
+.hero-dark .hero-body h1{color:#f9f7f3;}
+.hero-dark .hero-body h1 b{color:#fab23a;}
+.hero-dark .hero-body p{color:#777;}
+.hero-dark .hero-body .btn-p{background:#fab23a;color:#222;}
+.hero-dark .hero-body .btn-s{color:#999;border-color:rgba(255,255,255,0.08);}
+
+/* ══ DASHBOARD ══ */
+.dash{background:#f9f7f3;border-radius:20px;overflow:hidden;margin-bottom:24px;border:1px solid rgba(0,0,0,0.04);}
+.dash-bar{height:36px;background:#fff;border-bottom:1px solid rgba(0,0,0,0.05);display:flex;align-items:center;padding:0 14px;gap:6px;}
+.dash-bar .dot{width:10px;height:10px;border-radius:50%;}
+.dash-wrap{display:flex;}
+.dash-side{width:220px;background:#fff;border-right:1px solid rgba(0,0,0,0.05);padding:20px 16px;flex-shrink:0;}
+.dash-side .logo-sm{font-family:'Oxanium';font-weight:400;font-size:13px;letter-spacing:0.16em;color:#222;margin-bottom:24px;}
+.dash-side .nav-item{padding:8px 12px;font-size:12px;color:#999;border-radius:8px;margin-bottom:2px;font-weight:400;}
+.dash-side .nav-item.active{background:rgba(250,178,58,0.1);color:#222;font-weight:500;}
+.dash-side .nav-item.active::before{content:'';display:inline-block;width:4px;height:4px;background:#fab23a;border-radius:50%;margin-right:8px;}
+.dash-main{flex:1;padding:24px 28px;}
+.dash-main .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
+.dash-main .top h2{font-family:'Oxanium';font-weight:400;font-size:20px;letter-spacing:0.04em;color:#222;}
+.dash-main .top .btn{font-size:12px;color:#222;background:#fab23a;padding:8px 18px;border-radius:8px;font-weight:500;}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.kpi{background:#fff;border:1px solid rgba(0,0,0,0.04);border-radius:12px;padding:16px;}
+.kpi .label{font-size:11px;color:#999;margin-bottom:6px;}
+.kpi .val{font-family:'JetBrains Mono';font-weight:600;font-size:22px;color:#222;}
+.kpi .delta{font-size:10px;margin-top:4px;}
+.kpi .delta.up{color:#16A34A;}
+.kpi .delta.blue{color:#fab23a;}
+.chart{background:#fff;border:1px solid rgba(0,0,0,0.04);border-radius:12px;padding:20px;margin-bottom:16px;}
+.chart .title{font-size:12px;font-weight:600;color:#222;margin-bottom:14px;}
+.chart-bars{display:flex;align-items:flex-end;gap:6px;height:120px;}
+.chart-bars div{flex:1;border-radius:4px 4px 0 0;transition:all .3s;}
+.chart-bars div:hover{opacity:0.8;}
+/* Table */
+.tbl{background:#fff;border:1px solid rgba(0,0,0,0.04);border-radius:12px;overflow:hidden;}
+.tbl-hdr{display:grid;grid-template-columns:2fr 1.5fr 1fr 1fr 0.8fr;padding:10px 16px;font-size:10px;font-weight:600;color:#999;border-bottom:1px solid rgba(0,0,0,0.04);letter-spacing:0.04em;text-transform:uppercase;}
+.tbl-row{display:grid;grid-template-columns:2fr 1.5fr 1fr 1fr 0.8fr;padding:12px 16px;font-size:12px;color:#222;border-bottom:1px solid rgba(0,0,0,0.02);align-items:center;}
+.tbl-row:last-child{border-bottom:none;}
+.badge{font-size:10px;padding:3px 8px;border-radius:4px;font-weight:500;}
+.badge-ok{background:rgba(22,163,74,0.08);color:#16A34A;}
+.badge-pen{background:rgba(250,178,58,0.1);color:#D97706;}
+.badge-err{background:rgba(220,38,38,0.06);color:#DC2626;}
+
+/* ══ DARK DASHBOARD ══ */
+.dash-d{background:#1a1a1a;}
+.dash-d .dash-bar{background:#222;border-bottom-color:rgba(255,255,255,0.04);}
+.dash-d .dash-side{background:#1e1e1e;border-right-color:rgba(255,255,255,0.04);}
+.dash-d .dash-side .logo-sm{color:#f9f7f3;}
+.dash-d .dash-side .nav-item{color:#666;}
+.dash-d .dash-side .nav-item.active{background:rgba(250,178,58,0.08);color:#f9f7f3;}
+.dash-d .dash-main .top h2{color:#f9f7f3;}
+.dash-d .kpi{background:#222;border-color:rgba(255,255,255,0.04);}
+.dash-d .kpi .label{color:#666;}
+.dash-d .kpi .val{color:#f9f7f3;}
+.dash-d .chart{background:#222;border-color:rgba(255,255,255,0.04);}
+.dash-d .chart .title{color:#f9f7f3;}
+.dash-d .tbl{background:#222;border-color:rgba(255,255,255,0.04);}
+.dash-d .tbl-hdr{color:#666;border-bottom-color:rgba(255,255,255,0.04);}
+.dash-d .tbl-row{color:#ccc;border-bottom-color:rgba(255,255,255,0.02);}
+
+/* ══ TRANSFER FLOW ══ */
+.flow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px;}
+.flow-step{background:#fff;border:1px solid rgba(0,0,0,0.04);border-radius:14px;padding:24px;text-align:center;}
+.flow-step .num{width:32px;height:32px;background:#fab23a;color:#222;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;margin:0 auto 12px;}
+.flow-step h3{font-size:14px;font-weight:600;color:#222;margin-bottom:6px;}
+.flow-step p{font-size:11px;color:#999;line-height:1.5;}
+.flow-arrow{display:flex;align-items:center;justify-content:center;color:#fab23a;font-size:20px;}
+
+/* Mobile */
+.mobile{width:320px;background:#222;border-radius:36px;border:2px solid rgba(255,255,255,0.06);padding:12px;margin:0 auto 24px;box-shadow:0 20px 60px rgba(0,0,0,0.4);}
+.mobile-inner{background:#1a1a1a;border-radius:26px;overflow:hidden;}
+.mobile-status{padding:8px 20px;display:flex;justify-content:space-between;font-size:11px;color:#666;}
+.mobile-content{padding:20px 20px 24px;}
+
+@media(max-width:800px){.kpis{grid-template-columns:1fr 1fr;}.flow{grid-template-columns:1fr;}.dash-wrap{flex-direction:column;}.dash-side{width:100%;border-right:none;border-bottom:1px solid rgba(0,0,0,0.05);}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ══════════ LIGHT WEBSITE ══════════ -->
+<div class="sl">Website — Light (#f9f7f3)</div>
+<div class="hero-section">
+  <div class="hero-nav">
+    <span class="logo">ØNSTACK</span>
+    <div class="links"><span>Products</span><span>Developers</span><span>Pricing</span><span>Company</span></div>
+    <span class="cta">Get Started</span>
+  </div>
+  <div class="hero-body">
+    <h1>Cross-border in<br><b>under 5 minutes</b></h1>
+    <p>Regulated FX + stablecoin rails. One API for remittances, institutional FX, and iGaming settlements.</p>
+    <div class="btns">
+      <span class="btn-p">Start Building</span>
+      <span class="btn-s">Documentation</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ DARK WEBSITE ══════════ -->
+<div class="sl">Website — Dark (#222222)</div>
+<div class="hero-dark">
+  <div class="hero-nav">
+    <span class="logo">ØNSTACK</span>
+    <div class="links"><span>Products</span><span>Developers</span><span>Pricing</span><span>Company</span></div>
+    <span class="cta">Get Started</span>
+  </div>
+  <div class="hero-body">
+    <h1>FX without<br><b>borders</b></h1>
+    <p>Stablecoin-powered settlement. BACEN compliant. API-first. Brazil to the world.</p>
+    <div class="btns">
+      <span class="btn-p">Get Started</span>
+      <span class="btn-s">Learn More</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TRANSFER FLOW ══════════ -->
+<div class="sl">RemitFX — Transfer Flow</div>
+<div style="background:#f9f7f3;border-radius:20px;padding:32px;margin-bottom:24px;border:1px solid rgba(0,0,0,0.04);">
+  <div style="text-align:center;margin-bottom:24px;">
+    <div style="font-size:10px;color:#fab23a;letter-spacing:0.14em;font-weight:600;margin-bottom:4px;">REMITFX</div>
+    <div style="font-family:'Oxanium';font-weight:400;font-size:24px;color:#222;letter-spacing:0.04em;">Send money in 3 steps</div>
+  </div>
+  <div class="flow">
+    <div class="flow-step">
+      <div class="num">1</div>
+      <h3>Deposit BRL</h3>
+      <p>Via PIX. Instant. Enter amount and destination currency.</p>
+    </div>
+    <div class="flow-step">
+      <div class="num">2</div>
+      <h3>Lock Rate</h3>
+      <p>FX rate locked. NDF hedge applied. Compliance auto-check.</p>
+    </div>
+    <div class="flow-step">
+      <div class="num">3</div>
+      <h3>Settlement</h3>
+      <p>USDC sent via Morph L2. BACEN reporting automatic. Done.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ LIGHT DASHBOARD ══════════ -->
+<div class="sl">Dashboard — Light</div>
+<div class="dash">
+  <div class="dash-bar">
+    <div class="dot" style="background:#FF5F57;"></div>
+    <div class="dot" style="background:#FEBC2E;"></div>
+    <div class="dot" style="background:#28C840;"></div>
+    <span style="margin-left:12px;font-size:11px;color:#999;">app.onstack.io</span>
+  </div>
+  <div class="dash-wrap">
+    <div class="dash-side">
+      <div class="logo-sm">ØNSTACK</div>
+      <div class="nav-item active">Dashboard</div>
+      <div class="nav-item">Transfers</div>
+      <div class="nav-item">Exchange Hub</div>
+      <div class="nav-item">Compliance</div>
+      <div class="nav-item">Analytics</div>
+      <div class="nav-item">Settings</div>
+    </div>
+    <div class="dash-main">
+      <div class="top">
+        <div><span style="font-size:11px;color:#999;">Welcome back</span><h2>Overview</h2></div>
+        <span class="btn">+ New Transfer</span>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><div class="label">Volume (MTD)</div><div class="val">R$ 2.4M</div><div class="delta up">+12.3%</div></div>
+        <div class="kpi"><div class="label">Active Clients</div><div class="val">847</div><div class="delta up">+34 this week</div></div>
+        <div class="kpi"><div class="label">Avg Settlement</div><div class="val">3.2 min</div><div class="delta blue">Target: < 5 min</div></div>
+        <div class="kpi"><div class="label">Revenue (MTD)</div><div class="val">R$ 168K</div><div class="delta up">Take rate: 0.7%</div></div>
+      </div>
+      <div class="chart">
+        <div class="title">Volume (7d)</div>
+        <div class="chart-bars">
+          <div style="height:40%;background:#fab23a;opacity:0.4;"></div>
+          <div style="height:55%;background:#fab23a;opacity:0.5;"></div>
+          <div style="height:35%;background:#fab23a;opacity:0.4;"></div>
+          <div style="height:70%;background:#fab23a;opacity:0.6;"></div>
+          <div style="height:65%;background:#fab23a;opacity:0.55;"></div>
+          <div style="height:90%;background:#fab23a;opacity:0.8;"></div>
+          <div style="height:80%;background:#fab23a;opacity:0.7;"></div>
+        </div>
+      </div>
+      <div class="tbl">
+        <div class="tbl-hdr"><span>Client</span><span>Type</span><span>Amount</span><span>Rate</span><span>Status</span></div>
+        <div class="tbl-row"><span>Bybit Brasil</span><span>Exchange Hub</span><span class="mono" style="font-size:12px;">R$ 450,000</span><span class="mono" style="font-size:12px;">5.148</span><span><span class="badge badge-ok">Settled</span></span></div>
+        <div class="tbl-row"><span>ABC Importadora</span><span>RemitFX</span><span class="mono" style="font-size:12px;">R$ 52,300</span><span class="mono" style="font-size:12px;">5.152</span><span><span class="badge badge-ok">Settled</span></span></div>
+        <div class="tbl-row"><span>BetNacional</span><span>iGaming Rails</span><span class="mono" style="font-size:12px;">R$ 180,000</span><span class="mono" style="font-size:12px;">5.145</span><span><span class="badge badge-pen">Pending</span></span></div>
+        <div class="tbl-row"><span>OKX Latam</span><span>Exchange Hub</span><span class="mono" style="font-size:12px;">R$ 1,200,000</span><span class="mono" style="font-size:12px;">5.150</span><span><span class="badge badge-ok">Settled</span></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ DARK DASHBOARD ══════════ -->
+<div class="sl">Dashboard — Dark</div>
+<div class="dash dash-d">
+  <div class="dash-bar">
+    <div class="dot" style="background:#FF5F57;"></div>
+    <div class="dot" style="background:#FEBC2E;"></div>
+    <div class="dot" style="background:#28C840;"></div>
+    <span style="margin-left:12px;font-size:11px;color:#555;">app.onstack.io</span>
+  </div>
+  <div class="dash-wrap">
+    <div class="dash-side">
+      <div class="logo-sm">ØNSTACK</div>
+      <div class="nav-item active">Dashboard</div>
+      <div class="nav-item">Transfers</div>
+      <div class="nav-item">Exchange Hub</div>
+      <div class="nav-item">Compliance</div>
+      <div class="nav-item">Analytics</div>
+      <div class="nav-item">Settings</div>
+    </div>
+    <div class="dash-main">
+      <div class="top">
+        <div><span style="font-size:11px;color:#666;">Welcome back</span><h2>Overview</h2></div>
+        <span class="btn">+ New Transfer</span>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><div class="label">Volume (MTD)</div><div class="val">R$ 2.4M</div><div class="delta up">+12.3%</div></div>
+        <div class="kpi"><div class="label">Active Clients</div><div class="val">847</div><div class="delta up">+34 this week</div></div>
+        <div class="kpi"><div class="label">Avg Settlement</div><div class="val">3.2 min</div><div class="delta" style="color:#fab23a;">Target: < 5 min</div></div>
+        <div class="kpi"><div class="label">Revenue (MTD)</div><div class="val">R$ 168K</div><div class="delta up">Take rate: 0.7%</div></div>
+      </div>
+      <div class="chart">
+        <div class="title">Volume (7d)</div>
+        <div class="chart-bars">
+          <div style="height:40%;background:#fab23a;opacity:0.3;"></div>
+          <div style="height:55%;background:#fab23a;opacity:0.4;"></div>
+          <div style="height:35%;background:#fab23a;opacity:0.3;"></div>
+          <div style="height:70%;background:#fab23a;opacity:0.5;"></div>
+          <div style="height:65%;background:#fab23a;opacity:0.45;"></div>
+          <div style="height:90%;background:#fab23a;opacity:0.7;"></div>
+          <div style="height:80%;background:#fab23a;opacity:0.6;"></div>
+        </div>
+      </div>
+      <div class="tbl">
+        <div class="tbl-hdr"><span>Client</span><span>Type</span><span>Amount</span><span>Rate</span><span>Status</span></div>
+        <div class="tbl-row"><span>Bybit Brasil</span><span>Exchange Hub</span><span class="mono" style="font-size:12px;">R$ 450,000</span><span class="mono" style="font-size:12px;">5.148</span><span><span class="badge badge-ok">Settled</span></span></div>
+        <div class="tbl-row"><span>ABC Importadora</span><span>RemitFX</span><span class="mono" style="font-size:12px;">R$ 52,300</span><span class="mono" style="font-size:12px;">5.152</span><span><span class="badge badge-ok">Settled</span></span></div>
+        <div class="tbl-row"><span>BetNacional</span><span>iGaming Rails</span><span class="mono" style="font-size:12px;">R$ 180,000</span><span class="mono" style="font-size:12px;">5.145</span><span><span class="badge badge-pen">Pending</span></span></div>
+        <div class="tbl-row"><span>OKX Latam</span><span>Exchange Hub</span><span class="mono" style="font-size:12px;">R$ 1,200,000</span><span class="mono" style="font-size:12px;">5.150</span><span><span class="badge badge-ok">Settled</span></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MOBILE ══════════ -->
+<div class="sl">Mobile App</div>
+<div class="mobile">
+  <div class="mobile-inner">
+    <div class="mobile-status"><span>9:41</span><span>100%</span></div>
+    <div class="mobile-content">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+        <span style="font-family:'Oxanium';font-weight:400;font-size:14px;letter-spacing:0.16em;color:#f9f7f3;">ØNSTACK</span>
+        <div style="width:32px;height:32px;border-radius:50%;background:rgba(250,178,58,0.15);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fab23a;font-weight:700;">GP</div>
+      </div>
+      <div style="font-size:12px;color:#666;margin-bottom:4px;">Your balance</div>
+      <div style="font-family:'JetBrains Mono';font-weight:600;font-size:30px;color:#f9f7f3;margin-bottom:4px;">R$ 124,850<span style="font-size:18px;color:#666;">.00</span></div>
+      <div style="font-size:11px;color:#16A34A;margin-bottom:22px;">≈ US$ 24,242.72</div>
+      <div style="display:flex;gap:8px;margin-bottom:24px;">
+        <div style="flex:1;background:#fab23a;padding:12px;border-radius:10px;text-align:center;font-size:12px;font-weight:600;color:#222;">Send</div>
+        <div style="flex:1;background:rgba(255,255,255,0.04);padding:12px;border-radius:10px;text-align:center;font-size:12px;color:#888;border:1px solid rgba(255,255,255,0.04);">Receive</div>
+        <div style="flex:1;background:rgba(255,255,255,0.04);padding:12px;border-radius:10px;text-align:center;font-size:12px;color:#888;border:1px solid rgba(255,255,255,0.04);">Swap</div>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:#f9f7f3;margin-bottom:12px;">Recent</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;padding:10px 12px;background:rgba(255,255,255,0.02);border-radius:10px;">
+          <div><div style="font-size:12px;color:#f9f7f3;">Remittance to CNY</div><div style="font-size:10px;color:#555;">RemitFX · 2 min ago</div></div>
+          <div style="text-align:right;"><div style="font-size:12px;font-family:'JetBrains Mono';color:#f9f7f3;">-R$ 50,000</div><div style="font-size:10px;color:#16A34A;">Settled</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:10px 12px;background:rgba(255,255,255,0.02);border-radius:10px;">
+          <div><div style="font-size:12px;color:#f9f7f3;">USDC → BRL</div><div style="font-size:10px;color:#555;">Exchange · 1h ago</div></div>
+          <div style="text-align:right;"><div style="font-size:12px;font-family:'JetBrains Mono';color:#f9f7f3;">+R$ 25,400</div><div style="font-size:10px;color:#16A34A;">Complete</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:10px 12px;background:rgba(255,255,255,0.02);border-radius:10px;">
+          <div><div style="font-size:12px;color:#f9f7f3;">iGaming Payout</div><div style="font-size:10px;color:#555;">Rails · 3h ago</div></div>
+          <div style="text-align:right;"><div style="font-size:12px;font-family:'JetBrains Mono';color:#f9f7f3;">-R$ 100,000</div><div style="font-size:10px;color:#D97706;">Pending</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ COLOR PALETTE ══════════ -->
+<div class="sl">Color Palette — Spec</div>
+<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;">
+  <div style="text-align:center;">
+    <div style="width:100px;height:100px;background:#f9f7f3;border-radius:14px;border:1px solid rgba(0,0,0,0.06);margin-bottom:6px;"></div>
+    <div style="font-size:10px;font-weight:600;color:#f9f7f3;">#F9F7F3</div>
+    <div style="font-size:8px;color:#555;">Warm White</div>
+  </div>
+  <div style="text-align:center;">
+    <div style="width:100px;height:100px;background:#fab23a;border-radius:14px;margin-bottom:6px;"></div>
+    <div style="font-size:10px;font-weight:600;color:#fab23a;">#FAB23A</div>
+    <div style="font-size:8px;color:#555;">Gold Accent</div>
+  </div>
+  <div style="text-align:center;">
+    <div style="width:100px;height:100px;background:#222;border-radius:14px;margin-bottom:6px;"></div>
+    <div style="font-size:10px;font-weight:600;color:#ccc;">#222222</div>
+    <div style="font-size:8px;color:#555;">Near Black</div>
+  </div>
+  <div style="text-align:center;">
+    <div style="width:100px;height:100px;background:#fff;border-radius:14px;border:1px solid rgba(0,0,0,0.06);margin-bottom:6px;"></div>
+    <div style="font-size:10px;font-weight:600;color:#ccc;">#FFFFFF</div>
+    <div style="font-size:8px;color:#555;">Pure White</div>
+  </div>
+  <div style="text-align:center;">
+    <div style="width:100px;height:100px;background:#16A34A;border-radius:14px;margin-bottom:6px;"></div>
+    <div style="font-size:10px;font-weight:600;color:#16A34A;">#16A34A</div>
+    <div style="font-size:8px;color:#555;">Success</div>
+  </div>
+  <div style="text-align:center;">
+    <div style="width:100px;height:100px;background:#DC2626;border-radius:14px;margin-bottom:6px;"></div>
+    <div style="font-size:10px;font-weight:600;color:#DC2626;">#DC2626</div>
+    <div style="font-size:8px;color:#555;">Error</div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:28px 0;font-size:8px;color:#333;">ØnStack v13 · Mockups · Oxanium 400 · #f9f7f3 #fab23a #222222 · CONFIDENTIAL · March 2026</div>
+
+</div>
+</body>
+</html>
