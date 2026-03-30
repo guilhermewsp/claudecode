@@ -12,28 +12,29 @@
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200;300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --gold: #E8A020;
-  --gold-bright: #F5B740;
-  --gold-dim: rgba(232,160,32,0.12);
-  --gold-line: rgba(232,160,32,0.06);
-  --dark: #090909;
-  --dark-2: #0F0F0F;
-  --surface: #141414;
-  --surface-2: #1A1A1A;
-  --surface-3: #222;
-  --warm: #FAF8F4;
-  --warm-2: #F0EDE6;
-  --text: #E8E6E1;
-  --text-muted: #8A8780;
-  --text-dim: #5A5850;
-  --white: #FAFAFA;
-  --red: #E04040;
-  --green: #34C759;
-  --fd: 'Space Grotesk', sans-serif;
-  --fb: 'DM Sans', sans-serif;
+  --gold: #f08c00;
+  --gold-bright: #f5a623;
+  --gold-dim: rgba(240,140,0,0.12);
+  --gold-line: rgba(240,140,0,0.06);
+  --gold-dark: #c7841a;
+  --dark: #0d0d0d;
+  --dark-2: #111111;
+  --surface: #1a1a1a;
+  --surface-2: #222222;
+  --surface-3: #2a2a2a;
+  --warm: #f9f7f3;
+  --warm-2: #f0ede6;
+  --text: #e8e6e1;
+  --text-muted: #999690;
+  --text-dim: #5a5850;
+  --white: #fafafa;
+  --red: #DC2626;
+  --green: #16A34A;
+  --fd: 'Oxanium', sans-serif;
+  --fb: 'Inter', sans-serif;
   --fm: 'JetBrains Mono', monospace;
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -102,19 +103,18 @@ section { position: relative; }
   background: rgba(9,9,9,0.75);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(232,160,32,0.06);
+  border: 1px solid rgba(240,140,0,0.06);
   border-radius: 16px;
   transition: background 0.3s var(--ease);
 }
 .nav-logo {
   font-family: var(--fd);
-  font-weight: 600;
-  font-size: 20px;
-  letter-spacing: 0.14em;
-  color: var(--white);
+  font-weight: 400;
+  font-size: 18px;
+  letter-spacing: 0.18em;
+  color: var(--warm);
   text-decoration: none;
 }
-.nav-logo i { font-style: normal; color: var(--gold); }
 .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
 .nav-links a {
   font-family: var(--fb);
@@ -142,7 +142,7 @@ section { position: relative; }
   cursor: pointer;
   transition: transform 0.2s var(--ease), box-shadow 0.3s var(--ease);
 }
-.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(232,160,32,0.25); }
+.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(240,140,0,0.25); }
 .nav-burger { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
 .nav-burger span { display: block; width: 22px; height: 2px; background: var(--white); border-radius: 2px; margin: 5px 0; transition: transform 0.3s var(--ease); }
 
@@ -168,7 +168,7 @@ section { position: relative; }
   width: 800px;
   height: 800px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(232,160,32,0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(240,140,0,0.08) 0%, transparent 70%);
   top: -200px;
   left: 50%;
   transform: translateX(-50%);
@@ -182,12 +182,12 @@ section { position: relative; }
 .hero-orb {
   position: absolute;
   border-radius: 50%;
-  border: 1px solid rgba(232,160,32,0.08);
+  border: 1px solid rgba(240,140,0,0.08);
   pointer-events: none;
   animation: orb-spin 40s linear infinite;
 }
 .hero-orb-1 { width: 600px; height: 600px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
-.hero-orb-2 { width: 420px; height: 420px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-direction: reverse; animation-duration: 30s; border-color: rgba(232,160,32,0.04); }
+.hero-orb-2 { width: 420px; height: 420px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-direction: reverse; animation-duration: 30s; border-color: rgba(240,140,0,0.04); }
 @keyframes orb-spin { from { transform: translate(-50%,-50%) rotate(0); } to { transform: translate(-50%,-50%) rotate(360deg); } }
 
 .hero-badge {
@@ -197,7 +197,7 @@ section { position: relative; }
   text-transform: uppercase;
   color: var(--gold);
   background: var(--gold-dim);
-  border: 1px solid rgba(232,160,32,0.15);
+  border: 1px solid rgba(240,140,0,0.15);
   padding: 8px 20px;
   border-radius: 100px;
   margin-bottom: 40px;
@@ -261,7 +261,7 @@ section { position: relative; }
   opacity: 0;
   transition: opacity 0.3s;
 }
-.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(232,160,32,0.3); }
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(240,140,0,0.3); }
 .btn-primary:hover::before { opacity: 1; }
 
 .btn-ghost {
@@ -280,7 +280,7 @@ section { position: relative; }
   text-decoration: none;
   transition: border-color 0.25s var(--ease), background 0.25s var(--ease), transform 0.25s var(--ease);
 }
-.btn-ghost:hover { border-color: var(--gold); background: rgba(232,160,32,0.05); transform: translateY(-2px); }
+.btn-ghost:hover { border-color: var(--gold); background: rgba(240,140,0,0.05); transform: translateY(-2px); }
 
 /* Hero stats bar */
 .hero-stats {
@@ -583,7 +583,7 @@ section { position: relative; }
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
-.editor-tab.active { background: rgba(232,160,32,0.1); color: var(--gold); }
+.editor-tab.active { background: rgba(240,140,0,0.1); color: var(--gold); }
 .editor-body {
   padding: 24px;
   font-family: var(--fm);
@@ -640,7 +640,7 @@ section { position: relative; }
   height: 56px;
   border-radius: 16px;
   background: var(--gold-dim);
-  border: 1px solid rgba(232,160,32,0.12);
+  border: 1px solid rgba(240,140,0,0.12);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -693,7 +693,7 @@ section { position: relative; }
 }
 .comp-table th.hl {
   color: var(--gold);
-  background: rgba(232,160,32,0.06);
+  background: rgba(240,140,0,0.06);
 }
 .comp-table td {
   padding: 16px 24px;
@@ -703,7 +703,7 @@ section { position: relative; }
 }
 .comp-table td.hl {
   color: var(--gold);
-  background: rgba(232,160,32,0.03);
+  background: rgba(240,140,0,0.03);
   font-weight: 500;
 }
 .comp-table tr:last-child td { border-bottom: none; }
@@ -750,13 +750,12 @@ section { position: relative; }
 
 .dash-side-logo {
   font-family: var(--fd);
-  font-weight: 600;
-  font-size: 16px;
-  color: var(--white);
-  letter-spacing: 0.12em;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--warm);
+  letter-spacing: 0.18em;
   margin-bottom: 28px;
 }
-.dash-side-logo i { font-style: normal; color: var(--gold); }
 
 .dash-nav-item {
   display: flex;
@@ -895,7 +894,7 @@ section { position: relative; }
   text-align: center;
   transition: border-color 0.3s var(--ease), transform 0.3s var(--ease);
 }
-.team-card:hover { border-color: rgba(232,160,32,0.15); transform: translateY(-4px); }
+.team-card:hover { border-color: rgba(240,140,0,0.15); transform: translateY(-4px); }
 
 .team-avatar {
   width: 72px;
@@ -903,7 +902,7 @@ section { position: relative; }
   border-radius: 50%;
   overflow: hidden;
   margin: 0 auto 16px;
-  border: 2px solid rgba(232,160,32,0.2);
+  border: 2px solid rgba(240,140,0,0.2);
 }
 .team-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .team-name { font-family: var(--fd); font-size: 16px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
@@ -936,7 +935,7 @@ section { position: relative; }
   width: 600px;
   height: 600px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(232,160,32,0.06) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(240,140,0,0.06) 0%, transparent 70%);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -971,13 +970,12 @@ footer {
 }
 .footer-logo {
   font-family: var(--fd);
-  font-weight: 600;
-  font-size: 18px;
-  letter-spacing: 0.14em;
-  color: var(--white);
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 0.18em;
+  color: var(--warm);
   text-decoration: none;
 }
-.footer-logo i { font-style: normal; color: var(--gold); }
 .footer-links { display: flex; gap: 24px; }
 .footer-links a {
   font-size: 13px;
@@ -1001,7 +999,7 @@ footer {
 <!-- ===== NAVBAR ===== -->
 <div class="nav-wrap">
   <nav class="nav">
-    <a href="#" class="nav-logo">ØN<i>ST</i>ACK</a>
+    <a href="#" class="nav-logo">ØNSTACK</a>
     <ul class="nav-links">
       <li><a href="#products">Products</a></li>
       <li><a href="#api">API</a></li>
@@ -1333,7 +1331,7 @@ transfer <span class="op">=</span> client<span class="op">.</span>transfers<span
 
     <div class="dash-frame rv d2">
       <div class="dash-side">
-        <div class="dash-side-logo">ØN<i>ST</i>ACK</div>
+        <div class="dash-side-logo">ØNSTACK</div>
         <div class="dash-nav-item active">
           <svg viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
           Dashboard
@@ -1368,10 +1366,10 @@ transfer <span class="op">=</span> client<span class="op">.</span>transfers<span
         <div class="dash-chart">
           <div class="dash-chart-label">SETTLEMENT VOLUME — LAST 7 DAYS (USD M)</div>
           <svg viewBox="0 0 700 80" preserveAspectRatio="none">
-            <defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(232,160,32,0.3)"/><stop offset="100%" stop-color="rgba(232,160,32,0)"/></linearGradient></defs>
+            <defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(240,140,0,0.3)"/><stop offset="100%" stop-color="rgba(240,140,0,0)"/></linearGradient></defs>
             <polygon points="0,80 0,62 100,55 200,48 300,38 400,32 500,22 600,15 700,8 700,80" fill="url(#cg)"/>
-            <polyline points="0,62 100,55 200,48 300,38 400,32 500,22 600,15 700,8" fill="none" stroke="#E8A020" stroke-width="2"/>
-            <circle cx="700" cy="8" r="4" fill="#E8A020"/>
+            <polyline points="0,62 100,55 200,48 300,38 400,32 500,22 600,15 700,8" fill="none" stroke="#f08c00" stroke-width="2"/>
+            <circle cx="700" cy="8" r="4" fill="#f08c00"/>
           </svg>
         </div>
         <div class="dash-tbl">
@@ -1462,7 +1460,7 @@ transfer <span class="op">=</span> client<span class="op">.</span>transfers<span
 <footer>
   <div class="wrap">
     <div class="footer-inner">
-      <a href="#" class="footer-logo">ØN<i>ST</i>ACK</a>
+      <a href="#" class="footer-logo">ØNSTACK</a>
       <div class="footer-links">
         <a href="#products">Products</a>
         <a href="#api">API Docs</a>
