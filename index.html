@@ -31,6 +31,7 @@
   --font-mono: 'JetBrains Mono', monospace;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-reveal: cubic-bezier(0.22, 0.68, 0, 1);
   --size-xs: clamp(0.625rem, 0.56rem + 0.28vw, 0.75rem);
   --size-sm: clamp(0.75rem, 0.68rem + 0.35vw, 0.875rem);
   --size-base: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
@@ -93,27 +94,34 @@ body::before {
 }
 
 /* ============================================
-   SCROLL REVEAL
+   STAGGER REVEAL ANIMATIONS
    ============================================ */
 .reveal {
   opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+  transform: translateY(40px);
+  filter: blur(4px);
+  transition: opacity 0.8s var(--ease-reveal), transform 0.8s var(--ease-reveal), filter 0.8s var(--ease-reveal);
 }
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
+  filter: blur(0);
 }
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-.reveal-delay-4 { transition-delay: 0.4s; }
-.reveal-delay-5 { transition-delay: 0.5s; }
+.stagger-1 { transition-delay: 0.08s; }
+.stagger-2 { transition-delay: 0.16s; }
+.stagger-3 { transition-delay: 0.24s; }
+.stagger-4 { transition-delay: 0.32s; }
+.stagger-5 { transition-delay: 0.40s; }
+.stagger-6 { transition-delay: 0.48s; }
+.stagger-7 { transition-delay: 0.56s; }
+.stagger-8 { transition-delay: 0.64s; }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; transform: none; transition: none; }
+  .reveal { opacity: 1; transform: none; filter: none; transition: none; }
   .marquee-track { animation: none !important; }
   .traveling-dot { display: none; }
+  .hero-exchange-svg * { animation: none !important; }
+  #globeCanvas { display: none; }
 }
 
 /* ============================================
@@ -138,6 +146,24 @@ body::before {
   color: var(--warm);
   margin-bottom: var(--space-lg);
   max-width: 720px;
+  position: relative;
+  display: inline-block;
+  cursor: default;
+}
+.section-headline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease-out);
+}
+.section-headline:hover::after {
+  transform: scaleX(1);
 }
 .section-sub {
   font-size: var(--size-md);
@@ -162,7 +188,7 @@ section {
 }
 
 /* ============================================
-   BUTTONS
+   ENHANCED BUTTONS (METALLIC 3D)
    ============================================ */
 .btn {
   display: inline-flex;
@@ -174,17 +200,37 @@ section {
   letter-spacing: 0.02em;
   padding: 0.8em 1.8em;
   border-radius: var(--radius-sm);
-  transition: all 0.3s var(--ease-out);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   white-space: nowrap;
+  position: relative;
 }
 .btn-gold {
-  background: var(--gold);
+  background: linear-gradient(180deg, #f5a623 0%, #e07800 100%);
   color: var(--dark-bg);
+  font-weight: 600;
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.15) inset,
+    0 -1px 0 0 rgba(0,0,0,0.2) inset,
+    0 4px 12px rgba(240, 140, 0, 0.2),
+    0 2px 4px rgba(0,0,0,0.3);
 }
 .btn-gold:hover {
-  background: var(--gold-bright);
-  box-shadow: 0 0 30px rgba(240, 140, 0, 0.3);
-  transform: translateY(-1px);
+  background: linear-gradient(180deg, #fbb73a 0%, #f08c00 100%);
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.2) inset,
+    0 -1px 0 0 rgba(0,0,0,0.15) inset,
+    0 8px 30px rgba(240, 140, 0, 0.35),
+    0 4px 8px rgba(0,0,0,0.3);
+  transform: translateY(-2px) scale(1.02);
+}
+.btn-gold:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.1) inset,
+    0 -1px 0 0 rgba(0,0,0,0.25) inset,
+    0 2px 6px rgba(240, 140, 0, 0.15),
+    0 1px 2px rgba(0,0,0,0.3);
+  transition-duration: 0.1s;
 }
 .btn-ghost {
   border: 1px solid var(--text-dim);
@@ -195,6 +241,7 @@ section {
   border-color: var(--gold);
   color: var(--gold);
   background: var(--gold-glow);
+  transform: translateY(-1px);
 }
 
 /* ============================================
@@ -273,7 +320,7 @@ section {
 }
 
 /* ============================================
-   HERO
+   HERO (SPLIT LAYOUT)
    ============================================ */
 .hero {
   position: relative;
@@ -282,11 +329,6 @@ section {
   align-items: center;
   padding-top: 6rem;
   overflow: hidden;
-}
-.hero-canvas {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
 }
 .hero-glow {
   position: absolute;
@@ -309,10 +351,17 @@ section {
   left: -200px;
   opacity: 0.06;
 }
+.hero-split {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: var(--space-3xl);
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 780px;
 }
 .hero h1 {
   font-family: var(--font-display);
@@ -338,7 +387,7 @@ section {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-bottom: var(--space-4xl);
+  margin-bottom: var(--space-3xl);
 }
 .hero-stats {
   display: flex;
@@ -362,6 +411,17 @@ section {
   font-size: var(--size-xs);
   color: var(--text-dim);
   letter-spacing: 0.04em;
+}
+.hero-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-exchange-svg {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
 }
 .scroll-indicator {
   position: absolute;
@@ -392,8 +452,42 @@ section {
   50% { opacity: 0.7; transform: translateX(-50%) translateY(6px); }
 }
 
+/* Exchange SVG Animations */
+@keyframes drawPath {
+  from { stroke-dashoffset: 300; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes shimmer {
+  0% { stop-color: var(--gold); }
+  50% { stop-color: var(--gold-bright); }
+  100% { stop-color: var(--gold); }
+}
+@keyframes dotTravel {
+  0% { offset-distance: 0%; opacity: 0; }
+  5% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+.exchange-path {
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  animation: drawPath 1.5s var(--ease-out) forwards;
+}
+.exchange-path:nth-child(2) { animation-delay: 0.1s; }
+.exchange-path:nth-child(3) { animation-delay: 0.2s; }
+.exchange-path:nth-child(4) { animation-delay: 0.3s; }
+.exchange-path:nth-child(5) { animation-delay: 0.4s; }
+.exchange-path:nth-child(6) { animation-delay: 0.5s; }
+.exchange-path:nth-child(7) { animation-delay: 0.6s; }
+.exchange-path:nth-child(8) { animation-delay: 0.7s; }
+
+.exchange-dot {
+  offset-distance: 0%;
+  animation: dotTravel 3s linear infinite;
+}
+
 /* ============================================
-   TRUST BAR
+   TRUST BAR (INFINITE LOGO SLIDER)
    ============================================ */
 .trust-bar {
   padding: var(--space-3xl) 0;
@@ -401,6 +495,25 @@ section {
   border-top: 1px solid rgba(255,255,255,0.03);
   border-bottom: 1px solid rgba(255,255,255,0.03);
   background: var(--surface);
+  position: relative;
+}
+.trust-bar::before,
+.trust-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 120px;
+  z-index: 2;
+  pointer-events: none;
+}
+.trust-bar::before {
+  left: 0;
+  background: linear-gradient(to right, var(--surface), transparent);
+}
+.trust-bar::after {
+  right: 0;
+  background: linear-gradient(to left, var(--surface), transparent);
 }
 .marquee-row {
   display: flex;
@@ -414,6 +527,7 @@ section {
   animation: marquee 35s linear infinite;
   flex-shrink: 0;
   padding-right: 4rem;
+  will-change: transform;
 }
 .marquee-row:nth-child(2) .marquee-track {
   animation-direction: reverse;
@@ -447,12 +561,13 @@ section {
 }
 
 /* ============================================
-   WHY SECTION
+   WHY SECTION (BENTO GRID)
    ============================================ */
 .why-section { background: var(--dark-bg); }
 .why-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
   gap: 1.5rem;
   margin-top: var(--space-3xl);
 }
@@ -464,6 +579,9 @@ section {
   position: relative;
   overflow: hidden;
   transition: all 0.4s var(--ease-out);
+}
+.why-card:first-child {
+  grid-column: span 2;
 }
 .why-card::before {
   content: '';
@@ -480,9 +598,10 @@ section {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at top center, var(--gold-glow), transparent 70%);
+  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 0%), rgba(240,140,0,0.06), transparent 60%);
   opacity: 0;
   transition: opacity 0.4s;
+  pointer-events: none;
 }
 .why-card:hover {
   border-color: rgba(240, 140, 0, 0.15);
@@ -517,7 +636,7 @@ section {
 }
 
 /* ============================================
-   PRODUCTS
+   PRODUCTS (3D TILT)
    ============================================ */
 .products-section {
   background: var(--surface);
@@ -539,6 +658,7 @@ section {
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   margin-top: var(--space-3xl);
+  perspective: 1000px;
 }
 .product-card {
   background: var(--dark-bg);
@@ -547,13 +667,14 @@ section {
   padding: var(--space-2xl);
   position: relative;
   overflow: hidden;
-  transition: all 0.4s var(--ease-out);
+  transition: all 0.4s var(--ease-out), transform 0.15s ease-out;
   display: flex;
   flex-direction: column;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 .product-card:hover {
   border-color: rgba(240, 140, 0, 0.2);
-  transform: translateY(-4px);
   box-shadow: 0 24px 60px rgba(0,0,0,0.4);
 }
 .product-badge {
@@ -686,12 +807,8 @@ section {
   padding: var(--space-xl);
   overflow-x: auto;
 }
-.code-panel {
-  display: none;
-}
-.code-panel.active {
-  display: block;
-}
+.code-panel { display: none; }
+.code-panel.active { display: block; }
 .code-body pre {
   font-family: var(--font-mono);
   font-size: 0.8rem;
@@ -800,9 +917,7 @@ section {
   border-bottom: 1px solid rgba(255,255,255,0.08);
   color: var(--text-muted);
 }
-.comparison-table th:last-child {
-  color: var(--gold);
-}
+.comparison-table th:last-child { color: var(--gold); }
 .comparison-table td {
   padding: var(--space-md) var(--space-xl);
   border-bottom: 1px solid rgba(255,255,255,0.04);
@@ -813,18 +928,10 @@ section {
   color: var(--text-primary);
   font-weight: 500;
 }
-.comparison-table td:last-child {
-  background: rgba(240, 140, 0, 0.03);
-}
-.comparison-table th:last-child {
-  background: rgba(240, 140, 0, 0.06);
-}
-.comparison-table tbody tr:hover td {
-  background: rgba(255,255,255,0.015);
-}
-.comparison-table tbody tr:hover td:last-child {
-  background: rgba(240, 140, 0, 0.06);
-}
+.comparison-table td:last-child { background: rgba(240, 140, 0, 0.03); }
+.comparison-table th:last-child { background: rgba(240, 140, 0, 0.06); }
+.comparison-table tbody tr:hover td { background: rgba(255,255,255,0.015); }
+.comparison-table tbody tr:hover td:last-child { background: rgba(240, 140, 0, 0.06); }
 .check { color: var(--gold); font-size: 1.1rem; }
 .cross { color: var(--text-dim); font-size: 1.1rem; }
 
@@ -866,6 +973,73 @@ section {
   font-size: var(--size-sm);
   color: var(--text-muted);
   line-height: 1.65;
+}
+
+/* ============================================
+   GLOBAL REACH (ROTATING EARTH)
+   ============================================ */
+.globe-section {
+  background: var(--dark-bg);
+  overflow: hidden;
+  position: relative;
+}
+.globe-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(240,140,0,0.04), transparent 60%);
+  pointer-events: none;
+}
+.globe-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3xl);
+  align-items: center;
+}
+.globe-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 550px;
+  margin: 0 auto;
+}
+#globeCanvas {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+#globeCanvas:active { cursor: grabbing; }
+.globe-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+.globe-stat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
+}
+.globe-stat {
+  padding: var(--space-lg);
+  background: var(--surface);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: var(--radius-md);
+}
+.globe-stat-val {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--size-xl);
+  color: var(--gold);
+  margin-bottom: 0.25rem;
+}
+.globe-stat-lbl {
+  font-size: var(--size-xs);
+  color: var(--text-muted);
 }
 
 /* ============================================
@@ -956,7 +1130,6 @@ section {
   text-align: center;
   position: relative;
 }
-.traction-item {}
 .traction-value {
   font-family: var(--font-display);
   font-weight: 300;
@@ -1113,7 +1286,10 @@ section {
    RESPONSIVE
    ============================================ */
 @media (max-width: 1024px) {
+  .hero-split { grid-template-columns: 1fr; }
+  .hero-visual { margin-top: var(--space-2xl); }
   .why-grid { grid-template-columns: repeat(2, 1fr); }
+  .why-card:first-child { grid-column: span 2; }
   .products-grid { grid-template-columns: 1fr; }
   .dev-grid { grid-template-columns: 1fr; }
   .how-flow {
@@ -1145,6 +1321,8 @@ section {
   .arch-layer:nth-child(4) { margin-left: 0; margin-right: 0; }
   .comparison-table { font-size: var(--size-xs); }
   .comparison-table th, .comparison-table td { padding: var(--space-sm) var(--space-md); }
+  .globe-layout { grid-template-columns: 1fr; }
+  .globe-wrapper { max-width: 400px; }
 }
 
 @media (max-width: 768px) {
@@ -1153,6 +1331,7 @@ section {
   .hero h1 { font-size: var(--size-3xl); }
   .hero-stats { gap: var(--space-xl); }
   .why-grid { grid-template-columns: 1fr; }
+  .why-card:first-child { grid-column: span 1; }
   .usecases-grid { grid-template-columns: 1fr; }
   .traction-grid { grid-template-columns: 1fr 1fr; }
   .footer-inner { flex-direction: column; }
@@ -1161,6 +1340,7 @@ section {
   .arch-layer { flex-direction: column; text-align: center; gap: var(--space-md); }
   .arch-layer-label { min-width: unset; }
   .arch-layer-items { justify-content: center; }
+  .globe-stat-row { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 375px) {
@@ -1179,6 +1359,7 @@ section {
       <a href="#infrastructure">Infrastructure</a>
       <a href="#products">Products</a>
       <a href="#developers">Developers</a>
+      <a href="#global">Global</a>
       <a href="#company">Company</a>
       <a href="#" class="nav-cta">Request Access</a>
     </div>
@@ -1194,40 +1375,197 @@ section {
   <a href="#infrastructure" onclick="closeMobile()">Infrastructure</a>
   <a href="#products" onclick="closeMobile()">Products</a>
   <a href="#developers" onclick="closeMobile()">Developers</a>
+  <a href="#global" onclick="closeMobile()">Global</a>
   <a href="#company" onclick="closeMobile()">Company</a>
   <a href="#" class="btn btn-gold" onclick="closeMobile()">Request Access</a>
 </div>
 
-<!-- ===================== HERO ===================== -->
+<!-- ===================== HERO (SPLIT) ===================== -->
 <section class="hero" id="hero">
-  <canvas class="hero-canvas" id="heroCanvas"></canvas>
   <div class="hero-glow hero-glow-1"></div>
   <div class="hero-glow hero-glow-2"></div>
   <div class="container">
-    <div class="hero-content">
-      <h1>The infrastructure layer for <span>stablecoins</span> in Brazil</h1>
-      <p class="hero-sub">Regulated FX rails connecting global platforms to BRL, PIX, and tokenized assets. Integrate once. Move capital in minutes.</p>
-      <div class="hero-ctas">
-        <a href="#" class="btn btn-gold">Start Integrating<svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="margin-left:2px"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-        <a href="#" class="btn btn-ghost">Read Documentation</a>
+    <div class="hero-split">
+      <div class="hero-content">
+        <h1>The infrastructure layer for <span>stablecoins</span> in Brazil</h1>
+        <p class="hero-sub">Regulated FX rails connecting global platforms to BRL, PIX, and tokenized assets. Integrate once. Move capital in minutes.</p>
+        <div class="hero-ctas">
+          <a href="#" class="btn btn-gold">Start Integrating<svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="margin-left:2px"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a href="#" class="btn btn-ghost">Read Documentation</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat-item">
+            <div class="hero-stat-value" data-count="328" data-prefix="$" data-suffix="B+">$0</div>
+            <div class="hero-stat-label">Volume Processed</div>
+          </div>
+          <div class="hero-stat-item">
+            <div class="hero-stat-value" data-count="3.2" data-suffix=" min" data-decimal="1">0</div>
+            <div class="hero-stat-label">Avg Settlement</div>
+          </div>
+          <div class="hero-stat-item">
+            <div class="hero-stat-value" data-count="0.8" data-suffix="%" data-decimal="1">0</div>
+            <div class="hero-stat-label">Flat Fee</div>
+          </div>
+          <div class="hero-stat-item">
+            <div class="hero-stat-value" data-count="14" data-suffix=" live">0</div>
+            <div class="hero-stat-label">Platforms</div>
+          </div>
+        </div>
       </div>
-      <div class="hero-stats">
-        <div class="hero-stat-item">
-          <div class="hero-stat-value" data-count="328" data-prefix="$" data-suffix="B+">$0</div>
-          <div class="hero-stat-label">Volume Processed</div>
-        </div>
-        <div class="hero-stat-item">
-          <div class="hero-stat-value" data-count="3.2" data-suffix=" min" data-decimal="1">0</div>
-          <div class="hero-stat-label">Avg Settlement</div>
-        </div>
-        <div class="hero-stat-item">
-          <div class="hero-stat-value" data-count="0.8" data-suffix="%" data-decimal="1">0</div>
-          <div class="hero-stat-label">Flat Fee</div>
-        </div>
-        <div class="hero-stat-item">
-          <div class="hero-stat-value" data-count="14" data-suffix=" live">0</div>
-          <div class="hero-stat-label">Platforms</div>
-        </div>
+      <div class="hero-visual">
+        <!-- Exchange Architecture SVG -->
+        <svg class="hero-exchange-svg" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="goldShimmer" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#f08c00">
+                <animate attributeName="stop-color" values="#f08c00;#f5a623;#f08c00" dur="3s" repeatCount="indefinite"/>
+              </stop>
+              <stop offset="50%" style="stop-color:#f5a623">
+                <animate attributeName="stop-color" values="#f5a623;#f08c00;#f5a623" dur="3s" repeatCount="indefinite"/>
+              </stop>
+              <stop offset="100%" style="stop-color:#f08c00">
+                <animate attributeName="stop-color" values="#f08c00;#f5a623;#f08c00" dur="3s" repeatCount="indefinite"/>
+              </stop>
+            </linearGradient>
+            <radialGradient id="dotGlowBlue" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#6bdfff" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#6bdfff" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="dotGlowCyan" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#4fc3f7" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#4fc3f7" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="dotGlowGold" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#f5a623" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="dotGlowOrange" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#f08c00" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#f08c00" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="2" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+            <!-- Path definitions for dot animation -->
+            <path id="pathIn1" d="M 30,120 C 120,120 180,160 230,175" fill="none"/>
+            <path id="pathIn2" d="M 30,180 C 120,180 180,185 230,195" fill="none"/>
+            <path id="pathIn3" d="M 30,230 C 120,230 180,215 230,210" fill="none"/>
+            <path id="pathIn4" d="M 30,290 C 120,290 180,250 230,230" fill="none"/>
+            <path id="pathOut1" d="M 370,175 C 420,160 480,120 570,120" fill="none"/>
+            <path id="pathOut2" d="M 370,195 C 420,185 480,180 570,180" fill="none"/>
+            <path id="pathOut3" d="M 370,210 C 420,215 480,230 570,230" fill="none"/>
+            <path id="pathOut4" d="M 370,230 C 420,250 480,290 570,290" fill="none"/>
+          </defs>
+
+          <!-- Incoming paths (left side) -->
+          <use href="#pathIn1" stroke="#2a5f8f" stroke-width="1.5" class="exchange-path" opacity="0.5"/>
+          <use href="#pathIn2" stroke="#2a6fa8" stroke-width="1.5" class="exchange-path" opacity="0.5"/>
+          <use href="#pathIn3" stroke="#3a7fb8" stroke-width="1.5" class="exchange-path" opacity="0.5"/>
+          <use href="#pathIn4" stroke="#2a5f8f" stroke-width="1.5" class="exchange-path" opacity="0.5"/>
+
+          <!-- Outgoing paths (right side) -->
+          <use href="#pathOut1" stroke="#8f5f2a" stroke-width="1.5" class="exchange-path" opacity="0.5"/>
+          <use href="#pathOut2" stroke="#a86f2a" stroke-width="1.5" class="exchange-path" opacity="0.5"/>
+          <use href="#pathOut3" stroke="#b87f3a" stroke-width="1.5" class="exchange-path" opacity="0.5"/>
+          <use href="#pathOut4" stroke="#8f5f2a" stroke-width="1.5" class="exchange-path" opacity="0.5"/>
+
+          <!-- Center box -->
+          <rect x="230" y="155" width="140" height="90" rx="8" fill="#111111" stroke="url(#goldShimmer)" stroke-width="2"/>
+
+          <!-- Connection pins on left -->
+          <circle cx="230" cy="175" r="4" fill="#2a6fa8" stroke="#111" stroke-width="1"/>
+          <circle cx="230" cy="195" r="4" fill="#3a7fb8" stroke="#111" stroke-width="1"/>
+          <circle cx="230" cy="210" r="4" fill="#4fc3f7" stroke="#111" stroke-width="1"/>
+          <circle cx="230" cy="230" r="4" fill="#2a5f8f" stroke="#111" stroke-width="1"/>
+
+          <!-- Connection pins on right -->
+          <circle cx="370" cy="175" r="4" fill="#f5a623" stroke="#111" stroke-width="1"/>
+          <circle cx="370" cy="195" r="4" fill="#f08c00" stroke="#111" stroke-width="1"/>
+          <circle cx="370" cy="210" r="4" fill="#e07800" stroke="#111" stroke-width="1"/>
+          <circle cx="370" cy="230" r="4" fill="#f5a623" stroke="#111" stroke-width="1"/>
+
+          <!-- Center text -->
+          <text x="300" y="195" text-anchor="middle" fill="url(#goldShimmer)" font-family="Oxanium, sans-serif" font-size="18" font-weight="400" letter-spacing="3">ØNSTACK</text>
+          <text x="300" y="215" text-anchor="middle" fill="#555250" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="2">EXCHANGE ENGINE</text>
+
+          <!-- Currency labels - incoming (left) -->
+          <text x="18" y="116" fill="#6bdfff" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500" text-anchor="start">USDC</text>
+          <text x="18" y="176" fill="#4fc3f7" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500" text-anchor="start">USDT</text>
+          <text x="18" y="226" fill="#6bdfff" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500" text-anchor="start">EUR</text>
+          <text x="18" y="286" fill="#4fc3f7" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500" text-anchor="start">USD</text>
+
+          <!-- Currency labels - outgoing (right) -->
+          <text x="582" y="116" fill="#f5a623" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500" text-anchor="end">BRL</text>
+          <text x="582" y="176" fill="#f08c00" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500" text-anchor="end">PIX</text>
+          <text x="582" y="226" fill="#f5a623" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500" text-anchor="end">DREX</text>
+          <text x="582" y="286" fill="#f08c00" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500" text-anchor="end">R$</text>
+
+          <!-- Animated dots - incoming (blue/cyan) -->
+          <circle r="4" fill="url(#dotGlowBlue)" filter="url(#glow)">
+            <animateMotion dur="2.5s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+              <mpath href="#pathIn1"/>
+            </animateMotion>
+            <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.5s" repeatCount="indefinite"/>
+          </circle>
+          <circle r="4" fill="url(#dotGlowCyan)" filter="url(#glow)">
+            <animateMotion dur="3s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear" begin="0.4s">
+              <mpath href="#pathIn2"/>
+            </animateMotion>
+            <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="3s" repeatCount="indefinite" begin="0.4s"/>
+          </circle>
+          <circle r="4" fill="url(#dotGlowBlue)" filter="url(#glow)">
+            <animateMotion dur="2.8s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear" begin="0.8s">
+              <mpath href="#pathIn3"/>
+            </animateMotion>
+            <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.8s" repeatCount="indefinite" begin="0.8s"/>
+          </circle>
+          <circle r="4" fill="url(#dotGlowCyan)" filter="url(#glow)">
+            <animateMotion dur="3.2s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear" begin="1.2s">
+              <mpath href="#pathIn4"/>
+            </animateMotion>
+            <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="3.2s" repeatCount="indefinite" begin="1.2s"/>
+          </circle>
+
+          <!-- Animated dots - outgoing (gold/orange) -->
+          <circle r="4" fill="url(#dotGlowGold)" filter="url(#glow)">
+            <animateMotion dur="2.5s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear" begin="0.2s">
+              <mpath href="#pathOut1"/>
+            </animateMotion>
+            <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.5s" repeatCount="indefinite" begin="0.2s"/>
+          </circle>
+          <circle r="4" fill="url(#dotGlowOrange)" filter="url(#glow)">
+            <animateMotion dur="2.8s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear" begin="0.6s">
+              <mpath href="#pathOut2"/>
+            </animateMotion>
+            <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.8s" repeatCount="indefinite" begin="0.6s"/>
+          </circle>
+          <circle r="4" fill="url(#dotGlowGold)" filter="url(#glow)">
+            <animateMotion dur="3s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear" begin="1s">
+              <mpath href="#pathOut3"/>
+            </animateMotion>
+            <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="3s" repeatCount="indefinite" begin="1s"/>
+          </circle>
+          <circle r="4" fill="url(#dotGlowOrange)" filter="url(#glow)">
+            <animateMotion dur="3.3s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear" begin="1.4s">
+              <mpath href="#pathOut4"/>
+            </animateMotion>
+            <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="3.3s" repeatCount="indefinite" begin="1.4s"/>
+          </circle>
+
+          <!-- Decorative corner marks on center box -->
+          <line x1="225" y1="155" x2="225" y2="165" stroke="#f08c00" stroke-width="1" opacity="0.4"/>
+          <line x1="225" y1="155" x2="235" y2="155" stroke="#f08c00" stroke-width="1" opacity="0.4"/>
+          <line x1="375" y1="155" x2="375" y2="165" stroke="#f08c00" stroke-width="1" opacity="0.4"/>
+          <line x1="365" y1="155" x2="375" y2="155" stroke="#f08c00" stroke-width="1" opacity="0.4"/>
+          <line x1="225" y1="245" x2="225" y2="235" stroke="#f08c00" stroke-width="1" opacity="0.4"/>
+          <line x1="225" y1="245" x2="235" y2="245" stroke="#f08c00" stroke-width="1" opacity="0.4"/>
+          <line x1="375" y1="245" x2="375" y2="235" stroke="#f08c00" stroke-width="1" opacity="0.4"/>
+          <line x1="365" y1="245" x2="375" y2="245" stroke="#f08c00" stroke-width="1" opacity="0.4"/>
+        </svg>
       </div>
     </div>
   </div>
@@ -1289,34 +1627,34 @@ section {
   </div>
 </section>
 
-<!-- ===================== WHY ØNSTACK ===================== -->
+<!-- ===================== WHY ØNSTACK (BENTO GRID) ===================== -->
 <section class="why-section" id="infrastructure">
   <div class="container">
     <div class="section-label reveal">WHY ØNSTACK</div>
-    <h2 class="section-headline reveal reveal-delay-1">Not another off-ramp.<br>Complete financial infrastructure.</h2>
+    <h2 class="section-headline reveal stagger-1">Not another off-ramp.<br>Complete financial infrastructure.</h2>
     <div class="why-grid">
-      <div class="why-card reveal reveal-delay-1">
+      <div class="why-card reveal stagger-2" data-spotlight>
         <div class="why-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <h3>Regulated by Design</h3>
         <p>BACEN-licensed FX operations. SPSAV compliant. Automated IOF, IRRF, and RDE reporting. Your compliance layer, built in.</p>
       </div>
-      <div class="why-card reveal reveal-delay-2">
+      <div class="why-card reveal stagger-3" data-spotlight>
         <div class="why-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <h3>Stablecoins + RWA</h3>
-        <p>Beyond simple conversions. Access tokenized receivables (FIDC), stablecoin settlement, and real-world asset rails — all through one API.</p>
+        <p>Beyond simple conversions. Access tokenized receivables (FIDC), stablecoin settlement, and real-world asset rails -- all through one API.</p>
       </div>
-      <div class="why-card reveal reveal-delay-3">
+      <div class="why-card reveal stagger-4" data-spotlight>
         <div class="why-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <h3>Sub-5-Minute Settlement</h3>
-        <p>Deposit stablecoin → FX hedge → PIX delivery. Average 3.2 minutes end-to-end. No correspondent banks. No hidden fees.</p>
+        <p>Deposit stablecoin, FX hedge, PIX delivery. Average 3.2 minutes end-to-end. No correspondent banks. No hidden fees.</p>
       </div>
-      <div class="why-card reveal reveal-delay-4">
+      <div class="why-card reveal stagger-5" data-spotlight>
         <div class="why-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
         </div>
@@ -1327,13 +1665,13 @@ section {
   </div>
 </section>
 
-<!-- ===================== PRODUCTS ===================== -->
+<!-- ===================== PRODUCTS (3D TILT) ===================== -->
 <section class="products-section" id="products">
   <div class="container">
     <div class="section-label reveal">PRODUCTS</div>
-    <h2 class="section-headline reveal reveal-delay-1">Three rails. One platform.</h2>
+    <h2 class="section-headline reveal stagger-1">Three rails. One platform.</h2>
     <div class="products-grid">
-      <div class="product-card reveal reveal-delay-1">
+      <div class="product-card reveal stagger-2" data-tilt>
         <div class="product-badge">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="4"/></svg>
           REMITFX
@@ -1347,7 +1685,7 @@ section {
           <span class="product-stat">Auto IOF/IRRF</span>
         </div>
       </div>
-      <div class="product-card reveal reveal-delay-2">
+      <div class="product-card reveal stagger-3" data-tilt>
         <div class="product-badge">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="4"/></svg>
           BETRAILS
@@ -1361,7 +1699,7 @@ section {
           <span class="product-stat">99.97% SLA</span>
         </div>
       </div>
-      <div class="product-card reveal reveal-delay-3">
+      <div class="product-card reveal stagger-4" data-tilt>
         <div class="product-badge">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="4"/></svg>
           EXCHANGE HUB
@@ -1383,10 +1721,10 @@ section {
 <section class="dev-section" id="developers">
   <div class="container">
     <div class="section-label reveal">FOR DEVELOPERS</div>
-    <h2 class="section-headline reveal reveal-delay-1">The simplest stablecoin API<br>you'll ever integrate.</h2>
-    <p class="section-sub reveal reveal-delay-2">Full sandbox. Real money in 7 days. SDKs for Node.js and Python.</p>
+    <h2 class="section-headline reveal stagger-1">The simplest stablecoin API<br>you'll ever integrate.</h2>
+    <p class="section-sub reveal stagger-2">Full sandbox. Real money in 7 days. SDKs for Node.js and Python.</p>
     <div class="dev-grid" style="margin-top: var(--space-3xl);">
-      <div class="dev-features reveal reveal-delay-2">
+      <div class="dev-features reveal stagger-3">
         <p style="font-size: var(--size-md); color: var(--text-muted); line-height: 1.7;">One integration connects you to regulated FX, stablecoin settlement, PIX payouts, and tokenized asset rails. No middleware. No third-party orchestration.</p>
         <div class="dev-pills">
           <span class="dev-pill">REST API</span>
@@ -1399,7 +1737,7 @@ section {
           <span class="dev-pill">Idempotency</span>
         </div>
       </div>
-      <div class="code-editor reveal reveal-delay-3">
+      <div class="code-editor reveal stagger-4">
         <div class="code-tabs">
           <button class="code-tab active" data-tab="nodejs">Node.js</button>
           <button class="code-tab" data-tab="curl">cURL</button>
@@ -1411,11 +1749,11 @@ section {
 <span class="cf">import</span> <span class="cv">{ OnStack }</span> <span class="cf">from</span> <span class="cg">'@onstack/sdk'</span>;
 
 <span class="cf">const</span> <span class="cv">client</span> = <span class="cf">new</span> <span class="cs">OnStack</span>({
-  <span class="cv">apiKey</span>: process.env.<span class="co">ONSTACK_API_KEY</span>,
+  <span class="cv">apiKey</span>: process.env.<span class="co">ØNSTACK_API_KEY</span>,
   <span class="cv">sandbox</span>: <span class="cn">true</span>
 });
 
-<span class="ck">// Create a stablecoin → BRL payout</span>
+<span class="ck">// Create a stablecoin -&gt; BRL payout</span>
 <span class="cf">const</span> <span class="cv">payout</span> = <span class="cf">await</span> client.<span class="cs">payouts</span>.<span class="cs">create</span>({
   <span class="cv">amount</span>: <span class="cg">"10000.00"</span>,
   <span class="cv">currency</span>: <span class="cg">"USDC"</span>,
@@ -1428,13 +1766,13 @@ section {
 });
 
 console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
-<span class="ck">// → "pay_8xKj2mN..."</span>
-<span class="ck">// Status: PROCESSING → SETTLED (~3.2 min)</span></pre>
+<span class="ck">// -&gt; "pay_8xKj2mN..."</span>
+<span class="ck">// Status: PROCESSING -&gt; SETTLED (~3.2 min)</span></pre>
           </div>
           <div class="code-panel" id="panel-curl">
-<pre><span class="ck"># Create a stablecoin → BRL payout</span>
+<pre><span class="ck"># Create a stablecoin -&gt; BRL payout</span>
 <span class="cf">curl</span> -X POST <span class="cg">https://api.onstack.com/v1/payouts</span> \
-  -H <span class="cg">"Authorization: Bearer $ONSTACK_API_KEY"</span> \
+  -H <span class="cg">"Authorization: Bearer $ØNSTACK_API_KEY"</span> \
   -H <span class="cg">"Content-Type: application/json"</span> \
   -H <span class="cg">"Idempotency-Key: $(uuidgen)"</span> \
   -d <span class="cg">'{
@@ -1462,11 +1800,11 @@ console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
 <span class="cf">import</span> <span class="cv">os</span>
 
 <span class="cv">client</span> = <span class="cs">OnStack</span>(
-    <span class="cv">api_key</span>=os.environ[<span class="cg">"ONSTACK_API_KEY"</span>],
+    <span class="cv">api_key</span>=os.environ[<span class="cg">"ØNSTACK_API_KEY"</span>],
     <span class="cv">sandbox</span>=<span class="cn">True</span>
 )
 
-<span class="ck"># Create a stablecoin → BRL payout</span>
+<span class="ck"># Create a stablecoin -&gt; BRL payout</span>
 <span class="cv">payout</span> = client.payouts.<span class="cs">create</span>(
     <span class="cv">amount</span>=<span class="cg">"10000.00"</span>,
     <span class="cv">currency</span>=<span class="cg">"USDC"</span>,
@@ -1479,8 +1817,8 @@ console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
 )
 
 <span class="cs">print</span>(payout.id)
-<span class="ck"># → "pay_8xKj2mN..."</span>
-<span class="ck"># Status: PROCESSING → SETTLED (~3.2 min)</span></pre>
+<span class="ck"># -&gt; "pay_8xKj2mN..."</span>
+<span class="ck"># Status: PROCESSING -&gt; SETTLED (~3.2 min)</span></pre>
           </div>
         </div>
       </div>
@@ -1492,9 +1830,9 @@ console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
 <section class="how-section">
   <div class="container">
     <div class="section-label reveal">HOW IT WORKS</div>
-    <h2 class="section-headline reveal reveal-delay-1">Three steps. Under five minutes.</h2>
+    <h2 class="section-headline reveal stagger-1">Three steps. Under five minutes.</h2>
     <div class="how-flow">
-      <div class="how-step reveal reveal-delay-1">
+      <div class="how-step reveal stagger-2">
         <div class="how-step-number">01</div>
         <div class="how-step-icon">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f08c00" stroke-width="1.5"><path d="M21 12V7H5a2 2 0 010-4h14v4"/><path d="M3 5v14a2 2 0 002 2h16v-5"/><path d="M18 12a2 2 0 000 4h4v-4h-4z"/></svg>
@@ -1505,7 +1843,7 @@ console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
       <div class="how-connector">
         <div class="traveling-dot"></div>
       </div>
-      <div class="how-step reveal reveal-delay-2">
+      <div class="how-step reveal stagger-3">
         <div class="how-step-number">02</div>
         <div class="how-step-icon">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f08c00" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
@@ -1516,7 +1854,7 @@ console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
       <div class="how-connector">
         <div class="traveling-dot" style="animation-delay: 0.8s;"></div>
       </div>
-      <div class="how-step reveal reveal-delay-3">
+      <div class="how-step reveal stagger-4">
         <div class="how-step-number">03</div>
         <div class="how-step-icon">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f08c00" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
@@ -1532,9 +1870,9 @@ console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
 <section class="comparison-section">
   <div class="container">
     <div class="section-label reveal">COMPARISON</div>
-    <h2 class="section-headline reveal reveal-delay-1">Legacy rails weren't built for this.</h2>
+    <h2 class="section-headline reveal stagger-1">Legacy rails weren't built for this.</h2>
     <div style="overflow-x: auto;">
-      <table class="comparison-table reveal reveal-delay-2">
+      <table class="comparison-table reveal stagger-2">
         <thead>
           <tr>
             <th style="width: 28%">Feature</th>
@@ -1546,8 +1884,8 @@ console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
         <tbody>
           <tr>
             <td>Settlement Time</td>
-            <td>2–5 days</td>
-            <td>1–24 hours</td>
+            <td>2-5 days</td>
+            <td>1-24 hours</td>
             <td><strong style="color: var(--gold)">3.2 minutes</strong></td>
           </tr>
           <tr>
@@ -1602,30 +1940,30 @@ console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
 <section class="usecases-section" id="company">
   <div class="container">
     <div class="section-label reveal">WHO IT'S FOR</div>
-    <h2 class="section-headline reveal reveal-delay-1">Built for platforms that move<br>money globally.</h2>
+    <h2 class="section-headline reveal stagger-1">Built for platforms that move<br>money globally.</h2>
     <div class="usecases-grid">
-      <div class="usecase-card reveal reveal-delay-1">
+      <div class="usecase-card reveal stagger-2">
         <div class="usecase-icon">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f08c00" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         </div>
         <h3>Exchanges &amp; OTCs</h3>
         <p>Seamless on/off ramp for BRL. Aggregated liquidity, compliant FX, and instant PIX settlement for your users.</p>
       </div>
-      <div class="usecase-card reveal reveal-delay-2">
+      <div class="usecase-card reveal stagger-3">
         <div class="usecase-icon">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f08c00" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         </div>
         <h3>iGaming Operators</h3>
         <p>Instant PIX payouts with built-in KYC/AML. Flat 0.8% fee. Purpose-built for regulated iGaming in Brazil.</p>
       </div>
-      <div class="usecase-card reveal reveal-delay-3">
+      <div class="usecase-card reveal stagger-4">
         <div class="usecase-icon">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f08c00" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
         </div>
         <h3>Fintechs &amp; Neobanks</h3>
         <p>White-label FX infrastructure. Embed stablecoin-to-BRL rails in your product. Full API, your brand.</p>
       </div>
-      <div class="usecase-card reveal reveal-delay-4">
+      <div class="usecase-card reveal stagger-5">
         <div class="usecase-icon">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f08c00" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
         </div>
@@ -1636,15 +1974,49 @@ console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
   </div>
 </section>
 
+<!-- ===================== GLOBAL REACH (ROTATING EARTH) ===================== -->
+<section class="globe-section" id="global">
+  <div class="container">
+    <div class="globe-layout">
+      <div class="globe-info">
+        <div class="section-label reveal">GLOBAL REACH</div>
+        <h2 class="section-headline reveal stagger-1">Moving capital across<br>borders, instantly.</h2>
+        <p class="section-sub reveal stagger-2">ØNSTACK connects financial corridors across the Americas, Europe, and Asia. Our infrastructure operates 24/7, processing stablecoin settlements in real time.</p>
+        <div class="globe-stat-row reveal stagger-3">
+          <div class="globe-stat">
+            <div class="globe-stat-val">4</div>
+            <div class="globe-stat-lbl">Continents Served</div>
+          </div>
+          <div class="globe-stat">
+            <div class="globe-stat-val">24/7</div>
+            <div class="globe-stat-lbl">Settlement Uptime</div>
+          </div>
+          <div class="globe-stat">
+            <div class="globe-stat-val">14+</div>
+            <div class="globe-stat-lbl">Platform Partners</div>
+          </div>
+          <div class="globe-stat">
+            <div class="globe-stat-val">3.2m</div>
+            <div class="globe-stat-lbl">Avg Settlement</div>
+          </div>
+        </div>
+      </div>
+      <div class="globe-wrapper reveal stagger-2">
+        <canvas id="globeCanvas" width="550" height="550"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== ARCHITECTURE ===================== -->
 <section class="arch-section">
   <div class="container">
     <div style="text-align: center;">
       <div class="section-label reveal">ARCHITECTURE</div>
-      <h2 class="section-headline reveal reveal-delay-1" style="margin-left: auto; margin-right: auto;">Full-stack regulated infrastructure.</h2>
+      <h2 class="section-headline reveal stagger-1" style="margin-left: auto; margin-right: auto;">Full-stack regulated infrastructure.</h2>
     </div>
     <div class="arch-layers">
-      <div class="arch-layer reveal reveal-delay-1">
+      <div class="arch-layer reveal stagger-2">
         <div class="arch-layer-label">Distribution</div>
         <div class="arch-layer-items">
           <span class="arch-item">REST API</span>
@@ -1655,7 +2027,7 @@ console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
         </div>
       </div>
       <div class="arch-connector"></div>
-      <div class="arch-layer reveal reveal-delay-2">
+      <div class="arch-layer reveal stagger-3">
         <div class="arch-layer-label">Products</div>
         <div class="arch-layer-items">
           <span class="arch-item">RemitFX</span>
@@ -1665,7 +2037,7 @@ console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
         </div>
       </div>
       <div class="arch-connector"></div>
-      <div class="arch-layer reveal reveal-delay-3">
+      <div class="arch-layer reveal stagger-4">
         <div class="arch-layer-label">Stablecoin Rails</div>
         <div class="arch-layer-items">
           <span class="arch-item">Stellar</span>
@@ -1676,7 +2048,7 @@ console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
         </div>
       </div>
       <div class="arch-connector"></div>
-      <div class="arch-layer reveal reveal-delay-4">
+      <div class="arch-layer reveal stagger-5">
         <div class="arch-layer-label">FX + Compliance</div>
         <div class="arch-layer-items">
           <span class="arch-item">NDF Hedge</span>
@@ -1697,19 +2069,19 @@ console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
       <div class="section-label reveal">TRACTION</div>
     </div>
     <div class="traction-grid">
-      <div class="traction-item reveal reveal-delay-1">
+      <div class="traction-item reveal stagger-1">
         <div class="traction-value" data-count="328" data-prefix="$" data-suffix="B">$0</div>
         <div class="traction-label">Stablecoin volume<br>in Brazil</div>
       </div>
-      <div class="traction-item reveal reveal-delay-2">
+      <div class="traction-item reveal stagger-2">
         <div class="traction-value" data-count="20" data-prefix="$" data-suffix="B">$0</div>
         <div class="traction-label">iGaming TAM</div>
       </div>
-      <div class="traction-item reveal reveal-delay-3">
+      <div class="traction-item reveal stagger-3">
         <div class="traction-value" data-count="60" data-suffix="K+">0</div>
         <div class="traction-label">Inherited clients</div>
       </div>
-      <div class="traction-item reveal reveal-delay-4">
+      <div class="traction-item reveal stagger-4">
         <div class="traction-value" data-count="48.6" data-suffix="%" data-decimal="1">0</div>
         <div class="traction-label">Operating margin</div>
       </div>
@@ -1720,9 +2092,9 @@ console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
 <!-- ===================== CTA SECTION ===================== -->
 <section class="cta-section">
   <div class="container">
-    <h2 class="reveal">Ready to build on<br>regulated rails?</h2>
-    <p class="cta-sub reveal reveal-delay-1">Join the platforms already moving stablecoins through compliant infrastructure.</p>
-    <div class="cta-buttons reveal reveal-delay-2">
+    <h2 class="section-headline reveal" style="margin-left: auto; margin-right: auto; text-align: center; font-size: var(--size-4xl); font-weight: 200;">Ready to build on<br>regulated rails?</h2>
+    <p class="cta-sub reveal stagger-1">Join the platforms already moving stablecoins through compliant infrastructure.</p>
+    <div class="cta-buttons reveal stagger-2">
       <a href="#" class="btn btn-gold">Request Access<svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="margin-left:2px"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       <a href="#" class="btn btn-ghost">Talk to Sales</a>
     </div>
@@ -1768,132 +2140,63 @@ console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
   </div>
 </footer>
 
+<!-- D3.js for Globe -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
 <!-- ===================== JAVASCRIPT ===================== -->
 <script>
 /* ============================================
-   INTERACTIVE CANVAS HERO
+   1. TEXT SCRAMBLE ON SECTION HEADLINES
    ============================================ */
 (function() {
-  const canvas = document.getElementById('heroCanvas');
-  const ctx = canvas.getContext('2d');
-  let w, h, particles = [], mouse = { x: -999, y: -999 };
-  const PARTICLE_COUNT = 80;
-  const CONNECTION_DIST = 180;
-  const MOUSE_RADIUS = 200;
-  let prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let raf;
+  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*';
+  const headlines = document.querySelectorAll('.section-headline');
 
-  function resize() {
-    w = canvas.width = canvas.offsetWidth;
-    h = canvas.height = canvas.offsetHeight;
-  }
+  headlines.forEach(el => {
+    const originalHTML = el.innerHTML;
+    const originalText = el.textContent;
+    let isScrambling = false;
 
-  function createParticles() {
-    particles = [];
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      particles.push({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        r: Math.random() * 1.8 + 0.5,
-        baseAlpha: Math.random() * 0.4 + 0.1
-      });
-    }
-  }
+    el.addEventListener('mouseenter', () => {
+      if (isScrambling) return;
+      isScrambling = true;
 
-  function draw() {
-    ctx.clearRect(0, 0, w, h);
+      const text = originalText;
+      const duration = Math.max(text.length * 30, 400);
+      const totalFrames = Math.floor(duration / 30);
+      let frame = 0;
 
-    // Draw connections
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < CONNECTION_DIST) {
-          const alpha = (1 - dist / CONNECTION_DIST) * 0.12;
-          // Brighten near mouse
-          const mx = (particles[i].x + particles[j].x) / 2;
-          const my = (particles[i].y + particles[j].y) / 2;
-          const mDist = Math.sqrt((mx - mouse.x) ** 2 + (my - mouse.y) ** 2);
-          const mFactor = mDist < MOUSE_RADIUS ? (1 - mDist / MOUSE_RADIUS) * 2 : 0;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(240, 140, 0, ${alpha + mFactor * 0.15})`;
-          ctx.lineWidth = 0.5 + mFactor * 0.5;
-          ctx.stroke();
+      const interval = setInterval(() => {
+        frame++;
+        const progress = frame / totalFrames;
+        const revealedCount = Math.floor(progress * text.length);
+
+        let result = '';
+        for (let i = 0; i < text.length; i++) {
+          if (text[i] === ' ' || text[i] === '\n') {
+            result += text[i];
+          } else if (i < revealedCount) {
+            result += text[i];
+          } else {
+            result += CHARS[Math.floor(Math.random() * CHARS.length)];
+          }
         }
-      }
-    }
 
-    // Draw particles
-    for (const p of particles) {
-      const mDist = Math.sqrt((p.x - mouse.x) ** 2 + (p.y - mouse.y) ** 2);
-      const mFactor = mDist < MOUSE_RADIUS ? (1 - mDist / MOUSE_RADIUS) : 0;
-      const alpha = p.baseAlpha + mFactor * 0.6;
-      const r = p.r + mFactor * 1.5;
+        // Preserve <br> tags
+        el.textContent = result;
 
-      // Glow
-      if (mFactor > 0.2) {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, r * 4, 0, Math.PI * 2);
-        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 4);
-        g.addColorStop(0, `rgba(240, 140, 0, ${mFactor * 0.15})`);
-        g.addColorStop(1, 'rgba(240, 140, 0, 0)');
-        ctx.fillStyle = g;
-        ctx.fill();
-      }
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(240, 140, 0, ${alpha})`;
-      ctx.fill();
-
-      // Update position
-      p.x += p.vx;
-      p.y += p.vy;
-
-      // Slight mouse attraction
-      if (mFactor > 0) {
-        p.vx += (mouse.x - p.x) * 0.00003;
-        p.vy += (mouse.y - p.y) * 0.00003;
-      }
-
-      // Dampen
-      p.vx *= 0.999;
-      p.vy *= 0.999;
-
-      // Wrap
-      if (p.x < -10) p.x = w + 10;
-      if (p.x > w + 10) p.x = -10;
-      if (p.y < -10) p.y = h + 10;
-      if (p.y > h + 10) p.y = -10;
-    }
-
-    if (!prefersReduced) raf = requestAnimationFrame(draw);
-  }
-
-  resize();
-  createParticles();
-  if (!prefersReduced) draw();
-  else {
-    // Draw a single static frame
-    draw();
-  }
-
-  window.addEventListener('resize', () => { resize(); if (particles.length === 0) createParticles(); });
-  canvas.addEventListener('mousemove', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    mouse.x = e.clientX - rect.left;
-    mouse.y = e.clientY - rect.top;
+        if (frame >= totalFrames) {
+          clearInterval(interval);
+          el.innerHTML = originalHTML;
+          isScrambling = false;
+        }
+      }, 30);
+    });
   });
-  canvas.addEventListener('mouseleave', () => { mouse.x = -999; mouse.y = -999; });
 })();
 
 /* ============================================
-   SCROLL REVEALS (IntersectionObserver)
+   2. STAGGER REVEAL ANIMATIONS (IntersectionObserver)
    ============================================ */
 (function() {
   const els = document.querySelectorAll('.reveal');
@@ -1908,12 +2211,57 @@ console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
   els.forEach(el => observer.observe(el));
 })();
 
 /* ============================================
-   NAV SCROLL STATE
+   3. 3D TILT EFFECT ON PRODUCT CARDS
+   ============================================ */
+(function() {
+  const cards = document.querySelectorAll('[data-tilt]');
+  const MAX_ROTATION = 8;
+
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -MAX_ROTATION;
+      const rotateY = ((x - centerX) / centerX) * MAX_ROTATION;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+      card.style.transition = 'transform 0.1s ease-out';
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+      card.style.transition = 'transform 0.5s ease-out';
+    });
+  });
+})();
+
+/* ============================================
+   4. BENTO GRID SPOTLIGHT EFFECT
+   ============================================ */
+(function() {
+  const cards = document.querySelectorAll('[data-spotlight]');
+
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mouse-x', x + 'px');
+      card.style.setProperty('--mouse-y', y + 'px');
+    });
+  });
+})();
+
+/* ============================================
+   5. NAV SCROLL STATE
    ============================================ */
 (function() {
   const nav = document.getElementById('nav');
@@ -1930,7 +2278,7 @@ console.<span class="cs">log</span>(payout.<span class="cv">id</span>);
 })();
 
 /* ============================================
-   MOBILE MENU
+   6. MOBILE MENU
    ============================================ */
 function closeMobile() {
   document.getElementById('mobileMenu').classList.remove('open');
@@ -1941,7 +2289,7 @@ document.getElementById('hamburger').addEventListener('click', () => {
 document.getElementById('mobileClose').addEventListener('click', closeMobile);
 
 /* ============================================
-   CODE EDITOR TABS
+   7. CODE EDITOR TABS
    ============================================ */
 (function() {
   const tabs = document.querySelectorAll('.code-tab');
@@ -1956,7 +2304,7 @@ document.getElementById('mobileClose').addEventListener('click', closeMobile);
 })();
 
 /* ============================================
-   COUNTER ANIMATION
+   8. COUNTER ANIMATION
    ============================================ */
 (function() {
   const counters = document.querySelectorAll('[data-count]');
@@ -1974,7 +2322,6 @@ document.getElementById('mobileClose').addEventListener('click', closeMobile);
         function update(now) {
           const elapsed = now - start;
           const progress = Math.min(elapsed / duration, 1);
-          // Ease out cubic
           const eased = 1 - Math.pow(1 - progress, 3);
           const current = target * eased;
           el.textContent = prefix + current.toFixed(decimal) + suffix;
@@ -1986,6 +2333,200 @@ document.getElementById('mobileClose').addEventListener('click', closeMobile);
     });
   }, { threshold: 0.3 });
   counters.forEach(c => observer.observe(c));
+})();
+
+/* ============================================
+   9. ROTATING EARTH GLOBE (D3.js)
+   ============================================ */
+(function() {
+  const canvas = document.getElementById('globeCanvas');
+  if (!canvas) return;
+  const context = canvas.getContext('2d');
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const width = 550;
+  const height = 550;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
+  canvas.style.width = width + 'px';
+  canvas.style.height = height + 'px';
+  context.scale(dpr, dpr);
+
+  const projection = d3.geoOrthographic()
+    .scale(220)
+    .translate([width / 2, height / 2])
+    .clipAngle(90);
+
+  const path = d3.geoPath(projection, context);
+  const graticule = d3.geoGraticule10();
+
+  // Key markers: Brazil, USA, EU (London), Asia (Singapore)
+  const markers = [
+    { coords: [-47.9, -15.8], label: 'Brazil', color: '#f08c00' },
+    { coords: [-77.0, 38.9], label: 'USA', color: '#f5a623' },
+    { coords: [-0.1, 51.5], label: 'EU', color: '#f5a623' },
+    { coords: [103.8, 1.35], label: 'Asia', color: '#f08c00' }
+  ];
+
+  let rotation = [40, -20, 0];
+  let velocity = [0.3, 0, 0];
+  let isDragging = false;
+  let dragStart = null;
+  let rotationStart = null;
+  let landData = null;
+
+  // Fetch land data
+  fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/refs/heads/master/110m/physical/ne_110m_land.json')
+    .then(r => r.json())
+    .then(data => {
+      landData = data;
+      if (!prefersReduced) animate();
+      else { render(); }
+    })
+    .catch(() => {
+      // Fallback: just render graticule and markers
+      if (!prefersReduced) animate();
+      else { render(); }
+    });
+
+  function render() {
+    context.clearRect(0, 0, width, height);
+    projection.rotate(rotation);
+
+    // Globe background circle
+    context.beginPath();
+    context.arc(width / 2, height / 2, 220, 0, Math.PI * 2);
+    context.fillStyle = 'rgba(17, 17, 17, 0.8)';
+    context.fill();
+    context.strokeStyle = 'rgba(240, 140, 0, 0.1)';
+    context.lineWidth = 1;
+    context.stroke();
+
+    // Graticule
+    context.beginPath();
+    path(graticule);
+    context.strokeStyle = 'rgba(85, 82, 80, 0.2)';
+    context.lineWidth = 0.5;
+    context.stroke();
+
+    // Land masses with halftone dots
+    if (landData) {
+      // Land outlines
+      context.beginPath();
+      path(landData);
+      context.strokeStyle = 'rgba(249, 247, 243, 0.4)';
+      context.lineWidth = 0.8;
+      context.stroke();
+
+      // Halftone fill
+      context.save();
+      context.beginPath();
+      path(landData);
+      context.clip();
+
+      // Draw dots in a grid pattern within the clipped land
+      const dotSpacing = 6;
+      const dotRadius = 1.2;
+      context.fillStyle = 'rgba(240, 140, 0, 0.15)';
+      for (let x = 0; x < width; x += dotSpacing) {
+        for (let y = 0; y < height; y += dotSpacing) {
+          // Check if point is within globe circle
+          const dx = x - width / 2;
+          const dy = y - height / 2;
+          if (dx * dx + dy * dy < 220 * 220) {
+            context.beginPath();
+            context.arc(x, y, dotRadius, 0, Math.PI * 2);
+            context.fill();
+          }
+        }
+      }
+      context.restore();
+    }
+
+    // Markers
+    markers.forEach(marker => {
+      const coords = projection(marker.coords);
+      if (coords) {
+        // Check if on visible side
+        const d = d3.geoDistance(marker.coords, [-rotation[0], -rotation[1]]);
+        if (d < Math.PI / 2) {
+          // Glow
+          const grad = context.createRadialGradient(coords[0], coords[1], 0, coords[0], coords[1], 16);
+          grad.addColorStop(0, marker.color + '60');
+          grad.addColorStop(1, marker.color + '00');
+          context.beginPath();
+          context.arc(coords[0], coords[1], 16, 0, Math.PI * 2);
+          context.fillStyle = grad;
+          context.fill();
+
+          // Dot
+          context.beginPath();
+          context.arc(coords[0], coords[1], 4, 0, Math.PI * 2);
+          context.fillStyle = marker.color;
+          context.fill();
+
+          // Label
+          context.font = '500 9px "JetBrains Mono", monospace';
+          context.fillStyle = marker.color;
+          context.textAlign = 'center';
+          context.fillText(marker.label.toUpperCase(), coords[0], coords[1] - 12);
+        }
+      }
+    });
+  }
+
+  function animate() {
+    if (!isDragging) {
+      rotation[0] += velocity[0];
+    }
+    render();
+    requestAnimationFrame(animate);
+  }
+
+  // Drag interaction
+  canvas.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    dragStart = [e.clientX, e.clientY];
+    rotationStart = [...rotation];
+    canvas.style.cursor = 'grabbing';
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - dragStart[0];
+    const dy = e.clientY - dragStart[1];
+    rotation[0] = rotationStart[0] + dx * 0.3;
+    rotation[1] = Math.max(-60, Math.min(60, rotationStart[1] - dy * 0.3));
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (isDragging) {
+      isDragging = false;
+      canvas.style.cursor = 'grab';
+    }
+  });
+
+  // Touch support
+  canvas.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    const touch = e.touches[0];
+    dragStart = [touch.clientX, touch.clientY];
+    rotationStart = [...rotation];
+  }, { passive: true });
+
+  canvas.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - dragStart[0];
+    const dy = touch.clientY - dragStart[1];
+    rotation[0] = rotationStart[0] + dx * 0.3;
+    rotation[1] = Math.max(-60, Math.min(60, rotationStart[1] - dy * 0.3));
+  }, { passive: true });
+
+  canvas.addEventListener('touchend', () => {
+    isDragging = false;
+  });
 })();
 </script>
 </body>
