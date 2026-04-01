@@ -1,2815 +1,382 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ØNSTACK — Infraestrutura Regulada de Capital</title>
-<meta name="description" content="Rails regulados de FX conectando plataformas globais ao BRL, PIX e ativos tokenizados. Uma integração. Capital em minutos.">
-<link rel="icon" href="/favicon.png" type="image/png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Oxanium:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/cobe" defer></script>
+<title>0nStack — Programmable Infrastructure for RWAs & Fiat</title>
+<meta name="description" content="Regulated stablecoin infrastructure and API for Latin America. Convert, settle, tokenize — in minutes.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%C3%98</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-/* ─── RESET ─── */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-body{overflow-x:hidden}
-a{color:inherit;text-decoration:none}
-button{border:none;background:none;font:inherit;cursor:pointer}
-ul,ol{list-style:none}
-img,svg,canvas{display:block;max-width:100%}
-details>summary{list-style:none}
-details>summary::-webkit-details-marker{display:none}
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* ─── DESIGN TOKENS ─── */
-:root {
-  --bg: #050506;
-  --bg-soft: #0B0D10;
-  --panel: #111318;
-  --panel-2: #171A20;
-  --text: #F9F7F3;
-  --text-soft: #B7B2A8;
-  --text-dim: #7A756C;
-  --gold: #F5A623;
-  --gold-soft: rgba(245,166,35,0.16);
-  --gold-glow: rgba(245,166,35,0.30);
-  --line: rgba(255,255,255,0.08);
-  --cyan: #86E7FF;
-  --cyan-soft: rgba(134,231,255,0.16);
-  --r-sm: 8px;
-  --r-md: 18px;
-  --r-lg: 24px;
-  --r-xl: 32px;
-  --shadow-xl: 0 30px 100px rgba(0,0,0,0.45);
-  --shadow-card: 0 4px 24px rgba(0,0,0,0.3);
-  --shadow-gold: 0 8px 40px rgba(245,166,35,0.15);
-  --fd: 'Oxanium', sans-serif;
-  --fb: 'Inter', sans-serif;
-  --fm: 'JetBrains Mono', monospace;
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --ease-reveal: cubic-bezier(0.22, 0.68, 0, 1);
-  --size-xs: clamp(0.625rem, 0.56rem + 0.28vw, 0.75rem);
-  --size-sm: clamp(0.75rem, 0.68rem + 0.35vw, 0.875rem);
-  --size-base: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
-  --size-lg: clamp(1.125rem, 0.95rem + 0.75vw, 1.375rem);
-  --size-xl: clamp(1.5rem, 1.1rem + 1.8vw, 2.25rem);
-  --size-2xl: clamp(2rem, 1.3rem + 3vw, 3.25rem);
-  --size-3xl: clamp(2.5rem, 1.5rem + 4.5vw, 4.5rem);
-  --size-hero: clamp(3rem, 1.5rem + 7vw, 6.5rem);
-  --max-w: 1280px;
-}
-
-/* ─── BODY + GRAIN ─── */
-body {
-  font-family: var(--fb);
-  background: var(--bg);
-  color: var(--text);
-  font-size: var(--size-base);
-  line-height: 1.6;
-  position: relative;
-}
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 128px;
-}
-
-/* ─── UTILITY ─── */
-.container { max-width: var(--max-w); margin: 0 auto; padding: 0 2rem; }
-.section-label {
-  font-family: var(--fm);
-  font-size: var(--size-xs);
-  color: var(--gold);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-}
-.section-headline {
-  font-family: var(--fd);
-  font-weight: 400;
-  line-height: 1.15;
-  color: var(--text);
-  cursor: default;
-}
-.section-sub {
-  font-family: var(--fb);
-  font-weight: 300;
-  color: var(--text-soft);
-  font-size: var(--size-lg);
-  line-height: 1.6;
-  max-width: 640px;
-}
-.gold-text {
-  background: linear-gradient(135deg, #F5A623 0%, #FFD580 50%, #F5A623 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ─── BUTTONS ─── */
-.btn-gold {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.875rem 2rem;
-  font-family: var(--fd);
-  font-weight: 500;
-  font-size: var(--size-sm);
-  letter-spacing: 0.08em;
-  color: var(--bg);
-  background: linear-gradient(135deg, #F5A623 0%, #FFD580 100%);
-  border: none;
-  border-radius: var(--r-sm);
-  cursor: pointer;
-  transition: all 0.3s var(--ease-out);
-  min-height: 44px;
-  min-width: 44px;
-  text-transform: uppercase;
-  box-shadow: var(--shadow-gold);
-}
-.btn-gold:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 48px rgba(245,166,35,0.3);
-}
-.btn-ghost {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.875rem 2rem;
-  font-family: var(--fd);
-  font-weight: 500;
-  font-size: var(--size-sm);
-  letter-spacing: 0.08em;
-  color: var(--text);
-  background: transparent;
-  border: 1px solid var(--line);
-  border-radius: var(--r-sm);
-  cursor: pointer;
-  transition: all 0.3s var(--ease-out);
-  min-height: 44px;
-  min-width: 44px;
-  text-transform: uppercase;
-}
-.btn-ghost:hover {
-  border-color: var(--gold);
-  color: var(--gold);
-  transform: translateY(-2px);
-}
-
-/* ─── REVEAL ANIMATION ─── */
-.reveal {
-  opacity: 0;
-  transform: translateY(40px);
-  filter: blur(4px);
-  transition: opacity 0.8s var(--ease-reveal), transform 0.8s var(--ease-reveal), filter 0.8s var(--ease-reveal);
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-  filter: blur(0);
-}
-.stagger-1 { transition-delay: 80ms; }
-.stagger-2 { transition-delay: 160ms; }
-.stagger-3 { transition-delay: 240ms; }
-.stagger-4 { transition-delay: 320ms; }
-.stagger-5 { transition-delay: 400ms; }
-.stagger-6 { transition-delay: 480ms; }
-
-/* ═══════════════════════════════════════════
-   SECTION 1: NAVIGATION
-   ═══════════════════════════════════════════ */
-.nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  padding: 1.25rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  transition: all 0.4s var(--ease-out);
-}
-.nav.scrolled {
-  background: rgba(5,5,6,0.82);
-  backdrop-filter: blur(24px) saturate(1.4);
-  -webkit-backdrop-filter: blur(24px) saturate(1.4);
-  border-bottom: 1px solid var(--line);
-  padding: 0.875rem 2rem;
-}
-.nav-logo {
-  font-family: var(--fd);
-  font-weight: 400;
-  font-size: 1.25rem;
-  letter-spacing: 0.18em;
-  color: var(--text);
-  text-transform: uppercase;
-}
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 2.5rem;
-}
-.nav-links a {
-  font-family: var(--fb);
-  font-size: var(--size-sm);
-  font-weight: 400;
-  color: var(--text-soft);
-  transition: color 0.3s;
-  letter-spacing: 0.02em;
-}
-.nav-links a:hover { color: var(--text); }
-.nav-cta {
-  font-family: var(--fd) !important;
-  font-weight: 500 !important;
-  color: var(--gold) !important;
-  border: 1px solid var(--gold);
-  padding: 0.5rem 1.25rem;
-  border-radius: var(--r-sm);
-  font-size: var(--size-xs) !important;
-  letter-spacing: 0.1em !important;
-  text-transform: uppercase;
-  transition: all 0.3s var(--ease-out) !important;
-  min-height: 44px;
-  display: inline-flex !important;
-  align-items: center;
-}
-.nav-cta:hover {
-  background: var(--gold-soft);
-  transform: translateY(-1px);
-}
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-  min-width: 44px;
-  min-height: 44px;
-  align-items: center;
-  justify-content: center;
-}
-.hamburger span {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: var(--text);
-  transition: all 0.3s var(--ease-out);
-}
-.mobile-menu {
-  position: fixed;
-  inset: 0;
-  z-index: 999;
-  background: rgba(5,5,6,0.96);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2.5rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s var(--ease-out);
-}
-.mobile-menu.open {
-  opacity: 1;
-  pointer-events: all;
-}
-.mobile-menu a {
-  font-family: var(--fd);
-  font-size: var(--size-xl);
-  font-weight: 400;
-  color: var(--text);
-  letter-spacing: 0.08em;
-}
-.mobile-menu a:hover { color: var(--gold); }
-
-/* ═══════════════════════════════════════════
-   SECTION 2: HERO
-   ═══════════════════════════════════════════ */
-.hero {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  background: var(--bg);
-}
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 600px 400px at 70% 25%, rgba(245,166,35,0.12), transparent);
-  z-index: 1;
-  pointer-events: none;
-}
-.hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 500px 300px at 25% 75%, rgba(134,231,255,0.06), transparent);
-  z-index: 1;
-  pointer-events: none;
-}
-#heroCanvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-}
-.hero-content {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  max-width: 800px;
-  padding: 0 2rem;
-}
-.hero-eyebrow {
-  font-family: var(--fm);
-  font-size: var(--size-xs);
-  color: var(--gold);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
-}
-.hero-h1 {
-  font-family: var(--fd);
-  font-weight: 500;
-  font-size: var(--size-hero);
-  line-height: 1.05;
-  color: var(--text);
-  margin-bottom: 1.5rem;
-}
-.hero-h1 span { /* gold gradient text */
-  background: linear-gradient(135deg, #F5A623 0%, #FFD580 50%, #F5A623 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.hero-sub {
-  font-family: var(--fb);
-  font-weight: 300;
-  font-size: var(--size-lg);
-  color: var(--text-soft);
-  line-height: 1.7;
-  margin-bottom: 2.5rem;
-  max-width: 620px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.hero-ctas {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 3rem;
-}
-.hero-proof {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  font-family: var(--fm);
-  font-size: var(--size-xs);
-  color: var(--text-dim);
-  letter-spacing: 0.04em;
-}
-.hero-proof .dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--gold);
-  flex-shrink: 0;
-}
-.scroll-indicator {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  animation: scrollBounce 2s var(--ease-out) infinite;
-}
-.scroll-indicator span {
-  font-family: var(--fm);
-  font-size: 0.625rem;
-  color: var(--text-dim);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
-.scroll-indicator svg { color: var(--text-dim); }
-@keyframes scrollBounce {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(8px); }
-}
-
-/* ═══════════════════════════════════════════
-   SECTION 3: TRUST BAR
-   ═══════════════════════════════════════════ */
-.trust-bar {
-  background: var(--bg-soft);
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  padding: 2rem 0;
-  overflow: hidden;
-  position: relative;
-}
-.trust-bar::before,
-.trust-bar::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 120px;
-  z-index: 2;
-  pointer-events: none;
-}
-.trust-bar::before {
-  left: 0;
-  background: linear-gradient(to right, var(--bg-soft), transparent);
-}
-.trust-bar::after {
-  right: 0;
-  background: linear-gradient(to left, var(--bg-soft), transparent);
-}
-.marquee-row {
-  display: flex;
-  white-space: nowrap;
-  opacity: 0.4;
-}
-.marquee-row + .marquee-row { margin-top: 1rem; }
-.marquee-track {
-  display: flex;
-  align-items: center;
-  animation: marquee 40s linear infinite;
-}
-.marquee-row:nth-child(2) .marquee-track {
-  animation-direction: reverse;
-}
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-.marquee-item {
-  font-family: var(--fd);
-  font-weight: 500;
-  font-size: var(--size-sm);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-soft);
-  padding: 0 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  flex-shrink: 0;
-}
-.marquee-item::after {
-  content: '';
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--gold);
-  flex-shrink: 0;
-}
-
-/* ═══════════════════════════════════════════
-   SECTION 4: O QUE É (Infrastructure)
-   ═══════════════════════════════════════════ */
-.why-section {
-  padding: 8rem 0;
-  background: var(--bg);
-}
-.why-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.1fr;
-  gap: 4rem;
-  align-items: center;
-}
-.why-headline {
-  font-size: var(--size-3xl);
-  margin-bottom: 1.5rem;
-}
-.why-paragraph {
-  color: var(--text-soft);
-  font-weight: 300;
-  line-height: 1.8;
-  margin-bottom: 2.5rem;
-  font-size: var(--size-base);
-}
-.feature-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1rem 0;
-  border-top: 1px solid var(--line);
-}
-.feature-row:last-child { border-bottom: 1px solid var(--line); }
-.feature-icon {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-  color: var(--gold);
-  margin-top: 2px;
-}
-.feature-text h4 {
-  font-family: var(--fd);
-  font-weight: 500;
-  font-size: var(--size-base);
-  margin-bottom: 0.25rem;
-}
-.feature-text p {
-  font-size: var(--size-sm);
-  color: var(--text-dim);
-  line-height: 1.5;
-}
-
-/* Network SVG */
-.network-svg-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.network-svg-wrap svg { width: 100%; max-width: 440px; height: auto; }
-
-/* ═══════════════════════════════════════════
-   SECTION 5: USE CASES
-   ═══════════════════════════════════════════ */
-.usecases {
-  padding: 8rem 0;
-  background: var(--bg-soft);
-}
-.usecases .section-headline { font-size: var(--size-2xl); margin-bottom: 0.75rem; }
-.usecases .section-sub { margin-bottom: 3rem; }
-.tab-bar {
-  display: flex;
-  gap: 0;
-  border-bottom: 1px solid var(--line);
-  margin-bottom: 3rem;
-  position: relative;
-  overflow-x: auto;
-}
-.tab-btn {
-  font-family: var(--fd);
-  font-weight: 500;
-  font-size: var(--size-sm);
-  color: var(--text-dim);
-  padding: 1rem 1.75rem;
-  border-bottom: 2px solid transparent;
-  transition: all 0.3s var(--ease-out);
-  cursor: pointer;
-  white-space: nowrap;
-  min-height: 44px;
-}
-.tab-btn.active {
-  color: var(--gold);
-  border-bottom-color: var(--gold);
-}
-.tab-btn:hover:not(.active) { color: var(--text-soft); }
-.tab-panel {
-  display: none;
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out);
-}
-.tab-panel.active {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 3rem;
-  align-items: start;
-  opacity: 1;
-  transform: translateY(0);
-}
-.tab-headline {
-  font-family: var(--fd);
-  font-weight: 500;
-  font-size: var(--size-xl);
-  margin-bottom: 0.75rem;
-}
-.tab-desc {
-  color: var(--text-soft);
-  margin-bottom: 1.5rem;
-  line-height: 1.7;
-}
-.tab-bullets li {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 0;
-  font-size: var(--size-sm);
-  color: var(--text-soft);
-}
-.tab-bullets li::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--gold);
-  flex-shrink: 0;
-}
-.tab-card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: var(--r-lg);
-  padding: 2rem;
-  position: relative;
-  overflow: hidden;
-}
-.tab-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(245,166,35,0.06), transparent 60%);
-  pointer-events: none;
-}
-.tab-cta-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--fd);
-  font-size: var(--size-sm);
-  color: var(--gold);
-  margin-top: 1.5rem;
-  transition: gap 0.3s;
-  cursor: pointer;
-}
-.tab-cta-link:hover { gap: 0.75rem; }
-
-/* Mini dashboard inside tab cards */
-.mini-kpi-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-}
-.mini-kpi {
-  background: var(--bg);
-  border-radius: var(--r-sm);
-  padding: 0.75rem;
-  text-align: center;
-}
-.mini-kpi-val {
-  font-family: var(--fd);
-  font-weight: 600;
-  font-size: var(--size-lg);
-  color: var(--gold);
-}
-.mini-kpi-label {
-  font-size: var(--size-xs);
-  color: var(--text-dim);
-  margin-top: 0.25rem;
-}
-.mini-bar-chart {
-  display: flex;
-  align-items: flex-end;
-  gap: 6px;
-  height: 60px;
-}
-.mini-bar {
-  flex: 1;
-  border-radius: 3px;
-  background: linear-gradient(to top, var(--gold-soft), var(--gold));
-}
-
-/* ═══════════════════════════════════════════
-   SECTION 6: PLATFORM MOCKUP
-   ═══════════════════════════════════════════ */
-.platform {
-  padding: 8rem 0;
-  background: var(--bg);
-  position: relative;
-  overflow: hidden;
-}
-.platform::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 800px;
-  height: 600px;
-  background: radial-gradient(ellipse, rgba(245,166,35,0.08), transparent 70%);
-  pointer-events: none;
-}
-.platform .section-headline { font-size: var(--size-2xl); text-align: center; margin-bottom: 0.75rem; }
-.platform .section-sub { text-align: center; margin: 0 auto 4rem; }
-.devices-wrap {
-  position: relative;
-  max-width: 1000px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 520px;
-}
-/* Desktop frame */
-.device-desktop {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 780px;
-  background: var(--panel);
-  border-radius: var(--r-xl);
-  border: 1px solid var(--line);
-  overflow: hidden;
-  box-shadow: var(--shadow-xl);
-}
-.device-chrome {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: var(--panel-2);
-  border-bottom: 1px solid var(--line);
-}
-.chrome-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-.chrome-dot:nth-child(1) { background: #FF5F57; }
-.chrome-dot:nth-child(2) { background: #FEBC2E; }
-.chrome-dot:nth-child(3) { background: #28C840; }
-.chrome-url {
-  font-family: var(--fm);
-  font-size: 0.625rem;
-  color: var(--text-dim);
-  background: var(--bg);
-  padding: 0.25rem 0.75rem;
-  border-radius: 4px;
-  margin-left: 0.75rem;
-}
-.device-body {
-  display: grid;
-  grid-template-columns: 48px 1fr;
-  min-height: 340px;
-  background: var(--bg-soft);
-}
-.device-sidebar {
-  background: var(--panel);
-  border-right: 1px solid var(--line);
-  padding: 1rem 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  align-items: center;
-}
-.sidebar-icon {
-  width: 24px;
-  height: 24px;
-  border-radius: 4px;
-  background: var(--line);
-}
-.sidebar-icon.active { background: var(--gold-soft); border: 1px solid rgba(245,166,35,0.3); }
-.device-main { padding: 1.25rem; }
-.kpi-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
-}
-.kpi-box {
-  background: var(--panel);
-  border-radius: var(--r-sm);
-  padding: 0.75rem;
-  border: 1px solid var(--line);
-}
-.kpi-label {
-  font-size: 0.625rem;
-  font-family: var(--fm);
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.kpi-val {
-  font-family: var(--fd);
-  font-weight: 600;
-  font-size: var(--size-lg);
-  color: var(--text);
-  margin-top: 0.25rem;
-}
-.kpi-val.gold { color: var(--gold); }
-.mock-chart {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  height: 80px;
-  margin-bottom: 1.25rem;
-  padding: 0.5rem;
-  background: var(--panel);
-  border-radius: var(--r-sm);
-  border: 1px solid var(--line);
-}
-.chart-bar {
-  flex: 1;
-  border-radius: 3px 3px 0 0;
-  background: linear-gradient(to top, rgba(245,166,35,0.2), rgba(245,166,35,0.6));
-}
-.txn-row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  background: var(--panel);
-  border-radius: var(--r-sm);
-  border: 1px solid var(--line);
-  margin-bottom: 0.5rem;
-  font-size: 0.7rem;
-}
-.txn-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.txn-dot.green { background: #28C840; }
-.txn-dot.gold { background: var(--gold); }
-.txn-dot.cyan { background: var(--cyan); }
-.txn-name {
-  font-family: var(--fb);
-  color: var(--text-soft);
-  flex: 1;
-}
-.txn-amount {
-  font-family: var(--fm);
-  color: var(--text);
-}
-.txn-badge {
-  font-family: var(--fm);
-  font-size: 0.6rem;
-  padding: 0.15rem 0.5rem;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.txn-badge.settled { background: rgba(40,200,64,0.15); color: #28C840; }
-.txn-badge.processing { background: var(--gold-soft); color: var(--gold); }
-.txn-badge.pending { background: var(--cyan-soft); color: var(--cyan); }
-
-/* Tablet + Phone floating devices */
-.device-tablet {
-  position: absolute;
-  left: -60px;
-  top: 60px;
-  z-index: 1;
-  width: 280px;
-  background: var(--panel);
-  border-radius: var(--r-lg);
-  border: 1px solid var(--line);
-  overflow: hidden;
-  box-shadow: var(--shadow-card);
-  transform: perspective(1200px) rotateY(8deg) translateZ(-40px);
-}
-.device-tablet .device-main { padding: 1rem; }
-.device-phone {
-  position: absolute;
-  right: -40px;
-  bottom: 40px;
-  z-index: 3;
-  width: 200px;
-  background: var(--panel);
-  border-radius: var(--r-lg);
-  border: 1px solid var(--line);
-  overflow: hidden;
-  box-shadow: var(--shadow-card);
-  transform: perspective(1200px) rotateY(-8deg) translateZ(-20px);
-}
-.phone-notif {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.phone-header {
-  font-family: var(--fm);
-  font-size: 0.6rem;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-.phone-amount {
-  font-family: var(--fd);
-  font-weight: 600;
-  font-size: 1.25rem;
-  color: #28C840;
-}
-.phone-status {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.65rem;
-  color: #28C840;
-}
-.phone-status .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #28C840;
-}
-
-/* ═══════════════════════════════════════════
-   SECTION 7: HOW IT WORKS
-   ═══════════════════════════════════════════ */
-.how-section {
-  padding: 8rem 0;
-  background: var(--panel);
-}
-.how-section .section-headline { font-size: var(--size-2xl); margin-bottom: 0.75rem; }
-.how-section .section-sub { margin-bottom: 4rem; }
-.orbital-layout {
-  position: relative;
-  max-width: 900px;
-  margin: 0 auto;
-  min-height: 500px;
-}
-.orbital-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: 2px solid var(--gold);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--fd);
-  font-weight: 500;
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  color: var(--gold);
-  background: var(--bg);
-  box-shadow: 0 0 60px rgba(245,166,35,0.12);
-  z-index: 2;
-}
-.step-card {
-  position: absolute;
-  width: 280px;
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: var(--r-md);
-  padding: 1.5rem;
-  z-index: 3;
-}
-.step-card[data-step="1"] { top: 0; left: 0; }
-.step-card[data-step="2"] { top: 0; right: 0; }
-.step-card[data-step="3"] { bottom: 0; left: 50%; transform: translateX(-50%); }
-.step-num {
-  font-family: var(--fm);
-  font-size: var(--size-xs);
-  color: var(--gold);
-  letter-spacing: 0.1em;
-  margin-bottom: 0.5rem;
-}
-.step-card h4 {
-  font-family: var(--fd);
-  font-weight: 500;
-  font-size: var(--size-base);
-  margin-bottom: 0.5rem;
-}
-.step-card p {
-  font-size: var(--size-sm);
-  color: var(--text-soft);
-  line-height: 1.6;
-}
-.orbital-svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-/* Mobile vertical timeline */
-.how-vertical { display: none; }
-.how-v-step {
-  display: flex;
-  gap: 1.5rem;
-  padding-bottom: 2.5rem;
-  position: relative;
-}
-.how-v-step:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  left: 15px;
-  top: 40px;
-  bottom: 0;
-  width: 1px;
-  border-left: 2px dashed var(--line);
-}
-.how-v-num {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 2px solid var(--gold);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--fm);
-  font-size: var(--size-xs);
-  color: var(--gold);
-  flex-shrink: 0;
-  background: var(--bg);
-  position: relative;
-  z-index: 2;
-}
-.how-v-content h4 {
-  font-family: var(--fd);
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-}
-.how-v-content p {
-  font-size: var(--size-sm);
-  color: var(--text-soft);
-  line-height: 1.6;
-}
-
-/* ═══════════════════════════════════════════
-   SECTION 8: COMPARISON TABLE
-   ═══════════════════════════════════════════ */
-.comparison {
-  padding: 8rem 0;
-  background: var(--bg);
-}
-.comparison .section-headline { font-size: var(--size-2xl); margin-bottom: 0.75rem; }
-.comparison .section-sub { margin-bottom: 2rem; }
-.callout-card {
-  background: var(--gold-soft);
-  border: 1px solid rgba(245,166,35,0.25);
-  border-radius: var(--r-md);
-  padding: 1.5rem 2rem;
-  margin-bottom: 3rem;
-  text-align: center;
-  font-family: var(--fd);
-  font-weight: 500;
-  font-size: var(--size-lg);
-  color: var(--text);
-  box-shadow: var(--shadow-gold);
-}
-.table-wrap {
-  overflow-x: auto;
-  border-radius: var(--r-md);
-  border: 1px solid var(--line);
-}
-.comp-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: var(--size-sm);
-  min-width: 640px;
-}
-.comp-table thead th {
-  font-family: var(--fd);
-  font-weight: 500;
-  padding: 1rem 1.25rem;
-  text-align: left;
-  background: var(--panel);
-  border-bottom: 1px solid var(--line);
-  color: var(--text-soft);
-  font-size: var(--size-sm);
-  letter-spacing: 0.04em;
-}
-.comp-table thead th:last-child {
-  color: var(--gold);
-  background: rgba(245,166,35,0.06);
-}
-.comp-table tbody td {
-  padding: 0.875rem 1.25rem;
-  border-bottom: 1px solid var(--line);
-  color: var(--text-soft);
-}
-.comp-table tbody td:first-child {
-  font-family: var(--fd);
-  font-weight: 500;
-  color: var(--text);
-}
-.comp-table tbody td:last-child {
-  background: rgba(245,166,35,0.04);
-  color: var(--gold);
-  font-weight: 600;
-}
-.comp-table tbody tr:last-child td { border-bottom: none; }
-.check {
-  color: var(--gold);
-  font-weight: 700;
-}
-.cross {
-  color: var(--text-dim);
-  opacity: 0.4;
-}
-
-/* ═══════════════════════════════════════════
-   SECTION 9: RWA
-   ═══════════════════════════════════════════ */
-.rwa {
-  padding: 8rem 0;
-  background: var(--bg-soft);
-  position: relative;
-  overflow: hidden;
-}
-.rwa::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 60%;
-  transform: translate(-50%, -50%);
-  width: 600px;
-  height: 400px;
-  background: radial-gradient(ellipse, rgba(245,166,35,0.06), transparent 70%);
-  pointer-events: none;
-}
-.rwa .section-headline { font-size: var(--size-2xl); margin-bottom: 0.75rem; }
-.rwa-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-  margin-bottom: 4rem;
-}
-.rwa-left p {
-  color: var(--text-soft);
-  line-height: 1.8;
-  margin-bottom: 1.25rem;
-}
-.rwa-left p strong {
-  color: var(--text);
-  font-weight: 500;
-}
-.rwa-flow-svg { width: 100%; max-width: 480px; margin: 0 auto; }
-.rwa-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  max-width: 700px;
-  margin: 0 auto;
-}
-.rwa-stat {
-  text-align: center;
-  padding: 1.5rem;
-  background: var(--panel);
-  border-radius: var(--r-md);
-  border: 1px solid var(--line);
-}
-.rwa-stat-val {
-  font-family: var(--fd);
-  font-weight: 500;
-  font-size: var(--size-xl);
-  color: var(--gold);
-  margin-bottom: 0.25rem;
-}
-.rwa-stat-label {
-  font-size: var(--size-xs);
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-/* ═══════════════════════════════════════════
-   SECTION 10: DEVELOPERS / API
-   ═══════════════════════════════════════════ */
-.developers {
-  padding: 8rem 0;
-  background: var(--bg);
-}
-.developers .section-headline { font-size: var(--size-2xl); margin-bottom: 0.75rem; }
-.developers .section-sub { margin-bottom: 3rem; }
-.dev-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 3rem;
-  align-items: start;
-}
-.dev-desc {
-  color: var(--text-soft);
-  line-height: 1.8;
-  margin-bottom: 1.5rem;
-}
-.dev-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-.dev-pill {
-  font-family: var(--fm);
-  font-size: var(--size-xs);
-  color: var(--text-dim);
-  background: var(--panel);
-  border: 1px solid var(--line);
-  padding: 0.4rem 0.8rem;
-  border-radius: 100px;
-}
-.code-editor {
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  position: relative;
-  box-shadow: var(--shadow-xl);
-}
-.code-editor::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: var(--r-lg);
-  padding: 1px;
-  background: linear-gradient(135deg, var(--gold), var(--cyan));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  z-index: 1;
-}
-.code-tabs {
-  display: flex;
-  background: var(--panel-2);
-  border-bottom: 1px solid var(--line);
-}
-.code-tab {
-  font-family: var(--fm);
-  font-size: var(--size-xs);
-  color: var(--text-dim);
-  padding: 0.75rem 1.25rem;
-  cursor: pointer;
-  transition: color 0.3s;
-  border-bottom: 2px solid transparent;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-}
-.code-tab.active {
-  color: var(--gold);
-  border-bottom-color: var(--gold);
-}
-.code-tab:hover:not(.active) { color: var(--text-soft); }
-.code-body {
-  background: var(--bg);
-  padding: 1.5rem;
-  font-family: var(--fm);
-  font-size: 0.8rem;
-  line-height: 1.75;
-  overflow-x: auto;
-}
-.code-panel { display: none; }
-.code-panel.active { display: block; }
-.code-body .ck { color: var(--text-dim); }
-.code-body .cs { color: #86E7FF; }
-.code-body .cf { color: #c792ea; }
-.code-body .cn { color: #f78c6c; }
-.code-body .cv { color: var(--text); }
-.code-body .cg { color: #c3e88d; }
-.code-body .co { color: var(--gold); }
-.endpoint-strip {
-  margin-top: 2rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-}
-.endpoint-item {
-  font-family: var(--fm);
-  font-size: var(--size-xs);
-  color: var(--text-dim);
-  background: var(--panel);
-  border: 1px solid var(--line);
-  padding: 0.5rem 1rem;
-  border-radius: var(--r-sm);
-}
-
-/* ═══════════════════════════════════════════
-   SECTION 11: ECOSYSTEM / GLOBE
-   ═══════════════════════════════════════════ */
-.ecosystem {
-  padding: 8rem 0;
-  background: var(--panel);
-}
-.eco-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-}
-.eco-headline {
-  font-size: var(--size-2xl);
-  margin-bottom: 0.75rem;
-}
-.eco-sub {
-  color: var(--text-soft);
-  line-height: 1.8;
-  margin-bottom: 2rem;
-}
-.eco-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-.eco-stat {
-  padding: 1rem;
-  background: var(--bg);
-  border-radius: var(--r-sm);
-  border: 1px solid var(--line);
-}
-.eco-stat-val {
-  font-family: var(--fd);
-  font-weight: 600;
-  font-size: var(--size-xl);
-  color: var(--gold);
-}
-.eco-stat-label {
-  font-size: var(--size-xs);
-  color: var(--text-dim);
-  margin-top: 0.25rem;
-}
-.globe-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-#globeCanvas {
-  width: 100%;
-  max-width: 550px;
-  aspect-ratio: 1;
-}
-
-/* ═══════════════════════════════════════════
-   SECTION 12: FAQ
-   ═══════════════════════════════════════════ */
-.faq {
-  padding: 8rem 0;
-  background: var(--bg);
-}
-.faq .section-headline { font-size: var(--size-2xl); margin-bottom: 3rem; }
-.faq-list {
-  max-width: 800px;
-  margin: 0 auto;
-}
-.faq-item {
-  border-bottom: 1px solid var(--line);
-  transition: all 0.3s var(--ease-out);
-}
-.faq-item[open] {
-  border-left: 2px solid var(--gold);
-  padding-left: 1rem;
-}
-.faq-item summary {
-  font-family: var(--fd);
-  font-weight: 500;
-  font-size: var(--size-lg);
-  padding: 1.5rem 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: var(--text);
-  transition: color 0.3s;
-  min-height: 44px;
-}
-.faq-item summary:hover { color: var(--gold); }
-.faq-icon {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-  color: var(--gold);
-  transition: transform 0.3s var(--ease-out);
-}
-.faq-item[open] .faq-icon { transform: rotate(45deg); }
-.faq-answer {
-  padding: 0 0 1.5rem;
-  color: var(--text-soft);
-  line-height: 1.8;
-  font-size: var(--size-base);
-  max-width: 680px;
-}
-
-/* ═══════════════════════════════════════════
-   SECTION 13: CTA FINAL
-   ═══════════════════════════════════════════ */
-.cta-final {
-  padding: 12rem 0;
-  background: var(--bg);
-  position: relative;
-  text-align: center;
-  overflow: hidden;
-}
-.cta-final::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 700px;
-  height: 500px;
-  background: radial-gradient(ellipse, rgba(245,166,35,0.1), transparent 70%);
-  pointer-events: none;
-}
-.cta-final .section-headline {
-  font-size: var(--size-3xl);
-  margin-bottom: 1rem;
-  position: relative;
-}
-.cta-final .section-sub {
-  margin: 0 auto 3rem;
-  text-align: center;
-  position: relative;
-}
-.cta-final-buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 3rem;
-  position: relative;
-}
-.cta-trust {
-  font-family: var(--fm);
-  font-size: var(--size-xs);
-  color: var(--text-dim);
-  letter-spacing: 0.04em;
-  position: relative;
-}
-
-/* ═══════════════════════════════════════════
-   FOOTER
-   ═══════════════════════════════════════════ */
-.footer {
-  background: var(--panel);
-  border-top: 1px solid var(--line);
-  padding: 4rem 0 2rem;
-}
-.footer-grid {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1fr;
-  gap: 3rem;
-  margin-bottom: 3rem;
-}
-.footer-brand-name {
-  font-family: var(--fd);
-  font-weight: 400;
-  font-size: 1.25rem;
-  letter-spacing: 0.18em;
-  margin-bottom: 0.75rem;
-}
-.footer-tagline {
-  font-size: var(--size-sm);
-  color: var(--text-dim);
-  line-height: 1.6;
-}
-.footer-col-title {
-  font-family: var(--fd);
-  font-weight: 500;
-  font-size: var(--size-sm);
-  color: var(--text);
-  letter-spacing: 0.06em;
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-}
-.footer-col a {
-  display: block;
-  font-size: var(--size-sm);
-  color: var(--text-dim);
-  padding: 0.3rem 0;
-  transition: color 0.3s;
-}
-.footer-col a:hover { color: var(--gold); }
-.footer-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 2rem;
-  border-top: 1px solid var(--line);
-  font-size: var(--size-xs);
-  color: var(--text-dim);
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-/* ═══════════════════════════════════════════
-   RESPONSIVE
-   ═══════════════════════════════════════════ */
-@media (max-width: 1024px) {
-  .hero-h1 { font-size: var(--size-3xl); }
-  .why-grid { grid-template-columns: 1fr; }
-  .network-svg-wrap { margin-top: 2rem; }
-  .tab-panel.active { grid-template-columns: 1fr; }
-  .devices-wrap { min-height: auto; }
-  .device-tablet, .device-phone { display: none; }
-  .orbital-layout { display: none; }
-  .how-vertical { display: block; }
-  .eco-grid { grid-template-columns: 1fr; }
-  .globe-wrap { margin-top: 2rem; }
-  .comp-table { font-size: var(--size-xs); }
-  .rwa-grid { grid-template-columns: 1fr; }
-  .dev-grid { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 768px) {
-  .nav-links { display: none; }
-  .hamburger { display: flex; }
-  .hero-h1 { font-size: var(--size-2xl); }
-  .hero-ctas { flex-direction: column; }
-  .hero-ctas .btn-gold, .hero-ctas .btn-ghost { width: 100%; }
-  .kpi-row { grid-template-columns: repeat(2, 1fr); }
-  .rwa-stats { grid-template-columns: 1fr 1fr; }
-  .rwa-stats .rwa-stat:last-child { grid-column: span 2; }
-  .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
-  .footer-bottom { flex-direction: column; text-align: center; }
-  .eco-stats { grid-template-columns: 1fr; }
-  .endpoint-strip { flex-direction: column; align-items: stretch; text-align: center; }
-  .hero-proof { flex-direction: column; gap: 0.5rem; }
-  .hero-proof .dot { display: none; }
-}
-
-@media (max-width: 375px) {
-  .cta-final-buttons { flex-direction: column; }
-  .cta-final-buttons .btn-gold, .cta-final-buttons .btn-ghost { width: 100%; }
-  .eco-stats { grid-template-columns: 1fr 1fr; }
-  .hero-proof { flex-wrap: wrap; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reveal {
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-    transition: none !important;
+  :root {
+    --gold: #f08c00;
+    --gold-light: #ffb84d;
+    --gold-glow: rgba(240, 140, 0, 0.3);
+    --g400: #999;
+    --g500: #666;
+    --g600: #444;
+    --success: #16A34A;
   }
-  .marquee-track { animation: none !important; }
-  .scroll-indicator { animation: none !important; }
-  .traveling-dot { display: none !important; }
-}
+
+  html { background: #000; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #000;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: var(--gold); color: #000; }
+
+  /* Grid background */
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(240,140,0,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(240,140,0,0.06) 1px, transparent 1px);
+    background-size: 80px 80px;
+    opacity: 0.5;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 70%);
+  }
+
+  /* Glows */
+  .glow-center {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 900px; height: 900px;
+    background: radial-gradient(circle, rgba(240,140,0,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .glow-top {
+    position: fixed;
+    top: -300px; left: -200px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(240,140,0,0.025) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* Scan line */
+  .scan-line {
+    position: fixed;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(240,140,0,0.15), transparent);
+    animation: scan 8s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes scan {
+    0% { top: 0; }
+    100% { top: 100%; }
+  }
+
+  /* Content */
+  .content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 24px;
+    max-width: 640px;
+  }
+
+  /* Logo */
+  .logo {
+    font-family: 'Oxanium', sans-serif;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    color: #fff;
+    margin-bottom: 48px;
+    animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .logo .o { color: var(--gold); }
+
+  /* Divider */
+  .divider {
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(240,140,0,0.5), transparent);
+    margin-bottom: 40px;
+    animation: scaleIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+  }
+
+  /* Badge */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid rgba(240,140,0,0.2);
+    background: rgba(240,140,0,0.04);
+    padding: 10px 20px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+  }
+
+  .badge-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+  }
+
+  .pulse-dot {
+    position: relative;
+    width: 8px; height: 8px;
+  }
+
+  .pulse-dot::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: ping 1.5s cubic-bezier(0,0,0.2,1) infinite;
+  }
+
+  .pulse-dot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  @keyframes ping {
+    75%, 100% { transform: scale(2.5); opacity: 0; }
+  }
+
+  /* Headlines */
+  .headline {
+    font-family: 'Oxanium', sans-serif;
+    font-size: clamp(1.2rem, 3.5vw, 1.9rem);
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: #fff;
+    margin-bottom: 20px;
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both;
+  }
+
+  .headline .sub {
+    font-weight: 300;
+    color: var(--g400);
+  }
+
+  .description {
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    color: var(--g400);
+    max-width: 440px;
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.9s both;
+  }
+
+  /* Buttons */
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.1s both;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Oxanium', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    padding: 14px 28px;
+    text-decoration: none;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: #000;
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background: var(--gold-light);
+    box-shadow: 0 0 30px var(--gold-glow);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--g500);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .btn-secondary:hover {
+    color: var(--gold);
+    border-color: rgba(240,140,0,0.3);
+  }
+
+  /* Corner labels */
+  .corner {
+    position: fixed;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--g600);
+    letter-spacing: 0.15em;
+    z-index: 10;
+  }
+
+  .corner-tl { top: 24px; left: 24px; }
+  .corner-tr { top: 24px; right: 24px; }
+  .corner .slash { color: rgba(240,140,0,0.4); }
+
+  /* Status bar */
+  .status-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 48px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    z-index: 20;
+    animation: fadeIn 1s 1.5s both;
+  }
+
+  .status-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--g500);
+  }
+
+  .status-left { display: flex; align-items: center; gap: 8px; }
+  .status-center { display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .status-right { display: flex; align-items: center; justify-content: flex-end; gap: 6px; }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 6px var(--success);
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  .text-gold { color: var(--gold); }
+  .text-white { color: #fff; }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scaleX(0); }
+    to { opacity: 1; transform: scaleX(1); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .corner { display: none; }
+    .status-inner { font-size: 9px; padding: 0 16px; }
+    .buttons { flex-direction: column; align-items: stretch; }
+    .btn { justify-content: center; }
+  }
 </style>
 </head>
 <body>
 
-<!-- ═══ NAV ═══ -->
-<nav class="nav" id="mainNav">
-  <a href="#" class="nav-logo">ØNSTACK</a>
-  <div class="nav-links">
-    <a href="#infrastructure">Infraestrutura</a>
-    <a href="#usecases">Produtos</a>
-    <a href="#developers">Desenvolvedores</a>
-    <a href="#global">Empresa</a>
-    <a href="#" class="nav-cta">Solicitar Acesso</a>
-  </div>
-  <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
+  <div class="grid-bg"></div>
+  <div class="glow-center"></div>
+  <div class="glow-top"></div>
+  <div class="scan-line"></div>
 
-<!-- Mobile Menu -->
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#infrastructure" onclick="closeMobile()">Infraestrutura</a>
-  <a href="#usecases" onclick="closeMobile()">Produtos</a>
-  <a href="#developers" onclick="closeMobile()">Desenvolvedores</a>
-  <a href="#global" onclick="closeMobile()">Empresa</a>
-  <a href="#" class="btn-gold" onclick="closeMobile()">Solicitar Acesso</a>
-</div>
+  <div class="corner corner-tl"><span class="slash">//</span> 0nstack.io</div>
+  <div class="corner corner-tr">v0.1.0</div>
 
-<!-- ═══ HERO ═══ -->
-<section class="hero" id="hero">
-  <canvas id="heroCanvas"></canvas>
-  <div class="hero-content">
-    <p class="hero-eyebrow reveal">INFRAESTRUTURA REGULADA</p>
-    <h1 class="hero-h1 reveal stagger-1">Onde stablecoins viram <span>reais</span></h1>
-    <p class="hero-sub reveal stagger-2">Rails regulados de FX conectando plataformas globais ao BRL, PIX e ativos tokenizados. Uma integração. Capital em minutos.</p>
-    <div class="hero-ctas reveal stagger-3">
-      <a href="#" class="btn-gold">Solicitar Acesso</a>
-      <a href="#" class="btn-ghost">Ver Documentação</a>
+  <div class="content">
+    <div class="logo"><span class="o">&Oslash;</span>NSTACK</div>
+
+    <div class="divider"></div>
+
+    <div class="badge">
+      <span class="pulse-dot"></span>
+      <span class="badge-text">Coming Soon</span>
     </div>
-    <div class="hero-proof reveal stagger-4">
-      <span>3.2 min settlement</span>
-      <span class="dot"></span>
-      <span>0.8% flat</span>
-      <span class="dot"></span>
-      <span>14 plataformas live</span>
-      <span class="dot"></span>
-      <span>Licenciada BACEN</span>
+
+    <h1 class="headline">
+      Programmable Infrastructure<br>
+      <span class="sub">for RWAs & Fiat</span>
+    </h1>
+
+    <p class="description">
+      We're building the regulated API that will power stablecoin conversions,
+      cross-border settlements, and RWA tokenization across Latin America.
+    </p>
+
+    <div class="buttons">
+      <a href="mailto:contact@0nstack.io" class="btn btn-primary">Get in Touch</a>
+      <a href="/example" class="btn btn-secondary">Preview Design</a>
     </div>
   </div>
-  <div class="scroll-indicator">
-    <span>Scroll</span>
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-      <path d="M8 2v12M3 9l5 5 5-5"/>
-    </svg>
-  </div>
-</section>
 
-<!-- ═══ TRUST BAR ═══ -->
-<section class="trust-bar">
-  <div class="marquee-row">
-    <div class="marquee-track">
-      <span class="marquee-item">BACEN</span>
-      <span class="marquee-item">STELLAR</span>
-      <span class="marquee-item">CIRCLE</span>
-      <span class="marquee-item">PIX</span>
-      <span class="marquee-item">B3</span>
-      <span class="marquee-item">MORPH L2</span>
-      <span class="marquee-item">CHAINALYSIS</span>
-      <span class="marquee-item">FIREBLOCKS</span>
-      <span class="marquee-item">AWS</span>
-      <span class="marquee-item">BACEN</span>
-      <span class="marquee-item">STELLAR</span>
-      <span class="marquee-item">CIRCLE</span>
-      <span class="marquee-item">PIX</span>
-      <span class="marquee-item">B3</span>
-      <span class="marquee-item">MORPH L2</span>
-      <span class="marquee-item">CHAINALYSIS</span>
-      <span class="marquee-item">FIREBLOCKS</span>
-      <span class="marquee-item">AWS</span>
-    </div>
-  </div>
-  <div class="marquee-row">
-    <div class="marquee-track">
-      <span class="marquee-item">BINANCE</span>
-      <span class="marquee-item">KRAKEN</span>
-      <span class="marquee-item">OKX</span>
-      <span class="marquee-item">USDC</span>
-      <span class="marquee-item">USDT</span>
-      <span class="marquee-item">DREX</span>
-      <span class="marquee-item">NDF HEDGE</span>
-      <span class="marquee-item">IOF/IRRF</span>
-      <span class="marquee-item">SPSAV</span>
-      <span class="marquee-item">BINANCE</span>
-      <span class="marquee-item">KRAKEN</span>
-      <span class="marquee-item">OKX</span>
-      <span class="marquee-item">USDC</span>
-      <span class="marquee-item">USDT</span>
-      <span class="marquee-item">DREX</span>
-      <span class="marquee-item">NDF HEDGE</span>
-      <span class="marquee-item">IOF/IRRF</span>
-      <span class="marquee-item">SPSAV</span>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ SECTION 4: O QUE É ═══ -->
-<section class="why-section" id="infrastructure">
-  <div class="container">
-    <p class="section-label reveal">POR QUE ØNSTACK</p>
-    <div class="why-grid">
-      <div>
-        <h2 class="section-headline why-headline reveal stagger-1">A camada de capital do Brasil</h2>
-        <p class="why-paragraph reveal stagger-2">Uma integração substitui seu broker de câmbio, equipe de compliance e processador de pagamento. Da custódia de stablecoins à entrega PIX, tudo regulado, tudo em uma API.</p>
-        <div class="reveal stagger-3">
-          <div class="feature-row">
-            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-            <div class="feature-text">
-              <h4>Regulado por Design</h4>
-              <p>Licença BACEN, IOF/IRRF automatizado, relatórios prontos para auditoria.</p>
-            </div>
-          </div>
-          <div class="feature-row">
-            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 014 10 15 15 0 01-4 10 15 15 0 01-4-10A15 15 0 0112 2z"/>
-            </svg>
-            <div class="feature-text">
-              <h4>Stablecoins + RWA</h4>
-              <p>USDC, USDT e ativos tokenizados num mesmo rail regulado.</p>
-            </div>
-          </div>
-          <div class="feature-row">
-            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-            </svg>
-            <div class="feature-text">
-              <h4>Settlement Sub-5 Minutos</h4>
-              <p>Média de 3.2 minutos do depósito à entrega PIX.</p>
-            </div>
-          </div>
-          <div class="feature-row">
-            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
-            </svg>
-            <div class="feature-text">
-              <h4>Developer-First</h4>
-              <p>REST API, SDKs, sandbox completo. Produção em 7 dias.</p>
-            </div>
-          </div>
-        </div>
+  <div class="status-bar">
+    <div class="status-inner">
+      <div class="status-left">
+        <span class="status-dot"></span>
+        <span>Building</span>
       </div>
-      <!-- Network SVG -->
-      <div class="network-svg-wrap reveal stagger-4">
-        <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <!-- Central node -->
-          <rect x="140" y="160" width="120" height="80" rx="16" fill="url(#centralGrad)" stroke="url(#goldGrad)" stroke-width="2"/>
-          <text x="200" y="207" text-anchor="middle" font-family="Oxanium, sans-serif" font-size="14" font-weight="500" fill="#F5A623" letter-spacing="2">ØNSTACK</text>
-          <!-- Glow -->
-          <rect x="140" y="160" width="120" height="80" rx="16" fill="none" stroke="rgba(245,166,35,0.15)" stroke-width="8" filter="url(#glow)"/>
-          <!-- Paths to orbital nodes -->
-          <path id="pathTop" d="M200 160 C200 100 200 70 200 40" stroke="rgba(255,255,255,0.08)" stroke-width="1" fill="none"/>
-          <path id="pathRight" d="M260 200 C310 200 340 200 370 200" stroke="rgba(255,255,255,0.08)" stroke-width="1" fill="none"/>
-          <path id="pathBottom" d="M200 240 C200 300 200 330 200 360" stroke="rgba(255,255,255,0.08)" stroke-width="1" fill="none"/>
-          <path id="pathLeft" d="M140 200 C90 200 60 200 30 200" stroke="rgba(255,255,255,0.08)" stroke-width="1" fill="none"/>
-          <!-- Traveling dots -->
-          <circle r="3" fill="#86E7FF" class="traveling-dot">
-            <animateMotion dur="3s" repeatCount="indefinite"><mpath href="#pathTop"/></animateMotion>
-          </circle>
-          <circle r="3" fill="#F5A623" class="traveling-dot">
-            <animateMotion dur="3.5s" repeatCount="indefinite"><mpath href="#pathRight"/></animateMotion>
-          </circle>
-          <circle r="3" fill="#F5A623" class="traveling-dot">
-            <animateMotion dur="4s" repeatCount="indefinite"><mpath href="#pathBottom"/></animateMotion>
-          </circle>
-          <circle r="3" fill="#86E7FF" class="traveling-dot">
-            <animateMotion dur="3.2s" repeatCount="indefinite"><mpath href="#pathLeft"/></animateMotion>
-          </circle>
-          <!-- Orbital nodes -->
-          <rect x="165" y="16" width="70" height="30" rx="8" fill="#111318" stroke="rgba(134,231,255,0.3)" stroke-width="1"/>
-          <text x="200" y="36" text-anchor="middle" font-family="Oxanium, sans-serif" font-size="9" fill="#86E7FF">RemitFX</text>
-          <rect x="335" y="186" width="60" height="30" rx="8" fill="#111318" stroke="rgba(245,166,35,0.3)" stroke-width="1"/>
-          <text x="365" y="206" text-anchor="middle" font-family="Oxanium, sans-serif" font-size="9" fill="#F5A623">BetRails</text>
-          <rect x="155" y="354" width="90" height="30" rx="8" fill="#111318" stroke="rgba(245,166,35,0.3)" stroke-width="1"/>
-          <text x="200" y="374" text-anchor="middle" font-family="Oxanium, sans-serif" font-size="9" fill="#F5A623">Exchange Hub</text>
-          <rect x="5" y="186" width="70" height="30" rx="8" fill="#111318" stroke="rgba(134,231,255,0.3)" stroke-width="1"/>
-          <text x="40" y="206" text-anchor="middle" font-family="Oxanium, sans-serif" font-size="9" fill="#86E7FF">RWA Rails</text>
-          <!-- Defs -->
-          <defs>
-            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#F5A623"/><stop offset="100%" stop-color="#FFD580"/>
-            </linearGradient>
-            <radialGradient id="centralGrad" cx="50%" cy="50%">
-              <stop offset="0%" stop-color="rgba(245,166,35,0.06)"/><stop offset="100%" stop-color="#111318"/>
-            </radialGradient>
-            <filter id="glow"><feGaussianBlur stdDeviation="6" result="blur"/></filter>
-          </defs>
-        </svg>
+      <div class="status-center">
+        <span>Status:</span>
+        <span class="text-gold">In Development</span>
+      </div>
+      <div class="status-right">
+        <span>2025</span>
       </div>
     </div>
   </div>
-</section>
 
-<!-- ═══ SECTION 5: USE CASES ═══ -->
-<section class="usecases" id="usecases">
-  <div class="container">
-    <p class="section-label reveal">PARA QUEM</p>
-    <h2 class="section-headline reveal stagger-1" style="font-size:var(--size-2xl);margin-bottom:0.75rem;">Construído para plataformas que movem dinheiro globalmente.</h2>
-    <p class="section-sub reveal stagger-2"></p>
-    <div class="tab-bar reveal stagger-3">
-      <button class="tab-btn active" data-tab="exchanges">Exchanges &amp; OTCs</button>
-      <button class="tab-btn" data-tab="igaming">iGaming</button>
-      <button class="tab-btn" data-tab="fintechs">Fintechs</button>
-      <button class="tab-btn" data-tab="enterprise">Enterprise</button>
-    </div>
-    <!-- Exchanges -->
-    <div class="tab-panel active" id="panel-exchanges" data-spotlight>
-      <div>
-        <h3 class="tab-headline">On/off ramp sem fricção para BRL</h3>
-        <p class="tab-desc">Liquidez agregada, FX compliant, PIX instantâneo. Seus usuários convertem USDC/USDT em BRL diretamente na sua plataforma.</p>
-        <ul class="tab-bullets">
-          <li>Multi-venue execution</li>
-          <li>Aggregated liquidity $50M+</li>
-          <li>Sub-100ms latency</li>
-        </ul>
-        <a class="tab-cta-link" href="#">Saiba mais &rarr;</a>
-      </div>
-      <div class="tab-card" data-spotlight>
-        <div class="mini-kpi-row">
-          <div class="mini-kpi"><div class="mini-kpi-val">$50M+</div><div class="mini-kpi-label">Liquidez</div></div>
-          <div class="mini-kpi"><div class="mini-kpi-val">&lt;100ms</div><div class="mini-kpi-label">Latência</div></div>
-          <div class="mini-kpi"><div class="mini-kpi-val">24/7</div><div class="mini-kpi-label">Operação</div></div>
-          <div class="mini-kpi"><div class="mini-kpi-val">14+</div><div class="mini-kpi-label">Plataformas</div></div>
-        </div>
-        <div class="mini-bar-chart">
-          <div class="mini-bar" style="height:60%"></div>
-          <div class="mini-bar" style="height:85%"></div>
-          <div class="mini-bar" style="height:45%"></div>
-          <div class="mini-bar" style="height:95%"></div>
-          <div class="mini-bar" style="height:70%"></div>
-        </div>
-      </div>
-    </div>
-    <!-- iGaming -->
-    <div class="tab-panel" id="panel-igaming" data-spotlight>
-      <div>
-        <h3 class="tab-headline">PIX payouts instantâneos</h3>
-        <p class="tab-desc">PIX payouts instantâneos com KYC/AML integrado. 0.8% flat. Seus jogadores recebem em segundos.</p>
-        <ul class="tab-bullets">
-          <li>Instant PIX delivery</li>
-          <li>Built-in compliance</li>
-          <li>99.97% SLA</li>
-        </ul>
-        <a class="tab-cta-link" href="#">Saiba mais &rarr;</a>
-      </div>
-      <div class="tab-card" data-spotlight>
-        <div class="mini-kpi-row">
-          <div class="mini-kpi"><div class="mini-kpi-val">99.97%</div><div class="mini-kpi-label">SLA</div></div>
-          <div class="mini-kpi"><div class="mini-kpi-val">0.8%</div><div class="mini-kpi-label">Taxa Flat</div></div>
-          <div class="mini-kpi"><div class="mini-kpi-val">~3s</div><div class="mini-kpi-label">PIX Delivery</div></div>
-          <div class="mini-kpi"><div class="mini-kpi-val">100%</div><div class="mini-kpi-label">KYC/AML</div></div>
-        </div>
-        <div class="mini-bar-chart">
-          <div class="mini-bar" style="height:80%"></div>
-          <div class="mini-bar" style="height:55%"></div>
-          <div class="mini-bar" style="height:90%"></div>
-          <div class="mini-bar" style="height:65%"></div>
-          <div class="mini-bar" style="height:75%"></div>
-        </div>
-      </div>
-    </div>
-    <!-- Fintechs -->
-    <div class="tab-panel" id="panel-fintechs" data-spotlight>
-      <div>
-        <h3 class="tab-headline">Infraestrutura FX white-label</h3>
-        <p class="tab-desc">Stablecoin→BRL na sua marca. Sandbox completo, API white-label, sua identidade visual.</p>
-        <ul class="tab-bullets">
-          <li>White-label API</li>
-          <li>Full sandbox</li>
-          <li>Your brand</li>
-        </ul>
-        <a class="tab-cta-link" href="#">Saiba mais &rarr;</a>
-      </div>
-      <div class="tab-card" data-spotlight>
-        <div class="mini-kpi-row">
-          <div class="mini-kpi"><div class="mini-kpi-val">7 dias</div><div class="mini-kpi-label">Integração</div></div>
-          <div class="mini-kpi"><div class="mini-kpi-val">100%</div><div class="mini-kpi-label">White-label</div></div>
-          <div class="mini-kpi"><div class="mini-kpi-val">REST</div><div class="mini-kpi-label">API</div></div>
-          <div class="mini-kpi"><div class="mini-kpi-val">Full</div><div class="mini-kpi-label">Sandbox</div></div>
-        </div>
-        <div class="mini-bar-chart">
-          <div class="mini-bar" style="height:40%"></div>
-          <div class="mini-bar" style="height:70%"></div>
-          <div class="mini-bar" style="height:95%"></div>
-          <div class="mini-bar" style="height:50%"></div>
-          <div class="mini-bar" style="height:85%"></div>
-        </div>
-      </div>
-    </div>
-    <!-- Enterprise -->
-    <div class="tab-panel" id="panel-enterprise" data-spotlight>
-      <div>
-        <h3 class="tab-headline">Treasury e trade finance</h3>
-        <p class="tab-desc">Capital entre stablecoins, BRL e ativos tokenizados. Multi-asset treasury, NDF auto-hedge, relatórios BACEN.</p>
-        <ul class="tab-bullets">
-          <li>Multi-asset treasury</li>
-          <li>NDF auto-hedge</li>
-          <li>BACEN reporting</li>
-        </ul>
-        <a class="tab-cta-link" href="#">Saiba mais &rarr;</a>
-      </div>
-      <div class="tab-card" data-spotlight>
-        <div class="mini-kpi-row">
-          <div class="mini-kpi"><div class="mini-kpi-val">Multi</div><div class="mini-kpi-label">Assets</div></div>
-          <div class="mini-kpi"><div class="mini-kpi-val">Auto</div><div class="mini-kpi-label">NDF Hedge</div></div>
-          <div class="mini-kpi"><div class="mini-kpi-val">BACEN</div><div class="mini-kpi-label">Reports</div></div>
-          <div class="mini-kpi"><div class="mini-kpi-val">RWA</div><div class="mini-kpi-label">Ready</div></div>
-        </div>
-        <div class="mini-bar-chart">
-          <div class="mini-bar" style="height:90%"></div>
-          <div class="mini-bar" style="height:60%"></div>
-          <div class="mini-bar" style="height:75%"></div>
-          <div class="mini-bar" style="height:85%"></div>
-          <div class="mini-bar" style="height:50%"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ SECTION 6: PLATFORM MOCKUP ═══ -->
-<section class="platform" id="platform">
-  <div class="container">
-    <h2 class="section-headline reveal" style="font-size:var(--size-2xl);text-align:center;margin-bottom:0.75rem;">Veja o que sua equipe de operações vê</h2>
-    <p class="section-sub reveal stagger-1" style="text-align:center;margin:0 auto 4rem;">Dashboard em tempo real. Cada transação. Trilha de auditoria completa.</p>
-    <div class="devices-wrap reveal stagger-2">
-      <!-- Tablet -->
-      <div class="device-tablet">
-        <div class="device-chrome">
-          <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
-        </div>
-        <div class="device-main">
-          <div class="kpi-row" style="grid-template-columns:1fr 1fr;">
-            <div class="kpi-box"><div class="kpi-label">Volume</div><div class="kpi-val gold">R$ 2.4M</div></div>
-            <div class="kpi-box"><div class="kpi-label">SLA</div><div class="kpi-val">99.97%</div></div>
-          </div>
-          <div class="mock-chart">
-            <div class="chart-bar" style="height:50%"></div>
-            <div class="chart-bar" style="height:70%"></div>
-            <div class="chart-bar" style="height:40%"></div>
-            <div class="chart-bar" style="height:90%"></div>
-            <div class="chart-bar" style="height:60%"></div>
-          </div>
-        </div>
-      </div>
-      <!-- Desktop -->
-      <div class="device-desktop" data-tilt>
-        <div class="device-chrome">
-          <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
-          <span class="chrome-url">app.onstack.com</span>
-        </div>
-        <div class="device-body">
-          <div class="device-sidebar">
-            <div class="sidebar-icon active"></div>
-            <div class="sidebar-icon"></div>
-            <div class="sidebar-icon"></div>
-            <div class="sidebar-icon"></div>
-            <div class="sidebar-icon"></div>
-          </div>
-          <div class="device-main">
-            <div class="kpi-row">
-              <div class="kpi-box"><div class="kpi-label">Volume 24h</div><div class="kpi-val gold" data-count="2400000" data-prefix="R$ " data-suffix="" data-decimal="0">R$ 2.4M</div></div>
-              <div class="kpi-box"><div class="kpi-label">Settlement</div><div class="kpi-val" data-count="3.2" data-suffix=" min" data-decimal="1">3.2 min</div></div>
-              <div class="kpi-box"><div class="kpi-label">SLA</div><div class="kpi-val" data-count="99.97" data-suffix="%" data-decimal="2">99.97%</div></div>
-              <div class="kpi-box"><div class="kpi-label">Transações</div><div class="kpi-val gold" data-count="847" data-decimal="0">847</div></div>
-            </div>
-            <div class="mock-chart">
-              <div class="chart-bar" style="height:55%"></div>
-              <div class="chart-bar" style="height:80%"></div>
-              <div class="chart-bar" style="height:45%"></div>
-              <div class="chart-bar" style="height:92%"></div>
-              <div class="chart-bar" style="height:68%"></div>
-            </div>
-            <div class="txn-row">
-              <span class="txn-dot green"></span>
-              <span class="txn-name">Binance &rarr; PIX</span>
-              <span class="txn-amount">R$ 15.420,00</span>
-              <span class="txn-badge settled">Settled</span>
-            </div>
-            <div class="txn-row">
-              <span class="txn-dot gold"></span>
-              <span class="txn-name">Kraken &rarr; PIX</span>
-              <span class="txn-amount">R$ 8.750,00</span>
-              <span class="txn-badge processing">Processing</span>
-            </div>
-            <div class="txn-row">
-              <span class="txn-dot cyan"></span>
-              <span class="txn-name">OKX &rarr; TED</span>
-              <span class="txn-amount">R$ 42.100,00</span>
-              <span class="txn-badge pending">Pending</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Phone -->
-      <div class="device-phone">
-        <div class="device-chrome" style="padding:0.5rem 0.75rem;">
-          <span class="chrome-dot" style="width:6px;height:6px;"></span>
-          <span class="chrome-dot" style="width:6px;height:6px;"></span>
-          <span class="chrome-dot" style="width:6px;height:6px;"></span>
-        </div>
-        <div class="phone-notif">
-          <div class="phone-header">PIX Recebido</div>
-          <div class="phone-amount">R$ 15.420,00</div>
-          <div class="phone-status"><span class="dot"></span> Recebido via PIX</div>
-          <div style="font-size:0.6rem;color:var(--text-dim);margin-top:0.5rem;font-family:var(--fm);">pay_8xKj2mN... &bull; 3.1 min</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ SECTION 7: HOW IT WORKS ═══ -->
-<section class="how-section" id="how">
-  <div class="container">
-    <p class="section-label reveal">COMO FUNCIONA</p>
-    <h2 class="section-headline reveal stagger-1" style="font-size:var(--size-2xl);margin-bottom:0.75rem;">Três passos. Menos de cinco minutos.</h2>
-    <p class="section-sub reveal stagger-2" style="margin-bottom:4rem;"></p>
-
-    <!-- Desktop Orbital Layout -->
-    <div class="orbital-layout reveal stagger-3">
-      <svg class="orbital-svg" viewBox="0 0 900 500" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <!-- Arcs from center to steps -->
-        <path id="arc1" d="M450 250 C350 200 250 120 140 80" stroke="rgba(245,166,35,0.15)" stroke-width="1" fill="none" stroke-dasharray="4 4"/>
-        <path id="arc2" d="M450 250 C550 200 650 120 760 80" stroke="rgba(245,166,35,0.15)" stroke-width="1" fill="none" stroke-dasharray="4 4"/>
-        <path id="arc3" d="M450 250 C450 330 450 380 450 420" stroke="rgba(245,166,35,0.15)" stroke-width="1" fill="none" stroke-dasharray="4 4"/>
-        <!-- Animated dots -->
-        <circle r="4" fill="#F5A623" class="traveling-dot">
-          <animateMotion dur="2.5s" repeatCount="indefinite"><mpath href="#arc1"/></animateMotion>
-        </circle>
-        <circle r="4" fill="#F5A623" class="traveling-dot">
-          <animateMotion dur="3s" repeatCount="indefinite"><mpath href="#arc2"/></animateMotion>
-        </circle>
-        <circle r="4" fill="#F5A623" class="traveling-dot">
-          <animateMotion dur="2s" repeatCount="indefinite"><mpath href="#arc3"/></animateMotion>
-        </circle>
-      </svg>
-      <div class="orbital-center">ØNSTACK</div>
-      <div class="step-card" data-step="1" data-tilt>
-        <div class="step-num">STEP 01</div>
-        <h4>Deposite Stablecoin</h4>
-        <p>USDC ou USDT via Stellar, Ethereum ou transferência direta. Confirmação instantânea.</p>
-      </div>
-      <div class="step-card" data-step="2" data-tilt>
-        <div class="step-num">STEP 02</div>
-        <h4>FX + Compliance</h4>
-        <p>Hedge NDF automático, IOF/IRRF, screening AML, relatório BACEN. Tudo em tempo real.</p>
-      </div>
-      <div class="step-card" data-step="3" data-tilt>
-        <div class="step-num">STEP 03</div>
-        <h4>Entrega PIX</h4>
-        <p>BRL chega via PIX em segundos. Usuário recebe. Trilha de auditoria no dashboard.</p>
-      </div>
-    </div>
-
-    <!-- Mobile Vertical Timeline -->
-    <div class="how-vertical reveal stagger-3">
-      <div class="how-v-step">
-        <div class="how-v-num">01</div>
-        <div class="how-v-content">
-          <h4>Deposite Stablecoin</h4>
-          <p>USDC ou USDT via Stellar, Ethereum ou transferência direta. Confirmação instantânea.</p>
-        </div>
-      </div>
-      <div class="how-v-step">
-        <div class="how-v-num">02</div>
-        <div class="how-v-content">
-          <h4>FX + Compliance</h4>
-          <p>Hedge NDF automático, IOF/IRRF, screening AML, relatório BACEN. Tudo em tempo real.</p>
-        </div>
-      </div>
-      <div class="how-v-step">
-        <div class="how-v-num">03</div>
-        <div class="how-v-content">
-          <h4>Entrega PIX</h4>
-          <p>BRL chega via PIX em segundos. Usuário recebe. Trilha de auditoria no dashboard.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ SECTION 8: COMPARISON TABLE ═══ -->
-<section class="comparison" id="comparison">
-  <div class="container">
-    <p class="section-label reveal">VANTAGEM COMPETITIVA</p>
-    <h2 class="section-headline reveal stagger-1" style="font-size:var(--size-2xl);margin-bottom:0.75rem;">Rails legados não foram construídos para isso.</h2>
-    <p class="section-sub reveal stagger-2" style="margin-bottom:2rem;"></p>
-    <div class="callout-card reveal stagger-3">100x mais rápido que SWIFT. Totalmente compliant. Uma taxa flat.</div>
-    <div class="table-wrap reveal stagger-4">
-      <table class="comp-table">
-        <thead>
-          <tr>
-            <th>Feature</th>
-            <th>SWIFT</th>
-            <th>Crypto Desk</th>
-            <th>ØNSTACK</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Settlement Time</td>
-            <td>2-5 dias</td>
-            <td>1-24h</td>
-            <td>~3.2 min</td>
-          </tr>
-          <tr>
-            <td>FX Hedging</td>
-            <td>Manual</td>
-            <td><span class="cross">&times;</span></td>
-            <td><span class="check">&#10003;</span> NDF Auto</td>
-          </tr>
-          <tr>
-            <td>BACEN Compliance</td>
-            <td>Parcial</td>
-            <td><span class="cross">&times;</span></td>
-            <td><span class="check">&#10003;</span> Nativo</td>
-          </tr>
-          <tr>
-            <td>Stablecoin Support</td>
-            <td><span class="cross">&times;</span></td>
-            <td><span class="check" style="color:var(--text-soft);">&#10003;</span></td>
-            <td><span class="check">&#10003;</span> USDC/USDT</td>
-          </tr>
-          <tr>
-            <td>Tokenized Assets (RWA)</td>
-            <td><span class="cross">&times;</span></td>
-            <td><span class="cross">&times;</span></td>
-            <td><span class="check">&#10003;</span> FIDC</td>
-          </tr>
-          <tr>
-            <td>PIX Integration</td>
-            <td><span class="cross">&times;</span></td>
-            <td>Parcial</td>
-            <td><span class="check">&#10003;</span> Nativo</td>
-          </tr>
-          <tr>
-            <td>API Access</td>
-            <td><span class="cross">&times;</span></td>
-            <td>Parcial</td>
-            <td><span class="check">&#10003;</span> REST + SDK</td>
-          </tr>
-          <tr>
-            <td>Flat Pricing</td>
-            <td><span class="cross">&times;</span></td>
-            <td>Variável</td>
-            <td><span class="check">&#10003;</span> 0.8%</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ SECTION 9: RWA ═══ -->
-<section class="rwa" id="rwa">
-  <div class="container">
-    <p class="section-label reveal">ATIVOS TOKENIZADOS</p>
-    <h2 class="section-headline reveal stagger-1" style="font-size:var(--size-2xl);margin-bottom:0.75rem;">Ativos reais. On-chain. Regulados.</h2>
-    <div class="rwa-grid">
-      <div class="rwa-left reveal stagger-2">
-        <p>A <strong>ØNSTACK</strong> vai além de off-ramp e settlement de stablecoins. Nossa infraestrutura está preparada para ativos tokenizados — recebíveis (FIDC), títulos e instrumentos de dívida — com compliance regulatório integrado.</p>
-        <p><strong>Por que importa:</strong> Seus clientes acessam yield real, diversificação e liquidez em ativos antes inacessíveis. Tudo via a mesma API.</p>
-      </div>
-      <div class="reveal stagger-3" style="display:flex;justify-content:center;">
-        <svg class="rwa-flow-svg" viewBox="0 0 480 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <!-- Nodes -->
-          <rect x="10" y="50" width="120" height="60" rx="12" fill="#111318" stroke="rgba(245,166,35,0.3)" stroke-width="1.5"/>
-          <text x="70" y="75" text-anchor="middle" font-family="Oxanium, sans-serif" font-size="10" fill="#F5A623" letter-spacing="1">ATIVO</text>
-          <text x="70" y="95" text-anchor="middle" font-family="Oxanium, sans-serif" font-size="10" fill="#B7B2A8">REAL</text>
-          <rect x="180" y="50" width="120" height="60" rx="12" fill="#111318" stroke="rgba(245,166,35,0.5)" stroke-width="1.5"/>
-          <text x="240" y="85" text-anchor="middle" font-family="Oxanium, sans-serif" font-size="12" fill="#F5A623" font-weight="500" letter-spacing="1">TOKEN</text>
-          <rect x="350" y="50" width="120" height="60" rx="12" fill="#111318" stroke="rgba(134,231,255,0.3)" stroke-width="1.5"/>
-          <text x="410" y="75" text-anchor="middle" font-family="Oxanium, sans-serif" font-size="10" fill="#86E7FF" letter-spacing="1">SETTLE</text>
-          <text x="410" y="95" text-anchor="middle" font-family="Oxanium, sans-serif" font-size="10" fill="#B7B2A8">MENT</text>
-          <!-- Arrows -->
-          <path id="rwaArrow1" d="M130 80 L180 80" stroke="rgba(245,166,35,0.3)" stroke-width="1.5" fill="none"/>
-          <path id="rwaArrow2" d="M300 80 L350 80" stroke="rgba(245,166,35,0.3)" stroke-width="1.5" fill="none"/>
-          <!-- Arrow dots -->
-          <circle r="3" fill="#F5A623" class="traveling-dot"><animateMotion dur="2s" repeatCount="indefinite"><mpath href="#rwaArrow1"/></animateMotion></circle>
-          <circle r="3" fill="#F5A623" class="traveling-dot"><animateMotion dur="2s" repeatCount="indefinite"><mpath href="#rwaArrow2"/></animateMotion></circle>
-          <!-- Glow on center -->
-          <rect x="180" y="50" width="120" height="60" rx="12" fill="none" stroke="rgba(245,166,35,0.1)" stroke-width="8" filter="url(#rwaglow)"/>
-          <defs><filter id="rwaglow"><feGaussianBlur stdDeviation="6"/></filter></defs>
-        </svg>
-      </div>
-    </div>
-    <div class="rwa-stats reveal stagger-4">
-      <div class="rwa-stat">
-        <div class="rwa-stat-val">FIDC</div>
-        <div class="rwa-stat-label">Tokenizável</div>
-      </div>
-      <div class="rwa-stat">
-        <div class="rwa-stat-val">Yield Real</div>
-        <div class="rwa-stat-label">On-chain</div>
-      </div>
-      <div class="rwa-stat">
-        <div class="rwa-stat-val">BACEN + CVM</div>
-        <div class="rwa-stat-label">Regulado</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ SECTION 10: DEVELOPERS ═══ -->
-<section class="developers" id="developers">
-  <div class="container">
-    <p class="section-label reveal">PARA DESENVOLVEDORES</p>
-    <h2 class="section-headline reveal stagger-1" style="font-size:var(--size-2xl);margin-bottom:0.75rem;">A API de stablecoins mais simples que você já integrou.</h2>
-    <p class="section-sub reveal stagger-2" style="margin-bottom:3rem;">Sandbox completo. Produção em 7 dias. SDKs para Node.js e Python.</p>
-    <div class="dev-grid">
-      <div class="reveal stagger-3">
-        <p class="dev-desc">Integre pagamentos de stablecoins para BRL em horas, não semanas. Nossa API REST cuida de câmbio, compliance e entrega PIX em um único endpoint. Documentação completa, sandbox funcional e suporte direto da equipe de engenharia.</p>
-        <div class="dev-pills">
-          <span class="dev-pill">REST API</span>
-          <span class="dev-pill">Webhooks</span>
-          <span class="dev-pill">OAuth 2.0</span>
-          <span class="dev-pill">Sandbox</span>
-          <span class="dev-pill">99.97% SLA</span>
-          <span class="dev-pill">Node.js SDK</span>
-          <span class="dev-pill">Python SDK</span>
-          <span class="dev-pill">Idempotency</span>
-        </div>
-      </div>
-      <div class="reveal stagger-4">
-        <div class="code-editor">
-          <div class="code-tabs">
-            <button class="code-tab active" data-code="nodejs">Node.js</button>
-            <button class="code-tab" data-code="curl">cURL</button>
-            <button class="code-tab" data-code="python">Python</button>
-          </div>
-          <div class="code-body">
-            <pre class="code-panel active" id="code-nodejs"><span class="ck">// Initialize the ØNSTACK client</span>
-<span class="cf">import</span> <span class="cv">{ OnStack }</span> <span class="cf">from</span> <span class="cg">'@onstack/sdk'</span>;
-
-<span class="cf">const</span> <span class="cv">client</span> = <span class="cf">new</span> <span class="cs">OnStack</span>({
-  <span class="cv">apiKey</span>: <span class="cv">process</span>.<span class="cv">env</span>.<span class="co">ONSTACK_API_KEY</span>,
-  <span class="cv">sandbox</span>: <span class="cn">true</span>
-});
-
-<span class="ck">// Create a stablecoin → BRL payout</span>
-<span class="cf">const</span> <span class="cv">payout</span> = <span class="cf">await</span> <span class="cv">client</span>.<span class="cs">payouts</span>.<span class="cs">create</span>({
-  <span class="cv">amount</span>: <span class="cg">"10000.00"</span>,
-  <span class="cv">currency</span>: <span class="cg">"USDC"</span>,
-  <span class="cv">destination</span>: {
-    <span class="cv">type</span>: <span class="cg">"PIX"</span>,
-    <span class="cv">key</span>: <span class="cg">"user@email.com"</span>
-  },
-  <span class="cv">fx_lock</span>: <span class="cn">true</span>,
-  <span class="cv">webhook</span>: <span class="cg">"https://your.app/webhook"</span>
-});
-
-<span class="cv">console</span>.<span class="cs">log</span>(<span class="cv">payout</span>.<span class="cv">id</span>);
-<span class="ck">// → "pay_8xKj2mN..."</span>
-<span class="ck">// Status: PROCESSING → SETTLED (~3.2 min)</span></pre>
-            <pre class="code-panel" id="code-curl"><span class="ck"># Create a stablecoin → BRL payout</span>
-<span class="cs">curl</span> <span class="cv">-X POST</span> <span class="cg">https://api.onstack.com/v1/payouts</span> \
-  <span class="cv">-H</span> <span class="cg">"Authorization: Bearer $ONSTACK_API_KEY"</span> \
-  <span class="cv">-H</span> <span class="cg">"Content-Type: application/json"</span> \
-  <span class="cv">-d</span> <span class="cg">'{
-    "amount": "10000.00",
-    "currency": "USDC",
-    "destination": {
-      "type": "PIX",
-      "key": "user@email.com"
-    },
-    "fx_lock": true,
-    "webhook": "https://your.app/webhook"
-  }'</span>
-
-<span class="ck"># Response:</span>
-<span class="ck"># { "id": "pay_8xKj2mN...", "status": "PROCESSING" }</span></pre>
-            <pre class="code-panel" id="code-python"><span class="ck"># Initialize the ØNSTACK client</span>
-<span class="cf">from</span> <span class="cv">onstack</span> <span class="cf">import</span> <span class="cs">OnStack</span>
-
-<span class="cv">client</span> = <span class="cs">OnStack</span>(
-    <span class="cv">api_key</span>=<span class="cv">os</span>.<span class="cs">environ</span>[<span class="cg">"ONSTACK_API_KEY"</span>],
-    <span class="cv">sandbox</span>=<span class="cn">True</span>
-)
-
-<span class="ck"># Create a stablecoin → BRL payout</span>
-<span class="cv">payout</span> = <span class="cv">client</span>.<span class="cs">payouts</span>.<span class="cs">create</span>(
-    <span class="cv">amount</span>=<span class="cg">"10000.00"</span>,
-    <span class="cv">currency</span>=<span class="cg">"USDC"</span>,
-    <span class="cv">destination</span>={
-        <span class="cg">"type"</span>: <span class="cg">"PIX"</span>,
-        <span class="cg">"key"</span>: <span class="cg">"user@email.com"</span>
-    },
-    <span class="cv">fx_lock</span>=<span class="cn">True</span>,
-    <span class="cv">webhook</span>=<span class="cg">"https://your.app/webhook"</span>
-)
-
-<span class="cs">print</span>(<span class="cv">payout</span>.<span class="cv">id</span>)
-<span class="ck"># → "pay_8xKj2mN..."</span>
-<span class="ck"># Status: PROCESSING → SETTLED (~3.2 min)</span></pre>
-          </div>
-        </div>
-        <div class="endpoint-strip">
-          <span class="endpoint-item">POST /v1/payouts</span>
-          <span class="endpoint-item">GET /v1/rates</span>
-          <span class="endpoint-item">POST /v1/webhooks</span>
-          <span class="endpoint-item">GET /v1/transactions</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ SECTION 11: ECOSYSTEM / GLOBE ═══ -->
-<section class="ecosystem" id="global">
-  <div class="container">
-    <p class="section-label reveal">ALCANCE GLOBAL</p>
-    <div class="eco-grid">
-      <div class="reveal stagger-1">
-        <h2 class="section-headline eco-headline">Movendo capital entre fronteiras, instantaneamente</h2>
-        <p class="eco-sub">A ØNSTACK conecta corredores financeiros nas Américas, Europa e Ásia. Stablecoins entram, BRL sai via PIX. Simples assim, em qualquer fuso horário.</p>
-        <div class="eco-stats">
-          <div class="eco-stat">
-            <div class="eco-stat-val" data-count="4" data-decimal="0">4</div>
-            <div class="eco-stat-label">Continentes</div>
-          </div>
-          <div class="eco-stat">
-            <div class="eco-stat-val" data-count="14" data-suffix="+" data-decimal="0">14+</div>
-            <div class="eco-stat-label">Plataformas</div>
-          </div>
-          <div class="eco-stat">
-            <div class="eco-stat-val">$50M+</div>
-            <div class="eco-stat-label">Liquidez</div>
-          </div>
-          <div class="eco-stat">
-            <div class="eco-stat-val">24/7</div>
-            <div class="eco-stat-label">Operação</div>
-          </div>
-        </div>
-      </div>
-      <div class="globe-wrap reveal stagger-2">
-        <canvas id="globeCanvas" width="550" height="550"></canvas>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ SECTION 12: FAQ ═══ -->
-<section class="faq" id="faq">
-  <div class="container">
-    <p class="section-label reveal">PERGUNTAS FREQUENTES</p>
-    <h2 class="section-headline reveal stagger-1" style="font-size:var(--size-2xl);margin-bottom:3rem;">Perguntas</h2>
-    <div class="faq-list">
-      <details class="faq-item reveal stagger-2">
-        <summary>
-          Como funciona a integração?
-          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </summary>
-        <div class="faq-answer">Você obtém chaves de API do nosso sandbox, integra os endpoints REST e testa com transações simuladas. Quando estiver pronto, migramos para produção em até 7 dias. Documentação completa, SDKs para Node.js e Python, e suporte direto da equipe de engenharia.</div>
-      </details>
-      <details class="faq-item reveal stagger-3">
-        <summary>
-          Qual o tempo de settlement?
-          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </summary>
-        <div class="faq-answer">Em média 3.2 minutos do depósito de stablecoin até a entrega PIX. O processo inclui confirmação on-chain, conversão FX com hedge automático, compliance checks e entrega via PIX instantâneo.</div>
-      </details>
-      <details class="faq-item reveal stagger-4">
-        <summary>
-          Quais stablecoins são suportadas?
-          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </summary>
-        <div class="faq-answer">USDC e USDT via Stellar e Ethereum. Suporte a redes adicionais (Polygon, Solana) está no roadmap. Todas as operações são compliance-first com rastreabilidade completa.</div>
-      </details>
-      <details class="faq-item reveal stagger-5">
-        <summary>
-          Como funciona o hedge automático (NDF)?
-          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </summary>
-        <div class="faq-answer">Ao criar uma ordem, travamos a taxa FX automaticamente via NDF (Non-Deliverable Forward). Isso protege contra volatilidade cambial durante o período de settlement. Tudo transparente no dashboard.</div>
-      </details>
-      <details class="faq-item reveal stagger-6">
-        <summary>
-          A ØNSTACK é regulada?
-          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </summary>
-        <div class="faq-answer">Sim. Operações de câmbio licenciadas pelo BACEN. Compliance automatizado com IOF/IRRF, screening AML via Chainalysis, e relatórios prontos para auditoria. Regulação é core, não add-on.</div>
-      </details>
-      <details class="faq-item reveal">
-        <summary>
-          Quanto custa?
-          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </summary>
-        <div class="faq-answer">Taxa flat de 0.8% por transação. Sem taxas ocultas, sem spreads variáveis, sem minimum commitments. Volume enterprise? Fale com vendas para pricing customizado.</div>
-      </details>
-      <details class="faq-item reveal">
-        <summary>
-          O que são os rails de RWA?
-          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </summary>
-        <div class="faq-answer">Real World Assets — ativos tokenizados como recebíveis (FIDC), títulos e instrumentos de dívida. A ØNSTACK está preparada para settlement e custódia desses ativos com compliance regulatório integrado (BACEN + CVM).</div>
-      </details>
-      <details class="faq-item reveal">
-        <summary>
-          Como começar?
-          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </summary>
-        <div class="faq-answer">Solicite acesso pelo formulário, receba credenciais do sandbox em até 24h, integre a API usando nossos SDKs e documentação, teste com transações simuladas, e migre para produção quando pronto.</div>
-      </details>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ SECTION 13: CTA FINAL ═══ -->
-<section class="cta-final" id="cta">
-  <div class="container">
-    <h2 class="section-headline reveal" style="font-size:var(--size-3xl);">Pronto para construir sobre rails regulados?</h2>
-    <p class="section-sub reveal stagger-1" style="text-align:center;margin:0 auto 3rem;">Junte-se às plataformas que já movem capital por infraestrutura compliant.</p>
-    <div class="cta-final-buttons reveal stagger-2">
-      <a href="#" class="btn-gold">Solicitar Acesso</a>
-      <a href="#" class="btn-ghost">Falar com Vendas</a>
-    </div>
-    <p class="cta-trust reveal stagger-3">Licenciada BACEN &middot; 99.97% SLA &middot; Compliance Automatizado</p>
-  </div>
-</section>
-
-<!-- ═══ FOOTER ═══ -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-brand-name">ØNSTACK</div>
-        <p class="footer-tagline">A camada de capital do Brasil. Rails regulados de FX para stablecoins, BRL e ativos tokenizados.</p>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-title">Produtos</div>
-        <a href="#">RemitFX</a>
-        <a href="#">BetRails</a>
-        <a href="#">Exchange Hub</a>
-        <a href="#">RWA Rails</a>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-title">Desenvolvedores</div>
-        <a href="#">API Docs</a>
-        <a href="#">SDKs</a>
-        <a href="#">Sandbox</a>
-        <a href="#">Status</a>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-title">Empresa</div>
-        <a href="/brandbook">Brandbook</a>
-        <a href="/demo">Demo</a>
-        <a href="/pitch">Pitch</a>
-        <a href="#">Careers</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>&copy; 2026 ØNSTACK. All rights reserved.</span>
-      <span>Regulada pelo BACEN &middot; Construída no Brasil</span>
-    </div>
-  </div>
-</footer>
-
-<!-- ═══════════════════════════════════════════
-     JAVASCRIPT
-     ═══════════════════════════════════════════ -->
-<script>
-(function() {
-'use strict';
-
-/* ─── 1. HERO CANVAS: PARTICLE NETWORK ─── */
-class ParticleNetwork {
-  constructor(canvas) {
-    this.canvas = canvas;
-    this.ctx = canvas.getContext('2d');
-    this.particles = [];
-    this.mouse = { x: -9999, y: -9999 };
-    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    this.isMobile = window.innerWidth <= 768;
-    this.count = this.isMobile ? 35 : 75;
-    this.connectionDist = 160;
-    this.mouseRadius = 200;
-    this.running = true;
-    this.init();
-  }
-
-  init() {
-    this.resize();
-    window.addEventListener('resize', () => this.resize());
-    this.canvas.addEventListener('mousemove', (e) => {
-      const rect = this.canvas.getBoundingClientRect();
-      this.mouse.x = e.clientX - rect.left;
-      this.mouse.y = e.clientY - rect.top;
-    });
-    this.canvas.addEventListener('mouseleave', () => {
-      this.mouse.x = -9999;
-      this.mouse.y = -9999;
-    });
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        this.running = false;
-      } else {
-        this.running = true;
-        this.animate();
-      }
-    });
-
-    for (let i = 0; i < this.count; i++) {
-      const isGold = Math.random() < 0.7;
-      this.particles.push({
-        x: Math.random() * this.canvas.width,
-        y: Math.random() * this.canvas.height,
-        vx: (Math.random() - 0.5) * 0.6,
-        vy: (Math.random() - 0.5) * 0.6,
-        r: 1.5 + Math.random() * 2,
-        color: isGold ? '#F5A623' : '#86E7FF',
-        alpha: 0.3 + Math.random() * 0.5
-      });
-    }
-
-    if (this.reducedMotion) {
-      this.draw();
-    } else {
-      this.animate();
-    }
-  }
-
-  resize() {
-    const rect = this.canvas.parentElement.getBoundingClientRect();
-    this.canvas.width = rect.width;
-    this.canvas.height = rect.height;
-  }
-
-  draw() {
-    const ctx = this.ctx;
-    const w = this.canvas.width;
-    const h = this.canvas.height;
-    ctx.clearRect(0, 0, w, h);
-
-    // Draw connections
-    for (let i = 0; i < this.particles.length; i++) {
-      for (let j = i + 1; j < this.particles.length; j++) {
-        const a = this.particles[i];
-        const b = this.particles[j];
-        const dx = a.x - b.x;
-        const dy = a.y - b.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < this.connectionDist) {
-          const alpha = (1 - dist / this.connectionDist) * 0.08;
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.strokeStyle = `rgba(245,166,35,${alpha})`;
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
-        }
-      }
-    }
-
-    // Draw particles
-    for (const p of this.particles) {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = p.color;
-      ctx.globalAlpha = p.alpha;
-      ctx.fill();
-      ctx.globalAlpha = 1;
-    }
-  }
-
-  update() {
-    const w = this.canvas.width;
-    const h = this.canvas.height;
-    for (const p of this.particles) {
-      // Mouse gravity
-      const dx = this.mouse.x - p.x;
-      const dy = this.mouse.y - p.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < this.mouseRadius && dist > 0) {
-        const force = (1 - dist / this.mouseRadius) * 0.02;
-        p.vx += dx / dist * force;
-        p.vy += dy / dist * force;
-      }
-
-      p.x += p.vx;
-      p.y += p.vy;
-
-      // Damping
-      p.vx *= 0.999;
-      p.vy *= 0.999;
-
-      // Wrap edges
-      if (p.x < -10) p.x = w + 10;
-      if (p.x > w + 10) p.x = -10;
-      if (p.y < -10) p.y = h + 10;
-      if (p.y > h + 10) p.y = -10;
-    }
-  }
-
-  animate() {
-    if (!this.running) return;
-    this.update();
-    this.draw();
-    requestAnimationFrame(() => this.animate());
-  }
-}
-
-const heroCanvas = document.getElementById('heroCanvas');
-if (heroCanvas) new ParticleNetwork(heroCanvas);
-
-
-/* ─── 2. SCROLL REVEAL (IntersectionObserver) ─── */
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.15, rootMargin: '-40px' });
-
-document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-
-/* ─── 3. TEXT SCRAMBLE ON HEADLINES ─── */
-const scrambleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-document.querySelectorAll('.section-headline').forEach(el => {
-  el.addEventListener('mouseenter', function() {
-    const original = this.textContent;
-    const len = original.length;
-    let iteration = 0;
-    const interval = setInterval(() => {
-      this.textContent = original.split('').map((char, i) => {
-        if (char === ' ') return ' ';
-        if (i < iteration) return original[i];
-        return scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
-      }).join('');
-      iteration += 1;
-      if (iteration > len) {
-        clearInterval(interval);
-        this.textContent = original;
-      }
-    }, 30);
-  });
-});
-
-
-/* ─── 4. USE CASE TABS ─── */
-const tabBtns = document.querySelectorAll('.tab-btn');
-const tabPanels = document.querySelectorAll('.tab-panel');
-let autoAdvance;
-
-function switchTab(tabName) {
-  tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === tabName));
-  tabPanels.forEach(p => {
-    const isActive = p.id === 'panel-' + tabName;
-    p.classList.toggle('active', isActive);
-    if (isActive) {
-      p.style.opacity = '0';
-      p.style.transform = 'translateY(12px)';
-      requestAnimationFrame(() => {
-        p.style.transition = 'opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out)';
-        p.style.opacity = '1';
-        p.style.transform = 'translateY(0)';
-      });
-    }
-  });
-}
-
-tabBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    switchTab(btn.dataset.tab);
-    clearInterval(autoAdvance);
-    startAutoAdvance();
-  });
-});
-
-function startAutoAdvance() {
-  const tabs = Array.from(tabBtns).map(b => b.dataset.tab);
-  autoAdvance = setInterval(() => {
-    const currentIdx = tabs.findIndex(t => document.querySelector(`.tab-btn[data-tab="${t}"]`).classList.contains('active'));
-    const nextIdx = (currentIdx + 1) % tabs.length;
-    switchTab(tabs[nextIdx]);
-  }, 6000);
-}
-startAutoAdvance();
-
-const tabSection = document.querySelector('.usecases');
-if (tabSection) {
-  tabSection.addEventListener('mouseenter', () => clearInterval(autoAdvance));
-  tabSection.addEventListener('mouseleave', () => startAutoAdvance());
-}
-
-
-/* ─── 5. 3D TILT ON CARDS ─── */
-document.querySelectorAll('[data-tilt]').forEach(el => {
-  el.addEventListener('mousemove', (e) => {
-    const rect = el.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    el.style.transition = 'transform 0.1s linear';
-    el.style.transform = `perspective(1000px) rotateX(${-y * 8}deg) rotateY(${x * 8}deg) scale3d(1.02,1.02,1.02)`;
-  });
-  el.addEventListener('mouseleave', () => {
-    el.style.transition = 'transform 0.5s var(--ease-out)';
-    el.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1,1,1)';
-  });
-});
-
-
-/* ─── 6. SPOTLIGHT ON CARDS ─── */
-document.querySelectorAll('[data-spotlight]').forEach(el => {
-  el.addEventListener('mousemove', (e) => {
-    const rect = el.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
-    const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
-    el.style.setProperty('--mouse-x', x + '%');
-    el.style.setProperty('--mouse-y', y + '%');
-  });
-});
-
-
-/* ─── 7. NAV SCROLL STATE ─── */
-let ticking = false;
-function onScroll() {
-  if (!ticking) {
-    requestAnimationFrame(() => {
-      const nav = document.getElementById('mainNav');
-      if (nav) {
-        nav.classList.toggle('scrolled', window.scrollY > 60);
-      }
-      ticking = false;
-    });
-    ticking = true;
-  }
-}
-window.addEventListener('scroll', onScroll, { passive: true });
-
-
-/* ─── 8. MOBILE MENU ─── */
-const hamburgerBtn = document.getElementById('hamburgerBtn');
-const mobileMenu = document.getElementById('mobileMenu');
-
-hamburgerBtn.addEventListener('click', () => {
-  mobileMenu.classList.toggle('open');
-});
-
-function closeMobile() {
-  mobileMenu.classList.remove('open');
-}
-window.closeMobile = closeMobile;
-
-
-/* ─── 9. CODE EDITOR TABS ─── */
-document.querySelectorAll('.code-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.code-panel').forEach(p => p.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById('code-' + tab.dataset.code).classList.add('active');
-  });
-});
-
-
-/* ─── 10. COUNTER ANIMATION ─── */
-const counterObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting && !entry.target.dataset.counted) {
-      entry.target.dataset.counted = 'true';
-      const target = parseFloat(entry.target.dataset.count);
-      const decimal = parseInt(entry.target.dataset.decimal || '0');
-      const prefix = entry.target.dataset.prefix || '';
-      const suffix = entry.target.dataset.suffix || '';
-      const duration = 2000;
-      const startTime = performance.now();
-
-      function update(now) {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const current = (target * eased).toFixed(decimal);
-
-        let display = prefix + current + suffix;
-        // Format large numbers
-        if (target >= 1000000) {
-          display = prefix + (target * eased / 1000000).toFixed(1) + 'M' + suffix;
-        }
-        entry.target.textContent = display;
-
-        if (progress < 1) requestAnimationFrame(update);
-      }
-      requestAnimationFrame(update);
-    }
-  });
-}, { threshold: 0.5 });
-
-document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
-
-
-/* ─── 11. FAQ ACCORDION ─── */
-// details/summary already handles open/close; CSS handles icon rotation
-
-
-/* ─── 12. COBE.js GLOBE ─── */
-const globeCanvas = document.getElementById('globeCanvas');
-let cobeInstance = null;
-let phi = 0;
-
-const globeObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting && !cobeInstance && typeof createGlobe !== 'undefined') {
-      initGlobe();
-    }
-  });
-}, { threshold: 0.1 });
-
-if (globeCanvas) globeObserver.observe(globeCanvas);
-
-// Also try on load in case COBE loads after observer fires
-window.addEventListener('load', () => {
-  if (typeof createGlobe !== 'undefined' && !cobeInstance && globeCanvas) {
-    const rect = globeCanvas.getBoundingClientRect();
-    if (rect.top < window.innerHeight) initGlobe();
-  }
-});
-
-function initGlobe() {
-  if (cobeInstance) return;
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  cobeInstance = createGlobe(globeCanvas, {
-    devicePixelRatio: Math.min(window.devicePixelRatio, 2),
-    width: 550 * 2,
-    height: 550 * 2,
-    phi: 0,
-    theta: 0.25,
-    dark: 1,
-    diffuse: 1.2,
-    mapSamples: 16000,
-    mapBrightness: 4,
-    baseColor: [0.02, 0.02, 0.03],
-    markerColor: [0.96, 0.65, 0.14],
-    glowColor: [0.04, 0.04, 0.06],
-    markers: [
-      { location: [-15.8, -47.9], size: 0.08 },
-      { location: [38.9, -77], size: 0.05 },
-      { location: [51.5, -0.1], size: 0.05 },
-      { location: [1.35, 103.8], size: 0.05 }
-    ],
-    onRender: (state) => {
-      if (!reducedMotion) {
-        state.phi = phi;
-        phi += 0.005;
-      }
-    }
-  });
-}
-
-
-})();
-</script>
 </body>
 </html>
