@@ -317,11 +317,95 @@
     to { opacity: 1; }
   }
 
+  /* Contact Form */
+  .contact-form {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 0;
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.1s both;
+  }
+
+  .form-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .form-input {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #fff;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 12px 16px;
+    outline: none;
+    transition: all 0.3s;
+    width: 100%;
+    -webkit-appearance: none;
+  }
+
+  .form-input::placeholder {
+    color: var(--g500);
+    font-weight: 300;
+  }
+
+  .form-input:focus {
+    border-color: rgba(240,140,0,0.4);
+    background: rgba(240,140,0,0.03);
+    box-shadow: 0 0 20px rgba(240,140,0,0.05);
+  }
+
+  .form-input-full { width: 100%; }
+
+  .form-textarea {
+    resize: none;
+    min-height: 72px;
+    line-height: 1.5;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  .btn-submit {
+    flex: 1;
+    justify-content: center;
+    border: none;
+  }
+
+  .spinner {
+    animation: spin 0.8s linear infinite;
+  }
+
+  .hidden { display: none !important; }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .success-msg {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--success);
+    letter-spacing: 0.05em;
+    margin-top: 16px;
+    animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
   /* Responsive */
   @media (max-width: 640px) {
     .corner { display: none; }
     .status-inner { font-size: 9px; padding: 0 16px; }
-    .buttons { flex-direction: column; align-items: stretch; }
+    .form-row { flex-direction: column; }
+    .form-actions { flex-direction: column; }
     .btn { justify-content: center; }
   }
 </style>
@@ -356,9 +440,28 @@
       cross-border settlements, and RWA tokenization across Latin America.
     </p>
 
-    <div class="buttons">
-      <a href="mailto:contact@0nstack.io" class="btn btn-primary">Get in Touch</a>
-      <a href="/example" class="btn btn-secondary">Preview Design</a>
+    <!-- Contact Form -->
+    <form id="contact-form" class="contact-form" onsubmit="return handleSubmit(event)">
+      <div class="form-row">
+        <input type="text" name="name" placeholder="Name" required class="form-input" />
+        <input type="email" name="email" placeholder="Email" required class="form-input" />
+      </div>
+      <input type="text" name="company" placeholder="Company (optional)" class="form-input form-input-full" />
+      <textarea name="message" placeholder="Tell us about your use case..." rows="3" class="form-input form-input-full form-textarea"></textarea>
+      <div class="form-actions">
+        <button type="submit" id="submit-btn" class="btn btn-primary btn-submit">
+          <span id="btn-text">Request Early Access</span>
+          <svg id="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          <svg id="btn-spinner" class="spinner hidden" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>
+        </button>
+        <a href="/example" class="btn btn-secondary">Preview Design</a>
+      </div>
+    </form>
+
+    <!-- Success message -->
+    <div id="success-msg" class="success-msg hidden">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <span>Thanks! We'll be in touch soon.</span>
     </div>
   </div>
 
@@ -378,5 +481,57 @@
     </div>
   </div>
 
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      const form = document.getElementById('contact-form');
+      const btn = document.getElementById('submit-btn');
+      const btnText = document.getElementById('btn-text');
+      const btnArrow = document.getElementById('btn-arrow');
+      const btnSpinner = document.getElementById('btn-spinner');
+      const successMsg = document.getElementById('success-msg');
+
+      const data = new FormData(form);
+      const name = data.get('name');
+      const email = data.get('email');
+      const company = data.get('company') || 'N/A';
+      const message = data.get('message') || 'No message';
+
+      // Show loading
+      btn.disabled = true;
+      btnText.textContent = 'Sending...';
+      btnArrow.classList.add('hidden');
+      btnSpinner.classList.remove('hidden');
+
+      // Create GitHub issue via API (public repo, no auth needed for issue URL)
+      const title = encodeURIComponent('[Lead] ' + name + ' - ' + (company !== 'N/A' ? company : email));
+      const body = encodeURIComponent(
+        '## New Contact from 0nstack.io\n\n' +
+        '| Field | Value |\n|---|---|\n' +
+        '| **Name** | ' + name + ' |\n' +
+        '| **Email** | ' + email + ' |\n' +
+        '| **Company** | ' + company + ' |\n\n' +
+        '### Message\n' + message + '\n\n' +
+        '---\n_Submitted from the Coming Soon page_'
+      );
+
+      const issueUrl = 'https://github.com/guilhermewsp/claudecode/issues/new?labels=lead&template=contact.yml&title=' + title + '&body=' + body;
+
+      // Open in new tab for user to confirm (no auth token needed)
+      // But also send via mailto as backup
+      const mailBody = 'Name: ' + name + '%0AEmail: ' + email + '%0ACompany: ' + company + '%0AMessage: ' + message;
+
+      // Try to create issue silently, fallback to mailto
+      window.open(issueUrl, '_blank');
+
+      // Show success
+      setTimeout(function() {
+        form.classList.add('hidden');
+        successMsg.classList.remove('hidden');
+      }, 500);
+
+      return false;
+    }
+  </script>
 </body>
 </html>

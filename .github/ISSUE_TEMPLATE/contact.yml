@@ -1,0 +1,38 @@
+name: "Contact / Lead"
+description: "New contact from 0nstack.io"
+title: "[Lead] "
+labels: ["lead"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## New Contact
+        Fill in the details below.
+  - type: input
+    id: name
+    attributes:
+      label: Name
+      placeholder: "John Doe"
+    validations:
+      required: true
+  - type: input
+    id: email
+    attributes:
+      label: Email
+      placeholder: "john@company.com"
+    validations:
+      required: true
+  - type: input
+    id: company
+    attributes:
+      label: Company
+      placeholder: "Company name"
+    validations:
+      required: false
+  - type: textarea
+    id: message
+    attributes:
+      label: Message
+      placeholder: "Tell us about your use case..."
+    validations:
+      required: false
