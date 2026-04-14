@@ -1,0 +1,46 @@
+# ─── OS ───
+.DS_Store
+Thumbs.db
+
+# ─── Node ───
+node_modules/
+*.log
+npm-debug.log*
+.next/
+out/
+
+# ─── Python ───
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ipynb_checkpoints/
+
+# ─── Secrets ───
+.env
+.env.local
+.env.*.local
+*.pem
+credentials.json
+
+# ─── IDE / temp ───
+.vscode/
+.idea/
+*.swp
+*.tmp
+
+# ─── Third-party skill repos (clone separately — see SETUP.md) ───
+awesome-claude-skills/
+claude-mem/
+everything-claude-code/
+obsidian-skills/
+pixel-agents/
+superpowers/
+ui-ux-pro-max-skill/
+crypto-agents/cross-market-state-fusion/
+crypto-agents/last30days-skill/
+crypto-agents/polymarket-agents/
+
+# ─── Claude Code runtime ───
+.claude/worktrees/
