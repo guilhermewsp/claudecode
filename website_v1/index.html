@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ØnStack — Smart Digital FX Hub · Stablecoin + FX infrastructure for LATAM</title>
+<meta name="description" content="Regulated cross-border rails. Stablecoin settlement into BRL under 5 minutes. One API for FX, remittance, and payouts. Built for fintechs, desks, and iGaming operators.">
+<meta name="theme-color" content="#0a0a0a">
+<meta property="og:title" content="ØnStack — Smart Digital FX Hub">
+<meta property="og:description" content="Regulated FX + stablecoin infrastructure for LATAM. Settle cross-border payments into BRL in minutes via one API.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://0nstack.io/">
+<meta property="og:image" content="output/assets/og-synopsis.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200;300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+<style>
+:root {
+  --gold:    #f08c00;
+  --gold-h:  #e07d00;
+  --gold-g:  rgba(240,140,0,.08);
+  --gold-g2: rgba(240,140,0,.18);
+  --dark:    #111111;
+  --bg:      #0a0a0a;
+  --bg2:     #111111;
+  --bg3:     #181818;
+  --bg4:     #222222;
+  --border:  rgba(255,255,255,.07);
+  --border2: rgba(255,255,255,.14);
+  --t1:      #f0ede8;
+  --t2:      #7d7a75;
+  --t3:      #3d3b38;
+  --green:   #22c55e;
+  --red:     #ef4444;
+  --blue:    #3b82f6;
+  --fd: 'Oxanium', sans-serif;
+  --fb: 'Inter', sans-serif;
+  --fm: 'JetBrains Mono', monospace;
+  --r-sm: 6px; --r-md: 10px; --r-lg: 14px; --r-xl: 18px; --r-2xl: 24px;
+  --ease: cubic-bezier(0.22,1,0.36,1);
+  --ease2: cubic-bezier(0.4,0,0.2,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;font-size:15px;line-height:1.6;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:var(--gold)}
+img{display:block;max-width:100%}
+.container{max-width:1180px;margin:0 auto;padding:0 32px}
+.tag{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(240,140,0,.2);background:rgba(240,140,0,.06);border-radius:20px;padding:5px 14px}
+.tag .dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:.4}50%{opacity:1}}
+.sec-title{font-family:var(--fd);font-size:clamp(28px,3.2vw,44px);font-weight:400;letter-spacing:.025em;line-height:1.15;margin-bottom:16px}
+.sec-sub{font-size:15px;color:var(--t2);line-height:1.75;max-width:560px}
+
+.fu{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.fu.in{opacity:1;transform:none}
+.fu-d1{transition-delay:.1s}.fu-d2{transition-delay:.2s}.fu-d3{transition-delay:.3s}.fu-d4{transition-delay:.4s}.fu-d5{transition-delay:.5s}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:64px;display:flex;align-items:center;transition:background .3s,border-color .3s}
+nav.scrolled{background:rgba(10,10,10,.92);border-bottom:1px solid var(--border);backdrop-filter:blur(24px)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;width:100%;gap:24px}
+.nav-logo{font-family:var(--fd);font-size:15px;font-weight:700;letter-spacing:.18em;color:var(--t1);display:flex;align-items:center;gap:10px}
+.nav-logo .mark{color:var(--gold)}
+.nav-links{display:flex;gap:4px;align-items:center}
+.nav-links a{font-size:13px;color:var(--t2);padding:8px 14px;border-radius:var(--r-sm);transition:all .2s;font-weight:500;position:relative}
+.nav-links a:hover{color:var(--t1);background:rgba(255,255,255,.04)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-family:var(--fm);color:var(--t3);border:1px solid var(--border);border-radius:20px;padding:4px 10px}
+.nav-badge .dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.2)}}
+.btn-nav{font-size:13px;font-weight:600;background:var(--gold);color:#111;padding:9px 20px;border-radius:var(--r-sm);transition:all .2s;letter-spacing:.01em}
+.btn-nav:hover{background:var(--gold-h);box-shadow:0 0 24px rgba(240,140,0,.35);transform:translateY(-1px)}
+.nav-hamb{display:none;width:36px;height:36px;border-radius:8px;border:1px solid var(--border2);align-items:center;justify-content:center;flex-direction:column;gap:4px;cursor:pointer;transition:border-color .2s}
+.nav-hamb:hover{border-color:var(--gold)}
+.nav-hamb span{width:14px;height:1.5px;background:var(--t1);border-radius:1px;transition:all .3s}
+.nav-hamb.open span:nth-child(1){transform:translateY(3px) rotate(45deg)}
+.nav-hamb.open span:nth-child(2){transform:translateY(-3px) rotate(-45deg)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:140px 0 80px}
+.hero-igrid-base{position:absolute;inset:0;z-index:1;opacity:.05;pointer-events:none}
+.hero-igrid-interactive{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.55;-webkit-mask-image:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),black,transparent);mask-image:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),black,transparent)}
+.grid-svg{width:100%;height:100%}
+.igrid-orb-orange{position:absolute;right:-12%;top:-18%;width:46%;height:46%;border-radius:50%;background:rgba(240,140,0,.22);filter:blur(140px);pointer-events:none;z-index:2}
+.igrid-orb-blue{position:absolute;left:-12%;bottom:-18%;width:42%;height:42%;border-radius:50%;background:rgba(59,130,246,.16);filter:blur(140px);pointer-events:none;z-index:2}
+.igrid-orb-purple{position:absolute;left:40%;top:30%;width:28%;height:28%;border-radius:50%;background:rgba(168,85,247,.08);filter:blur(120px);pointer-events:none;z-index:2}
+.hero-veil{position:absolute;inset:0;z-index:3;background:linear-gradient(to bottom,transparent 40%,rgba(10,10,10,.75) 85%,var(--bg) 100%);pointer-events:none}
+.hero-sheen{position:absolute;inset:0;z-index:3;background:radial-gradient(ellipse 80% 50% at 50% 30%,rgba(240,140,0,.04),transparent 60%);pointer-events:none}
+
+.hero-inner{position:relative;z-index:10;display:grid;grid-template-columns:1.05fr 1fr;gap:72px;align-items:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;margin-bottom:26px;opacity:0;animation:fade-slide-up .6s .1s var(--ease) forwards}
+.eyebrow-badge{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);background:rgba(240,140,0,.08);border:1px solid rgba(240,140,0,.2);padding:5px 12px;border-radius:20px}
+.eyebrow-sep{width:1px;height:14px;background:var(--border2)}
+.eyebrow-text{font-size:12px;color:var(--t3);letter-spacing:.01em}
+.hero-h1{font-family:var(--fd);font-size:clamp(38px,4.4vw,64px);font-weight:400;letter-spacing:.015em;line-height:1.06;margin-bottom:24px;opacity:0;animation:fade-slide-up .7s .2s var(--ease) forwards}
+.hero-h1 .line2{color:var(--gold)}
+.hero-desc{font-size:17px;color:var(--t2);line-height:1.75;max-width:520px;margin-bottom:38px;opacity:0;animation:fade-slide-up .7s .35s var(--ease) forwards}
+.hero-desc strong{color:var(--t1);font-weight:500}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:52px;opacity:0;animation:fade-slide-up .7s .45s var(--ease) forwards}
+.btn-primary{display:inline-flex;align-items:center;gap:9px;padding:15px 30px;background:var(--gold);color:#111;font-weight:600;font-size:14px;border-radius:var(--r-sm);transition:all .25s;letter-spacing:.01em}
+.btn-primary:hover{background:var(--gold-h);box-shadow:0 0 40px rgba(240,140,0,.4);transform:translateY(-2px)}
+.btn-primary .arr{transition:transform .2s}
+.btn-primary:hover .arr{transform:translateX(3px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:9px;padding:15px 30px;color:var(--t2);font-size:14px;border-radius:var(--r-sm);border:1px solid var(--border2);transition:all .25s;backdrop-filter:blur(10px);background:rgba(255,255,255,.02)}
+.btn-ghost:hover{color:var(--t1);border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.05)}
+.hero-proofs{display:flex;gap:40px;flex-wrap:wrap;opacity:0;animation:fade-slide-up .7s .55s var(--ease) forwards}
+.hero-proof{display:flex;flex-direction:column;gap:3px}
+.hp-val{font-family:var(--fm);font-size:22px;font-weight:600;color:var(--t1)}
+.hp-val span{color:var(--gold)}
+.hp-lbl{font-size:11px;color:var(--t3);letter-spacing:.02em}
+.hero-proof-div{width:1px;height:38px;background:var(--border);align-self:center}
+
+/* Hero right — quote widget (demo-style chrome) */
+.hero-right{position:relative;display:flex;align-items:center;justify-content:center;opacity:0;animation:fade-slide-up .8s .3s var(--ease) forwards}
+.hero-card-wrap{position:relative;width:100%;max-width:460px}
+.quote-card{background:linear-gradient(180deg,rgba(24,24,24,.94),rgba(16,16,16,.94));border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:22px;backdrop-filter:blur(32px);box-shadow:0 32px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04) inset;position:relative;overflow:hidden}
+.quote-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(240,140,0,.08),transparent 55%);pointer-events:none;border-radius:20px}
+.qc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative}
+.qc-tabs{display:flex;gap:4px;background:rgba(0,0,0,.35);border-radius:8px;padding:3px}
+.qc-tab{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);padding:6px 12px;border-radius:6px;transition:all .2s;cursor:pointer}
+.qc-tab.active{background:var(--gold);color:#111}
+.qc-tab:not(.active):hover{color:var(--t2);background:rgba(255,255,255,.03)}
+.qc-live{display:flex;align-items:center;gap:6px;font-size:10px;font-family:var(--fm);color:var(--green);background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);padding:4px 10px;border-radius:20px}
+.qc-live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.qc-field{background:rgba(0,0,0,.35);border:1px solid var(--border);border-radius:var(--r-md);padding:14px 16px;transition:border-color .2s;margin-bottom:8px;position:relative}
+.qc-field:focus-within,.qc-field:hover{border-color:rgba(240,140,0,.4)}
+.qc-field-label{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--t3);letter-spacing:.04em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.qc-field-label .bal{font-family:var(--fm);font-size:10px;color:var(--t3);text-transform:none;letter-spacing:0}
+.qc-field-row{display:flex;align-items:center;gap:12px}
+.qc-input{flex:1;background:transparent;border:none;outline:none;color:var(--t1);font-family:var(--fd);font-size:26px;font-weight:500;letter-spacing:-.01em;min-width:0;padding:0}
+.qc-input::-webkit-outer-spin-button,.qc-input::-webkit-inner-spin-button{display:none}
+.qc-asset{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:700;color:var(--t1);cursor:pointer;transition:border-color .2s}
+.qc-asset:hover{border-color:var(--border2)}
+.qc-asset-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0}
+.qc-asset-icon.usdt{background:#26a17b;color:#fff}
+.qc-asset-icon.usdc{background:#2775ca;color:#fff}
+.qc-asset-icon.brl{background:linear-gradient(135deg,#009c3b,#ffdf00);color:#002776;font-size:14px}
+.qc-swap-btn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;margin:-4px auto;background:var(--bg);border:1px solid var(--border2);border-radius:50%;color:var(--gold);cursor:pointer;transition:all .2s;position:relative;z-index:2}
+.qc-swap-btn:hover{border-color:var(--gold);transform:rotate(180deg)}
+.qc-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px;padding:12px;background:rgba(240,140,0,.04);border:1px solid rgba(240,140,0,.12);border-radius:var(--r-sm)}
+.qc-mi{text-align:center}
+.qc-mi-v{font-family:var(--fm);font-size:12px;font-weight:600;color:var(--t1)}
+.qc-mi-v.gold{color:var(--gold)}
+.qc-mi-v.green{color:var(--green)}
+.qc-mi-l{font-size:9px;color:var(--t3);margin-top:2px;letter-spacing:.03em}
+.qc-route{display:flex;align-items:center;gap:10px;margin-top:14px;padding:10px 12px;background:rgba(255,255,255,.03);border-radius:var(--r-sm);font-size:11px;color:var(--t3);font-family:var(--fm)}
+.qc-route .ri{display:flex;align-items:center;gap:5px}
+.qc-route .ri b{color:var(--t1);font-weight:600}
+.qc-route .arr{color:var(--gold);margin:0 auto}
+.qc-btn{width:100%;padding:14px;margin-top:14px;background:var(--gold);color:#111;font-weight:700;font-size:14px;border-radius:var(--r-sm);border:none;cursor:pointer;transition:all .2s;letter-spacing:.01em;display:flex;align-items:center;justify-content:center;gap:8px}
+.qc-btn:hover{background:var(--gold-h);box-shadow:0 0 20px rgba(240,140,0,.35)}
+.qc-savings{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-size:11px;color:var(--green)}
+.qc-savings b{font-family:var(--fm);font-weight:700}
+
+/* floating mini cards */
+.hero-float1{position:absolute;top:-22px;right:-28px;background:rgba(15,15,15,.95);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-lg);padding:11px 15px;backdrop-filter:blur(20px);display:flex;align-items:center;gap:10px;animation:float1 6s ease-in-out infinite;z-index:20;box-shadow:0 12px 32px rgba(0,0,0,.4)}
+.hero-float2{position:absolute;bottom:-18px;left:-26px;background:rgba(15,15,15,.95);border:1px solid rgba(34,197,94,.22);border-radius:var(--r-lg);padding:11px 15px;backdrop-filter:blur(20px);display:flex;align-items:center;gap:10px;animation:float2 8s ease-in-out infinite;z-index:20;box-shadow:0 12px 32px rgba(0,0,0,.4)}
+@keyframes float1{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes float2{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+.hf-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.hf-icon.gold-bg{background:rgba(240,140,0,.18);color:var(--gold)}
+.hf-icon.green-bg{background:rgba(34,197,94,.14);color:var(--green)}
+.hf-v{font-size:12px;font-weight:700;color:var(--t1)}
+.hf-l{font-size:10px;color:var(--t3)}
+
+@keyframes fade-slide-up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* TEXT ROTATE */
+.tr-wrap{display:inline-block;overflow:hidden;vertical-align:bottom;min-width:280px}
+.tr-char{display:inline-block;animation:tr-enter .55s cubic-bezier(0.22,1,0.36,1) both}
+.tr-char.exiting{animation:tr-exit .3s cubic-bezier(0.4,0,1,1) both}
+@keyframes tr-enter{from{opacity:0;transform:translateY(105%)}to{opacity:1;transform:translateY(0)}}
+@keyframes tr-exit{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-115%)}}
+
+/* TICKER */
+.ticker{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);height:38px;overflow:hidden;display:flex;align-items:center}
+.ticker-track{display:flex;gap:40px;animation:tickroll 46s linear infinite;white-space:nowrap;padding:0 20px}
+@keyframes tickroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tick{font-family:var(--fm);font-size:10px;display:flex;gap:8px;align-items:center;color:var(--t3);letter-spacing:.02em}
+.tick b{color:var(--t2);font-weight:500}.tick .up{color:var(--green)}.tick .dn{color:var(--red)}
+.tick-sep{width:3px;height:3px;border-radius:50%;background:var(--t3);opacity:.4;flex-shrink:0}
+
+/* LOGOS3 */
+.logos3{padding:48px 0;background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden}
+.logos3-label{text-align:center;font-size:11px;color:var(--t3);letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-bottom:28px}
+.logos3-carousel{position:relative;overflow:hidden}
+.logos3-carousel::before,.logos3-carousel::after{content:'';position:absolute;top:0;bottom:0;width:140px;z-index:2;pointer-events:none}
+.logos3-carousel::before{left:0;background:linear-gradient(to right,var(--bg2) 0%,transparent 100%)}
+.logos3-carousel::after{right:0;background:linear-gradient(to left,var(--bg2) 0%,transparent 100%)}
+.logos3-track{display:flex;align-items:center;width:max-content;animation:logos-roll 36s linear infinite}
+.logos3-track:hover{animation-play-state:paused}
+@keyframes logos-roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.logo3-item{display:flex;align-items:center;gap:8px;padding:0 40px;opacity:.32;filter:grayscale(1);transition:opacity .3s,filter .3s;white-space:nowrap;flex-shrink:0}
+.logo3-item:hover{opacity:.7;filter:grayscale(.1)}
+.logo3-item svg text{font-family:'Oxanium',sans-serif;font-weight:700;letter-spacing:.08em;fill:var(--t1)}
+
+/* PROBLEM */
+.problem{padding:110px 0;border-top:1px solid var(--border)}
+.problem-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.problem-vis{position:relative;border-radius:22px;overflow:hidden;background:var(--bg2);border:1px solid var(--border);min-height:460px;padding:36px}
+.problem-vis::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top right,rgba(240,140,0,.08),transparent 60%);pointer-events:none}
+.pv-title{font-family:var(--fd);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:24px;position:relative}
+.pv-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 18px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:var(--r-md);margin-bottom:10px;transition:border-color .2s;position:relative}
+.pv-row.bad{border-color:rgba(239,68,68,.18)}
+.pv-row.good{border-color:rgba(240,140,0,.28);background:rgba(240,140,0,.05);box-shadow:0 0 24px rgba(240,140,0,.08)}
+.pv-row-left{display:flex;align-items:center;gap:12px;min-width:0}
+.pv-ic{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pv-ic.red{background:rgba(239,68,68,.08);color:var(--red)}
+.pv-ic.gold{background:rgba(240,140,0,.12);color:var(--gold)}
+.pv-label{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pv-name{font-size:12px;font-weight:600;color:var(--t1);white-space:nowrap}
+.pv-meta{font-size:10px;color:var(--t3);font-family:var(--fm)}
+.pv-vals{text-align:right;flex-shrink:0}
+.pv-vmain{font-family:var(--fm);font-size:14px;font-weight:700}
+.pv-vmain.red{color:var(--red)}
+.pv-vmain.green{color:var(--green)}
+.pv-vsub{font-size:10px;color:var(--t3);font-family:var(--fm);margin-top:2px}
+.pv-arrow{text-align:center;margin:12px 0;color:var(--gold);opacity:.5;font-size:14px}
+.pv-save{margin-top:16px;padding:14px 18px;background:linear-gradient(90deg,rgba(34,197,94,.08),rgba(34,197,94,.02));border:1px solid rgba(34,197,94,.2);border-radius:var(--r-md);display:flex;align-items:center;justify-content:space-between}
+.pv-save-l{font-size:11px;color:var(--t3);letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.pv-save-v{font-family:var(--fd);font-size:22px;font-weight:600;color:var(--green)}
+.problem-content{display:flex;flex-direction:column;gap:20px}
+.problem-title{font-family:var(--fd);font-size:clamp(28px,3vw,42px);font-weight:400;letter-spacing:.025em;line-height:1.15;margin-bottom:8px}
+.problem-desc{font-size:15px;color:var(--t2);line-height:1.8}
+.problem-points{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+.pp{display:flex;gap:14px;align-items:flex-start}
+.pp-num{font-family:var(--fd);font-size:11px;font-weight:700;color:var(--gold);background:rgba(240,140,0,.08);border:1px solid rgba(240,140,0,.2);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.pp-text{font-size:13px;color:var(--t2);line-height:1.7}
+.pp-text strong{color:var(--t1);font-weight:500}
+
+/* STATS */
+.stats{padding:0 0 110px}
+.stats-inner{background:linear-gradient(135deg,rgba(240,140,0,.06),rgba(240,140,0,.02));border:1px solid rgba(240,140,0,.15);border-radius:24px;overflow:hidden;display:grid;grid-template-columns:repeat(4,1fr)}
+.stat-item{padding:44px 32px;position:relative;transition:background .2s}
+.stat-item + .stat-item{border-left:1px solid rgba(240,140,0,.1)}
+.stat-item:hover{background:rgba(240,140,0,.04)}
+.stat-num{font-family:var(--fd);font-size:clamp(30px,3.3vw,48px);font-weight:500;color:var(--gold);letter-spacing:-.015em;margin-bottom:8px;line-height:1}
+.stat-label{font-size:13px;color:var(--t2);line-height:1.5}
+.stat-note{font-size:11px;color:var(--t3);margin-top:4px;font-family:var(--fm)}
+
+/* PRODUCTS */
+.products{padding:110px 0;border-top:1px solid var(--border)}
+.products-header{text-align:center;margin-bottom:64px}
+.products-header .sec-sub{margin:0 auto}
+.products-list{display:flex;flex-direction:column;gap:14px}
+.prod-row{display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--bg2);border:1px solid var(--border);border-radius:22px;overflow:hidden;transition:border-color .3s,transform .3s}
+.prod-row:hover{border-color:rgba(240,140,0,.22);transform:translateY(-2px)}
+.prod-row.rev .prod-vis{order:1}
+.prod-row.rev .prod-info{order:2}
+.prod-info{padding:48px 48px;display:flex;flex-direction:column;justify-content:center}
+.prod-kicker{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.prod-name{font-family:var(--fd);font-size:clamp(24px,2.5vw,34px);font-weight:500;letter-spacing:.025em;line-height:1.15;margin-bottom:14px}
+.prod-desc{font-size:14px;color:var(--t2);line-height:1.75;margin-bottom:24px;max-width:400px}
+.prod-bullets{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.pb{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--t2);line-height:1.5}
+.pb::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.prod-link{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--gold);transition:gap .2s;cursor:pointer;align-self:flex-start;border-bottom:1px solid transparent;padding-bottom:2px}
+.prod-link:hover{gap:12px;border-color:var(--gold)}
+.prod-vis{position:relative;overflow:hidden;min-height:380px;background:linear-gradient(135deg,var(--bg2),var(--bg3))}
+.prod-ui{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:28px}
+.mini-dash{background:rgba(10,10,10,.82);border:1px solid var(--border2);border-radius:14px;padding:20px;backdrop-filter:blur(20px);width:100%;max-width:300px;box-shadow:0 24px 60px rgba(0,0,0,.55)}
+.md-header{font-size:10px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--t3);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.md-big{font-family:var(--fd);font-size:28px;font-weight:500;color:var(--t1);margin-bottom:4px;letter-spacing:-.005em}
+.md-sub{font-size:11px;color:var(--t3);margin-bottom:14px}
+.md-bar-wrap{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;margin-bottom:14px}
+.md-bar{height:100%;background:linear-gradient(90deg,var(--gold),rgba(240,140,0,.4));border-radius:2px}
+.md-row{display:flex;justify-content:space-between;align-items:center;font-size:11px;padding:6px 0;border-top:1px solid var(--border)}
+.md-row .k{color:var(--t3)}
+.md-row .v{font-family:var(--fm);color:var(--t1);font-weight:500}
+.md-row .v.gold{color:var(--gold)}
+.md-row .v.green{color:var(--green)}
+.md-row .v.red{color:var(--red)}
+.prod-glyph{position:absolute;right:-40px;bottom:-40px;width:260px;height:260px;opacity:.04;pointer-events:none}
+
+/* HOW IT WORKS */
+.hiw{padding:110px 0;border-top:1px solid var(--border)}
+.hiw-header{text-align:center;margin-bottom:72px}
+.hiw-header .sec-sub{margin:0 auto}
+.hiw-track{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;position:relative}
+.hiw-track::before{content:'';position:absolute;top:46px;left:calc(16.66% + 12px);right:calc(16.66% + 12px);height:1px;background:linear-gradient(90deg,transparent 0%,var(--gold) 30%,var(--gold) 70%,transparent 100%);opacity:.3}
+.hiw-step{display:flex;flex-direction:column;gap:18px;padding:32px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;position:relative;transition:border-color .3s,transform .3s}
+.hiw-step:hover{border-color:rgba(240,140,0,.22);transform:translateY(-4px)}
+.hiw-step.active{border-color:rgba(240,140,0,.3);background:linear-gradient(135deg,rgba(240,140,0,.05),var(--bg2))}
+.step-num{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:15px;font-weight:700;color:#111;background:var(--gold);box-shadow:0 0 24px rgba(240,140,0,.3)}
+.hiw-step:not(.active) .step-num{color:var(--gold);background:rgba(240,140,0,.08);border:1px solid rgba(240,140,0,.2);box-shadow:none}
+.step-title{font-family:var(--fd);font-size:17px;font-weight:500;letter-spacing:.025em}
+.step-desc{font-size:13px;color:var(--t2);line-height:1.7}
+.step-detail{font-size:11px;color:var(--t3);line-height:1.6;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;font-family:var(--fm)}
+
+/* UNIT ECONOMICS */
+.econ{padding:110px 0;border-top:1px solid var(--border);background:var(--bg2);position:relative;overflow:hidden}
+.econ::before{content:'';position:absolute;top:-20%;left:50%;width:800px;height:500px;background:radial-gradient(ellipse,rgba(240,140,0,.05),transparent 65%);transform:translateX(-50%);pointer-events:none}
+.econ-header{text-align:center;margin-bottom:56px;position:relative}
+.econ-header .sec-sub{margin:0 auto}
+.econ-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;position:relative;margin-bottom:56px}
+.econ-card{background:var(--bg);border:1px solid var(--border);border-radius:22px;padding:36px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
+.econ-card.legacy{filter:grayscale(.1)}
+.econ-card.onstack{border-color:rgba(240,140,0,.28);background:linear-gradient(135deg,rgba(240,140,0,.04),var(--bg));box-shadow:0 24px 60px rgba(240,140,0,.08)}
+.econ-card.onstack::before{content:'';position:absolute;top:0;right:0;width:180px;height:180px;background:radial-gradient(circle,rgba(240,140,0,.08),transparent 65%);pointer-events:none}
+.ec-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin-bottom:20px}
+.ec-badge.legacy{color:var(--t3);background:rgba(255,255,255,.04);border:1px solid var(--border)}
+.ec-badge.onstack{color:var(--gold);background:rgba(240,140,0,.08);border:1px solid rgba(240,140,0,.2)}
+.ec-title{font-family:var(--fd);font-size:22px;font-weight:500;letter-spacing:.02em;margin-bottom:6px}
+.ec-sub{font-size:12px;color:var(--t3);margin-bottom:24px}
+.ec-hero{margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.ec-hero-v{font-family:var(--fd);font-size:clamp(38px,4.2vw,54px);font-weight:500;letter-spacing:-.015em;line-height:1;margin-bottom:6px}
+.ec-hero-v.legacy{color:var(--t2);text-decoration:line-through;text-decoration-color:rgba(239,68,68,.45);text-decoration-thickness:2px}
+.ec-hero-v.gold{color:var(--gold)}
+.ec-hero-l{font-size:11px;color:var(--t3);letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.ec-rows{display:flex;flex-direction:column;gap:2px}
+.ec-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;font-size:13px;border-bottom:1px solid var(--border)}
+.ec-row:last-child{border-bottom:none}
+.ec-row .k{color:var(--t3);font-size:12px}
+.ec-row .v{font-family:var(--fm);font-weight:600;color:var(--t1);font-size:13px}
+.ec-row .v.red{color:var(--red)}
+.ec-row .v.green{color:var(--green)}
+.ec-row .v.gold{color:var(--gold)}
+.ec-row .v.strike{text-decoration:line-through;text-decoration-color:rgba(239,68,68,.4);color:var(--t2)}
+.econ-saving{background:linear-gradient(90deg,rgba(240,140,0,.1),rgba(240,140,0,.03));border:1px solid rgba(240,140,0,.22);border-radius:var(--r-xl);padding:28px 36px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.econ-saving-l{flex:1;min-width:240px}
+.econ-saving-l .k{font-size:11px;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.econ-saving-l .v{font-family:var(--fd);font-size:clamp(22px,2.4vw,32px);font-weight:500;color:var(--t1);letter-spacing:.01em;line-height:1.2}
+.econ-saving-l .v span{color:var(--gold)}
+.econ-saving-note{font-size:11px;color:var(--t3);max-width:260px;text-align:right;line-height:1.6}
+.econ-saving-note a{color:var(--gold);border-bottom:1px dotted rgba(240,140,0,.4)}
+
+/* DEMO EMBED */
+.demo-embed{padding:110px 0;border-top:1px solid var(--border)}
+.demo-embed-header{text-align:center;margin-bottom:48px}
+.demo-embed-header .sec-sub{margin:0 auto}
+.demo-frame-wrap{position:relative;border-radius:24px;overflow:hidden;border:1px solid var(--border2);background:var(--bg2);box-shadow:0 40px 100px rgba(0,0,0,.5)}
+.demo-chrome{display:flex;align-items:center;gap:12px;padding:12px 18px;background:var(--bg3);border-bottom:1px solid var(--border)}
+.demo-chrome-dots{display:flex;gap:6px}
+.demo-chrome-dot{width:11px;height:11px;border-radius:50%}
+.demo-chrome-dot:nth-child(1){background:#ff5f57}
+.demo-chrome-dot:nth-child(2){background:#ffbd2e}
+.demo-chrome-dot:nth-child(3){background:#28c841}
+.demo-chrome-url{flex:1;background:rgba(0,0,0,.35);border:1px solid var(--border);border-radius:6px;padding:5px 14px;font-family:var(--fm);font-size:11px;color:var(--t3);text-align:center}
+.demo-chrome-url b{color:var(--gold)}
+.demo-chrome-actions{display:flex;gap:8px}
+.demo-chrome-actions .btn-demo-open{font-size:11px;font-weight:600;color:var(--gold);padding:5px 12px;border:1px solid rgba(240,140,0,.3);border-radius:6px;transition:all .2s}
+.demo-chrome-actions .btn-demo-open:hover{background:rgba(240,140,0,.08);border-color:var(--gold)}
+.demo-iframe-wrap{position:relative;background:var(--bg);aspect-ratio:16/9;overflow:hidden}
+.demo-iframe-wrap iframe{width:100%;height:100%;border:none;display:block}
+.demo-cta{text-align:center;margin-top:32px}
+.demo-cta-label{font-size:12px;color:var(--t3);margin-bottom:14px;letter-spacing:.04em}
+
+/* MARKET */
+.market{padding:110px 0;border-top:1px solid var(--border)}
+.market-inner{display:grid;grid-template-columns:1.3fr 1fr;gap:72px;align-items:start}
+.market-numbers{display:flex;flex-direction:column;gap:14px}
+.mn-card{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:28px 32px;transition:border-color .2s,transform .2s}
+.mn-card:hover{border-color:rgba(240,140,0,.22);transform:translateY(-2px)}
+.mn-num{font-family:var(--fd);font-size:40px;font-weight:500;color:var(--gold);line-height:1;letter-spacing:-.015em}
+.mn-label{font-size:14px;color:var(--t1);font-weight:500;margin-top:6px}
+.mn-sub{font-size:12px;color:var(--t3);margin-top:4px;line-height:1.5}
+.market-right{display:flex;flex-direction:column;gap:14px}
+.mr-point{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px 22px;display:flex;gap:14px;transition:border-color .2s,transform .2s}
+.mr-point:hover{border-color:rgba(240,140,0,.22);transform:translateX(3px)}
+.mrp-icon{width:36px;height:36px;border-radius:10px;background:rgba(240,140,0,.08);border:1px solid rgba(240,140,0,.2);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:14px;flex-shrink:0}
+.mrp-title{font-size:13px;font-weight:600;margin-bottom:4px}
+.mrp-desc{font-size:12px;color:var(--t3);line-height:1.6}
+
+/* MOAT */
+.moat{padding:110px 0;border-top:1px solid var(--border);background:var(--bg2)}
+.moat-header{text-align:center;margin-bottom:64px}
+.moat-header .sec-sub{margin:0 auto;max-width:520px}
+.moat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.moat-card{background:var(--bg);border:1px solid var(--border);border-radius:18px;padding:28px;transition:all .3s}
+.moat-card:hover{border-color:rgba(240,140,0,.22);transform:translateY(-3px)}
+.moat-icon{width:40px;height:40px;border-radius:10px;background:rgba(240,140,0,.08);border:1px solid rgba(240,140,0,.18);display:flex;align-items:center;justify-content:center;color:var(--gold);margin-bottom:16px}
+.moat-title{font-family:var(--fd);font-size:15px;font-weight:500;letter-spacing:.03em;margin-bottom:8px}
+.moat-desc{font-size:12px;color:var(--t3);line-height:1.65}
+.moat-tag{margin-top:14px;display:inline-block;font-size:10px;font-family:var(--fm);color:var(--gold);background:rgba(240,140,0,.06);border:1px solid rgba(240,140,0,.15);padding:3px 10px;border-radius:4px}
+
+/* INSTITUTIONAL PROOF */
+.proof{padding:110px 0;border-top:1px solid var(--border)}
+.proof-header{text-align:center;margin-bottom:64px}
+.proof-header .sec-sub{margin:0 auto}
+.proof-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:48px}
+.proof-card{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:12px;transition:all .3s;position:relative;overflow:hidden}
+.proof-card:hover{border-color:rgba(240,140,0,.22);transform:translateY(-3px)}
+.proof-card::before{content:'';position:absolute;top:0;right:0;width:60px;height:60px;background:radial-gradient(circle at top right,rgba(240,140,0,.05),transparent 70%);pointer-events:none}
+.proof-ic{width:40px;height:40px;border-radius:10px;background:rgba(240,140,0,.08);border:1px solid rgba(240,140,0,.18);display:flex;align-items:center;justify-content:center;color:var(--gold)}
+.proof-title{font-family:var(--fd);font-size:14px;font-weight:500;letter-spacing:.04em;color:var(--t1)}
+.proof-desc{font-size:12px;color:var(--t3);line-height:1.65}
+.proof-chip{font-size:10px;font-family:var(--fm);color:var(--gold);letter-spacing:.06em}
+.proof-stack{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:40px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.proof-stack-title{grid-column:1/-1;font-size:11px;color:var(--t3);letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.proof-stack-item{display:flex;flex-direction:column;gap:6px;padding:18px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-md);transition:border-color .2s}
+.proof-stack-item:hover{border-color:rgba(240,140,0,.22)}
+.proof-stack-k{font-size:10px;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+.proof-stack-v{font-family:var(--fd);font-size:14px;font-weight:500;color:var(--t1);letter-spacing:.02em}
+.proof-stack-m{font-size:11px;color:var(--t3);font-family:var(--fm);margin-top:2px}
+
+/* TEAM */
+.team{padding:110px 0;border-top:1px solid var(--border);background:var(--bg2)}
+.team-header{text-align:center;margin-bottom:64px}
+.team-header .sec-sub{margin:0 auto}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.team-card{background:var(--bg);border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:border-color .3s,transform .3s}
+.team-card:hover{border-color:rgba(240,140,0,.22);transform:translateY(-4px)}
+.team-img-wrap{position:relative;height:240px;overflow:hidden;background:linear-gradient(135deg,var(--bg3),var(--bg2))}
+.team-img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:grayscale(.35) saturate(.85) contrast(1.02);transition:filter .4s,transform .6s}
+.team-card:hover .team-img{filter:grayscale(0) saturate(1);transform:scale(1.03)}
+.team-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,10,.95) 0%,rgba(10,10,10,.2) 40%,transparent 70%)}
+.team-info{padding:20px}
+.team-name{font-family:var(--fd);font-size:16px;font-weight:500;letter-spacing:.04em;margin-bottom:3px}
+.team-role{font-size:11px;color:var(--gold);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.team-bio{font-size:12px;color:var(--t3);line-height:1.65}
+.team-links{display:flex;gap:8px;margin-top:14px}
+.tl-link{width:30px;height:30px;border-radius:7px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--t3);transition:all .2s}
+.tl-link:hover{border-color:var(--gold);color:var(--gold);background:rgba(240,140,0,.06)}
+
+/* FAQ */
+.faq{padding:110px 0;border-top:1px solid var(--border)}
+.faq-inner{display:grid;grid-template-columns:1fr 1.8fr;gap:72px;align-items:start}
+.faq-list{display:flex;flex-direction:column;gap:0}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:22px 0;cursor:pointer;font-size:14px;font-weight:500;color:var(--t1);transition:color .2s;gap:20px}
+.faq-q:hover{color:var(--gold)}
+.faq-icon{font-size:18px;color:var(--t3);transition:transform .3s;flex-shrink:0}
+.faq-item.open .faq-icon{transform:rotate(45deg);color:var(--gold)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s var(--ease),padding .4s}
+.faq-item.open .faq-a{max-height:300px;padding-bottom:20px}
+.faq-a p{font-size:13px;color:var(--t2);line-height:1.8}
+
+/* CTA */
+.cta-section{padding:120px 0;border-top:1px solid var(--border);position:relative;overflow:hidden}
+.cta-inner{text-align:center;position:relative}
+.cta-glow{position:absolute;width:900px;height:400px;background:radial-gradient(ellipse,rgba(240,140,0,.08),transparent 65%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.cta-title{font-family:var(--fd);font-size:clamp(34px,4.2vw,60px);font-weight:400;letter-spacing:.02em;line-height:1.1;margin-bottom:20px;position:relative;z-index:1}
+.cta-title span{color:var(--gold)}
+.cta-sub{font-size:17px;color:var(--t2);margin-bottom:48px;position:relative;z-index:1}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.cta-note{margin-top:24px;font-size:11px;color:var(--t3);position:relative;z-index:1;font-family:var(--fm);letter-spacing:.04em}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:60px 0 32px;background:var(--bg2)}
+.footer-inner{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.footer-logo{font-family:var(--fd);font-size:14px;font-weight:700;letter-spacing:.18em;color:var(--t1);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.footer-logo .mark{color:var(--gold)}
+.footer-tagline{font-size:12px;color:var(--t3);line-height:1.7;max-width:280px;margin-bottom:20px}
+.footer-badges{display:flex;gap:8px;flex-wrap:wrap}
+.f-badge{font-size:10px;color:var(--t3);border:1px solid var(--border);border-radius:4px;padding:4px 9px;font-family:var(--fm);letter-spacing:.04em}
+.footer-col-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin-bottom:16px}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer-links a{font-size:13px;color:var(--t2);transition:color .2s}
+.footer-links a:hover{color:var(--t1)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid var(--border);gap:24px;flex-wrap:wrap}
+.footer-copy{font-size:11px;color:var(--t3);font-family:var(--fm)}
+.footer-legal{font-size:10px;color:var(--t3);max-width:640px;line-height:1.6}
+
+section{position:relative;z-index:1}
+
+/* REQUEST ACCESS MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(12px);z-index:500;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;display:flex;align-items:center;justify-content:center;padding:24px}
+.modal-overlay.open{opacity:1;visibility:visible}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:22px;padding:36px;max-width:440px;width:100%;position:relative;transform:translateY(20px) scale(.98);transition:transform .3s var(--ease);box-shadow:0 40px 100px rgba(0,0,0,.6)}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:8px;color:var(--t3);transition:all .2s;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:rgba(255,255,255,.05);color:var(--t1)}
+.modal-title{font-family:var(--fd);font-size:22px;font-weight:500;letter-spacing:.02em;margin-bottom:8px}
+.modal-sub{font-size:13px;color:var(--t3);line-height:1.65;margin-bottom:24px}
+.modal-form{display:flex;flex-direction:column;gap:12px}
+.modal-input,.modal-select{background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 14px;color:var(--t1);font-family:var(--fb);font-size:13px;transition:border-color .2s;width:100%;outline:none}
+.modal-input:focus,.modal-select:focus{border-color:var(--gold)}
+.modal-input::placeholder{color:var(--t3)}
+.modal-submit{padding:13px;background:var(--gold);color:#111;font-weight:700;font-size:14px;border-radius:var(--r-sm);border:none;cursor:pointer;transition:all .2s;margin-top:6px}
+.modal-submit:hover{background:var(--gold-h);box-shadow:0 0 24px rgba(240,140,0,.35)}
+.modal-success{text-align:center;padding:20px 0;display:none}
+.modal-success.show{display:block}
+.modal-success-ic{width:54px;height:54px;border-radius:50%;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);display:flex;align-items:center;justify-content:center;color:var(--green);margin:0 auto 16px}
+.modal-success-t{font-family:var(--fd);font-size:18px;margin-bottom:6px}
+.modal-success-m{font-size:13px;color:var(--t3);line-height:1.65}
+
+/* ═══════════ RESPONSIVE ═══════════ */
+@media (max-width:1100px){
+  .container{padding:0 24px}
+  .hero-inner{gap:56px}
+  .problem-inner,.market-inner,.faq-inner{gap:56px}
+  .proof-grid{grid-template-columns:repeat(2,1fr)}
+  .proof-stack{grid-template-columns:repeat(2,1fr)}
+  .stats-inner{grid-template-columns:repeat(2,1fr)}
+  .stat-item + .stat-item{border-left:none}
+  .stat-item:nth-child(n+3){border-top:1px solid rgba(240,140,0,.1)}
+  .stat-item:nth-child(3){border-left:none}
+  .stat-item:nth-child(2),.stat-item:nth-child(4){border-left:1px solid rgba(240,140,0,.1)}
+  .moat-grid{grid-template-columns:repeat(2,1fr)}
+  .team-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:880px){
+  .nav-links{display:none}
+  .nav-hamb{display:flex}
+  .nav-badge{display:none}
+  .nav-links.mobile-open{display:flex;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:rgba(10,10,10,.98);border-bottom:1px solid var(--border);backdrop-filter:blur(24px);padding:16px 24px;gap:4px}
+  .nav-links.mobile-open a{padding:12px 14px;font-size:14px;width:100%}
+  .hero{padding:110px 0 60px}
+  .hero-inner{grid-template-columns:1fr;gap:48px}
+  .hero-right{margin-top:8px}
+  .hero-card-wrap{max-width:420px;margin:0 auto}
+  .hero-proofs{gap:24px}
+  .hero-proof-div{display:none}
+  .problem-inner{grid-template-columns:1fr}
+  .problem-vis{min-height:auto;padding:28px}
+  .products-list .prod-row,.prod-row.rev{grid-template-columns:1fr}
+  .prod-row.rev .prod-vis{order:0}
+  .prod-row.rev .prod-info{order:0}
+  .prod-info{padding:32px 28px}
+  .prod-vis{min-height:260px}
+  .hiw-track{grid-template-columns:1fr;gap:16px}
+  .hiw-track::before{display:none}
+  .econ-grid{grid-template-columns:1fr}
+  .econ-saving{flex-direction:column;text-align:center}
+  .econ-saving-note{text-align:center;max-width:none}
+  .market-inner{grid-template-columns:1fr}
+  .faq-inner{grid-template-columns:1fr;gap:32px}
+  .footer-inner{grid-template-columns:1fr 1fr;gap:40px}
+  .footer-brand{grid-column:1/-1}
+}
+@media (max-width:560px){
+  .container{padding:0 20px}
+  .hero{padding:100px 0 48px}
+  .hero-h1{font-size:clamp(32px,8vw,42px)}
+  .hero-desc{font-size:15px}
+  .tr-wrap{min-width:220px}
+  .hero-float1{top:-14px;right:-10px;padding:9px 12px;transform:scale(.9)}
+  .hero-float2{bottom:-12px;left:-10px;padding:9px 12px;transform:scale(.9)}
+  .quote-card{padding:18px}
+  .qc-input{font-size:22px}
+  .hero-ctas{width:100%;flex-direction:column;gap:10px}
+  .btn-primary,.btn-ghost{width:100%;justify-content:center;padding:14px 22px}
+  .stats-inner{grid-template-columns:1fr}
+  .stat-item{padding:32px 24px}
+  .stat-item + .stat-item{border-left:none;border-top:1px solid rgba(240,140,0,.1)}
+  .stat-item:nth-child(2),.stat-item:nth-child(4){border-left:none}
+  .proof-grid{grid-template-columns:1fr}
+  .proof-stack{grid-template-columns:1fr;padding:24px}
+  .moat-grid{grid-template-columns:1fr}
+  .team-grid{grid-template-columns:1fr 1fr}
+  .team-img-wrap{height:200px}
+  .econ-card{padding:28px 22px}
+  .ec-hero-v{font-size:clamp(32px,10vw,42px)}
+  .footer-inner{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;align-items:flex-start;gap:12px}
+  .demo-chrome-url{font-size:10px;padding:5px 10px}
+  .prod-info{padding:28px 22px}
+  .mini-dash{max-width:240px}
+}
+@media (max-width:400px){
+  .team-grid{grid-template-columns:1fr}
+  .hero-proofs{gap:16px}
+  .hp-val{font-size:18px}
+}
+
+/* Reduce motion fallback (don't kill content — just stop transitions/animations) */
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important}
+  .fu{opacity:1;transform:none}
+  [style*="animation"]{opacity:1 !important;transform:none !important}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══════════════════════════════════════════════════════ -->
+<nav id="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" aria-label="ØnStack home">
+        <span><span class="mark">Ø</span>NSTACK</span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#products">Products</a>
+        <a href="#how">How it works</a>
+        <a href="#econ">Pricing</a>
+        <a href="#demo-embed">Demo</a>
+        <a href="#team">Team</a>
+      </div>
+      <div class="nav-right">
+        <div class="nav-badge"><span class="dot"></span>Live 2026</div>
+        <a href="#cta" class="btn-nav" data-open-modal>Request Access</a>
+        <button class="nav-hamb" id="navHamb" aria-label="Toggle menu">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ HERO ══════════════════════════════════════════════════════ -->
+<section class="hero" id="hero-section">
+  <div class="hero-igrid-base">
+    <svg class="grid-svg" id="grid-svg-base">
+      <defs>
+        <pattern id="grid-base" width="40" height="40" patternUnits="userSpaceOnUse" x="0" y="0">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#grid-base)"/>
+    </svg>
+  </div>
+  <div class="hero-igrid-interactive">
+    <svg class="grid-svg" id="grid-svg-interactive">
+      <defs>
+        <pattern id="grid-inter" width="40" height="40" patternUnits="userSpaceOnUse" x="0" y="0">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f08c00" stroke-width="1.2"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#grid-inter)"/>
+    </svg>
+  </div>
+  <div class="igrid-orb-orange"></div>
+  <div class="igrid-orb-blue"></div>
+  <div class="igrid-orb-purple"></div>
+  <div class="hero-sheen"></div>
+  <div class="hero-veil"></div>
+
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-eyebrow">
+          <span class="eyebrow-badge">API · BACEN · ADGM</span>
+          <span class="eyebrow-sep"></span>
+          <span class="eyebrow-text">Smart Digital FX Hub · early access</span>
+        </div>
+        <h1 class="hero-h1">
+          Cross-border rails<br>
+          <span class="tr-wrap" id="text-rotate-el" aria-live="polite"></span>
+        </h1>
+        <p class="hero-desc">
+          ØnStack is the <strong>regulated FX + stablecoin infrastructure</strong> for LATAM. Move USDC, USDT or BRLA into BRL settlement in minutes — through one API, under BACEN and ADGM supervision. Built for fintechs, brokerages and institutional desks.
+        </p>
+        <div class="hero-ctas">
+          <a href="#cta" class="btn-primary" data-open-modal>Request Access <span class="arr">→</span></a>
+          <a href="#demo-embed" class="btn-ghost">See live demo</a>
+        </div>
+        <div class="hero-proofs">
+          <div class="hero-proof">
+            <span class="hp-val"><span>&lt;</span>5<span>min</span></span>
+            <span class="hp-lbl">stablecoin → BRL settlement</span>
+          </div>
+          <div class="hero-proof-div"></div>
+          <div class="hero-proof">
+            <span class="hp-val">73<span>%</span></span>
+            <span class="hp-lbl">cheaper than legacy SWIFT</span>
+          </div>
+          <div class="hero-proof-div"></div>
+          <div class="hero-proof">
+            <span class="hp-val"><span>$</span>363<span>B</span></span>
+            <span class="hp-lbl">LATAM addressable market</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUOTE WIDGET (demo-style chrome) -->
+      <div class="hero-right">
+        <div class="hero-card-wrap">
+          <div class="hero-float1">
+            <div class="hf-icon gold-bg"><i data-lucide="zap" style="width:14px;height:14px"></i></div>
+            <div>
+              <div class="hf-v">3.2 min avg</div>
+              <div class="hf-l">PIX settlement</div>
+            </div>
+          </div>
+          <div class="hero-float2">
+            <div class="hf-icon green-bg"><i data-lucide="shield-check" style="width:14px;height:14px"></i></div>
+            <div>
+              <div class="hf-v">BACEN supervised</div>
+              <div class="hf-l">FX authorization via M&amp;A</div>
+            </div>
+          </div>
+
+          <div class="quote-card" id="quoteCard">
+            <div class="qc-header">
+              <div class="qc-tabs">
+                <button class="qc-tab active" data-tab="send">Send</button>
+                <button class="qc-tab" data-tab="fx">FX</button>
+                <button class="qc-tab" data-tab="api">API</button>
+              </div>
+              <div class="qc-live"><span class="qc-live-dot"></span>Live rate</div>
+            </div>
+
+            <div class="qc-field">
+              <div class="qc-field-label"><span>You send</span><span class="bal">min $1,000 · max $500K</span></div>
+              <div class="qc-field-row">
+                <input type="text" class="qc-input" id="qcSend" value="10,000" inputmode="decimal" />
+                <button class="qc-asset" aria-label="Source asset">
+                  <span class="qc-asset-icon usdc">$</span>
+                  <span>USDC</span>
+                  <i data-lucide="chevron-down" style="width:12px;height:12px;color:var(--t3)"></i>
+                </button>
+              </div>
+            </div>
+
+            <button class="qc-swap-btn" aria-label="Swap direction">
+              <i data-lucide="arrow-down-up" style="width:13px;height:13px"></i>
+            </button>
+
+            <div class="qc-field">
+              <div class="qc-field-label"><span>Recipient gets</span><span class="bal" id="qcRate">1 USDC = 5.4218 BRL</span></div>
+              <div class="qc-field-row">
+                <input type="text" class="qc-input" id="qcRecv" value="54,018" readonly />
+                <button class="qc-asset" aria-label="Destination asset">
+                  <span class="qc-asset-icon brl">R$</span>
+                  <span>BRL</span>
+                  <i data-lucide="chevron-down" style="width:12px;height:12px;color:var(--t3)"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="qc-meta">
+              <div class="qc-mi"><div class="qc-mi-v gold" id="qcFee">$98.00</div><div class="qc-mi-l">Total fee</div></div>
+              <div class="qc-mi"><div class="qc-mi-v">0.40%</div><div class="qc-mi-l">FX spread</div></div>
+              <div class="qc-mi"><div class="qc-mi-v green">~3 min</div><div class="qc-mi-l">Arrival</div></div>
+            </div>
+
+            <div class="qc-route">
+              <div class="ri"><span style="font-size:14px">🇺🇸</span><b>USDC · Ethereum</b></div>
+              <div class="arr">→</div>
+              <div class="ri"><b>PIX · BRL</b><span style="font-size:14px">🇧🇷</span></div>
+            </div>
+
+            <button class="qc-btn" data-open-modal>
+              <i data-lucide="arrow-right" style="width:14px;height:14px"></i>
+              Get full quote
+            </button>
+            <div class="qc-savings">
+              <i data-lucide="trending-down" style="width:12px;height:12px"></i>
+              <span>You save <b id="qcSavings">$267</b> vs SWIFT wire on this transfer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TICKER ══════════════════════════════════════════════════════ -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="tick"><b>USDC/BRL</b> 5.4218 <span class="up">+0.12%</span></span>
+    <span class="tick-sep"></span>
+    <span class="tick"><b>USDT/BRL</b> 5.4201 <span class="up">+0.09%</span></span>
+    <span class="tick-sep"></span>
+    <span class="tick"><b>USD/BRL spot</b> 5.4235 <span class="dn">-0.03%</span></span>
+    <span class="tick-sep"></span>
+    <span class="tick"><b>BRLA/USD</b> 0.1843 <span class="up">+0.04%</span></span>
+    <span class="tick-sep"></span>
+    <span class="tick"><b>SELIC</b> 12.25% <span class="up">stable</span></span>
+    <span class="tick-sep"></span>
+    <span class="tick"><b>NDF 30d</b> 5.45 <span class="up">+0.07%</span></span>
+    <span class="tick-sep"></span>
+    <span class="tick"><b>PIX vol today</b> R$4.2B <span class="up">live</span></span>
+    <span class="tick-sep"></span>
+    <span class="tick"><b>ØnStack API</b> 99.97% <span class="up">uptime</span></span>
+    <span class="tick-sep"></span>
+    <!-- duplicate for seamless loop -->
+    <span class="tick"><b>USDC/BRL</b> 5.4218 <span class="up">+0.12%</span></span>
+    <span class="tick-sep"></span>
+    <span class="tick"><b>USDT/BRL</b> 5.4201 <span class="up">+0.09%</span></span>
+    <span class="tick-sep"></span>
+    <span class="tick"><b>USD/BRL spot</b> 5.4235 <span class="dn">-0.03%</span></span>
+    <span class="tick-sep"></span>
+    <span class="tick"><b>BRLA/USD</b> 0.1843 <span class="up">+0.04%</span></span>
+    <span class="tick-sep"></span>
+    <span class="tick"><b>SELIC</b> 12.25% <span class="up">stable</span></span>
+    <span class="tick-sep"></span>
+    <span class="tick"><b>NDF 30d</b> 5.45 <span class="up">+0.07%</span></span>
+    <span class="tick-sep"></span>
+    <span class="tick"><b>PIX vol today</b> R$4.2B <span class="up">live</span></span>
+    <span class="tick-sep"></span>
+    <span class="tick"><b>ØnStack API</b> 99.97% <span class="up">uptime</span></span>
+  </div>
+</div>
+
+<!-- ══ LOGOS3 ══════════════════════════════════════════════════════ -->
+<section class="logos3">
+  <p class="logos3-label">Ecosystem &amp; infrastructure · Settlement networks · Regulatory framework</p>
+  <div class="logos3-carousel">
+    <div class="logos3-track" id="logos3Track">
+      <div class="logo3-item"><svg viewBox="0 0 90 24"><text x="0" y="18" font-size="16">BACEN</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 70 24"><text x="0" y="18" font-size="16">ADGM</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 60 24"><text x="0" y="18" font-size="16">CVM</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 90 24"><text x="0" y="18" font-size="16">STELLAR</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 80 24"><text x="0" y="18" font-size="16">CIRCLE</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 80 24"><text x="0" y="18" font-size="16">TETHER</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 60 24"><text x="0" y="18" font-size="16">BRLA</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 40 24"><text x="0" y="18" font-size="16">PIX</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 30 24"><text x="0" y="18" font-size="16">B3</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 120 24"><text x="0" y="18" font-size="16">CHAINLINK</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 110 24"><text x="0" y="18" font-size="16">FIREBLOCKS</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 80 24"><text x="0" y="18" font-size="16">OPEN FX</text></svg></div>
+      <!-- duplicate set -->
+      <div class="logo3-item"><svg viewBox="0 0 90 24"><text x="0" y="18" font-size="16">BACEN</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 70 24"><text x="0" y="18" font-size="16">ADGM</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 60 24"><text x="0" y="18" font-size="16">CVM</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 90 24"><text x="0" y="18" font-size="16">STELLAR</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 80 24"><text x="0" y="18" font-size="16">CIRCLE</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 80 24"><text x="0" y="18" font-size="16">TETHER</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 60 24"><text x="0" y="18" font-size="16">BRLA</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 40 24"><text x="0" y="18" font-size="16">PIX</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 30 24"><text x="0" y="18" font-size="16">B3</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 120 24"><text x="0" y="18" font-size="16">CHAINLINK</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 110 24"><text x="0" y="18" font-size="16">FIREBLOCKS</text></svg></div>
+      <div class="logo3-item"><svg viewBox="0 0 80 24"><text x="0" y="18" font-size="16">OPEN FX</text></svg></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROBLEM ══════════════════════════════════════════════════════ -->
+<section class="problem" id="problem">
+  <div class="container">
+    <div class="problem-inner">
+      <div class="problem-vis fu">
+        <div class="pv-title">$100K transfer · USD → BRL</div>
+        <div class="pv-row bad">
+          <div class="pv-row-left">
+            <div class="pv-ic red"><i data-lucide="x" style="width:14px;height:14px"></i></div>
+            <div class="pv-label">
+              <div class="pv-name">SWIFT correspondent wire</div>
+              <div class="pv-meta">1–5 business days · manual compliance</div>
+            </div>
+          </div>
+          <div class="pv-vals">
+            <div class="pv-vmain red">$3,655</div>
+            <div class="pv-vsub">3.65% all-in cost</div>
+          </div>
+        </div>
+        <div class="pv-row bad">
+          <div class="pv-row-left">
+            <div class="pv-ic red"><i data-lucide="alert-triangle" style="width:14px;height:14px"></i></div>
+            <div class="pv-label">
+              <div class="pv-name">Crypto OTC desk</div>
+              <div class="pv-meta">Hours · grey-zone compliance</div>
+            </div>
+          </div>
+          <div class="pv-vals">
+            <div class="pv-vmain red">$1,500+</div>
+            <div class="pv-vsub">1.5–4% variable spread</div>
+          </div>
+        </div>
+
+        <div class="pv-arrow">↓</div>
+
+        <div class="pv-row good">
+          <div class="pv-row-left">
+            <div class="pv-ic gold"><i data-lucide="zap" style="width:14px;height:14px"></i></div>
+            <div class="pv-label">
+              <div class="pv-name" style="color:var(--gold)">ØnStack API</div>
+              <div class="pv-meta">&lt;5 min · BACEN + ADGM supervised</div>
+            </div>
+          </div>
+          <div class="pv-vals">
+            <div class="pv-vmain green">$984</div>
+            <div class="pv-vsub">0.98% all-in</div>
+          </div>
+        </div>
+
+        <div class="pv-save">
+          <div class="pv-save-l">You save per $100K</div>
+          <div class="pv-save-v">$2,671 <span style="font-size:13px;color:var(--t3);font-weight:500;font-family:var(--fm)">(73%)</span></div>
+        </div>
+      </div>
+
+      <div class="problem-content">
+        <div class="fu">
+          <p class="tag"><span class="dot"></span> The problem</p>
+        </div>
+        <div class="fu fu-d1">
+          <h2 class="problem-title">Cross-border into LATAM is slow, opaque, and expensive.</h2>
+          <p class="problem-desc">Every fintech moving USD into Brazil still sits on top of SWIFT — or a crypto desk operating in a grey zone. Neither gives you a rate lock, a compliance trail, or a reliable settlement SLA.</p>
+        </div>
+        <div class="problem-points fu fu-d2">
+          <div class="pp">
+            <span class="pp-num">01</span>
+            <p class="pp-text"><strong>SWIFT charges 3–4% and takes up to 5 days.</strong> Your end client pays the inefficiency; your margin absorbs the FX drift.</p>
+          </div>
+          <div class="pp">
+            <span class="pp-num">02</span>
+            <p class="pp-text"><strong>Crypto OTC desks look cheaper — but aren't licensed.</strong> Under BACEN Res. 519/520, unlicensed FX-via-stablecoin is now a direct regulatory risk.</p>
+          </div>
+          <div class="pp">
+            <span class="pp-num">03</span>
+            <p class="pp-text"><strong>No single API connects FX + stablecoins + PIX.</strong> You end up stitching 4 vendors, 3 KYC stacks, and a spreadsheet for reconciliation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STATS ══════════════════════════════════════════════════════ -->
+<section class="stats">
+  <div class="container">
+    <div class="stats-inner fu">
+      <div class="stat-item">
+        <div class="stat-num" data-count="318">$0B</div>
+        <div class="stat-label">Stablecoin volume in Brazil (2024)</div>
+        <div class="stat-note">Source: Chainalysis LATAM 2024</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num"><span data-count="5">0</span>min</div>
+        <div class="stat-label">Stablecoin → BRL settlement</div>
+        <div class="stat-note">vs. 1–5 days via SWIFT</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-count="73">0%</div>
+        <div class="stat-label">Cost reduction vs SWIFT</div>
+        <div class="stat-note">$984 vs $3,655 per $100K</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">3mo</div>
+        <div class="stat-label">Time-to-license via M&amp;A path</div>
+        <div class="stat-note">vs 18–24 months from scratch</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRODUCTS ══════════════════════════════════════════════════════ -->
+<section class="products" id="products">
+  <div class="container">
+    <div class="products-header fu">
+      <p class="tag" style="margin-bottom:16px"><span class="dot"></span> Three products</p>
+      <h2 class="sec-title">One licensed platform.<br>Three revenue lines.</h2>
+      <p class="sec-sub">ØnStack is an infrastructure layer, not a single product. The same rail powers remittance, iGaming settlement, and institutional FX — each exposed through its own API surface and compliance profile.</p>
+    </div>
+
+    <div class="products-list">
+      <!-- RemitFX -->
+      <div class="prod-row fu">
+        <div class="prod-info">
+          <div class="prod-kicker">01 · RemitFX</div>
+          <h3 class="prod-name">Hedged remittance, API-first</h3>
+          <p class="prod-desc">A quote-to-PIX pipeline for fintechs and neobanks moving USD, EUR, and stablecoins into BRL. Rate locked at quote, hedged via NDF, settled on-chain, paid out through PIX.</p>
+          <div class="prod-bullets">
+            <div class="pb">Rate guaranteed from quote to delivery — no slippage on client</div>
+            <div class="pb">NDF hedge desk absorbs intraday FX volatility</div>
+            <div class="pb">PIX payout in under 5 minutes, end-to-end</div>
+            <div class="pb">Take rate 0.80% · target 70%+ product margin</div>
+          </div>
+          <a href="#cta" class="prod-link" data-open-modal>Talk to the RemitFX team <i data-lucide="arrow-right" style="width:14px;height:14px"></i></a>
+        </div>
+        <div class="prod-vis">
+          <div class="prod-ui">
+            <div class="mini-dash">
+              <div class="md-header"><span>RemitFX · live</span><span style="color:var(--green);display:inline-flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Active</span></div>
+              <div class="md-big">$2.4M</div>
+              <div class="md-sub">Volume settled today</div>
+              <div class="md-bar-wrap"><div class="md-bar" style="width:78%"></div></div>
+              <div class="md-row"><span class="k">Take rate</span><span class="v gold">0.80%</span></div>
+              <div class="md-row"><span class="k">Avg settlement</span><span class="v green">3.2 min</span></div>
+              <div class="md-row"><span class="k">FX spread</span><span class="v">0.40%</span></div>
+              <div class="md-row"><span class="k">Fail rate</span><span class="v green">0.03%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BetRails -->
+      <div class="prod-row rev fu fu-d1">
+        <div class="prod-vis">
+          <div class="prod-ui">
+            <div class="mini-dash">
+              <div class="md-header"><span>BetRails · live</span><span style="color:var(--green);display:inline-flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Processing</span></div>
+              <div class="md-big">R$12.4M</div>
+              <div class="md-sub">Player flow settled this week</div>
+              <div class="md-bar-wrap"><div class="md-bar" style="width:91%"></div></div>
+              <div class="md-row"><span class="k">Take rate</span><span class="v gold">1.00%</span></div>
+              <div class="md-row"><span class="k">vs. market avg</span><span class="v red">8–12%</span></div>
+              <div class="md-row"><span class="k">Operators live</span><span class="v">14</span></div>
+              <div class="md-row"><span class="k">KYC stack</span><span class="v green">native</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-kicker">02 · iGamingRails</div>
+          <h3 class="prod-name">Settlement rails for iGaming operators</h3>
+          <p class="prod-desc">White-label PIX-in / PIX-out + stablecoin treasury for licensed iGaming platforms operating under Brazil's SPA regime. Player deposits in, payouts out, reconciliation handled natively.</p>
+          <div class="prod-bullets">
+            <div class="pb">1.0% flat fee vs 8–12% typical legacy processor cost</div>
+            <div class="pb">Real-time PIX-in and PIX-out with built-in AML scoring</div>
+            <div class="pb">Treasury auto-convert to USDC / BRLA for FX exposure control</div>
+            <div class="pb">$20B Brazilian iGaming market, regulated since Feb 2025</div>
+          </div>
+          <a href="#cta" class="prod-link" data-open-modal>Partner with iGamingRails <i data-lucide="arrow-right" style="width:14px;height:14px"></i></a>
+        </div>
+      </div>
+
+      <!-- Exchange Hub -->
+      <div class="prod-row fu fu-d2">
+        <div class="prod-info">
+          <div class="prod-kicker">03 · Exchange Hub</div>
+          <h3 class="prod-name">Institutional FX + custody, one endpoint</h3>
+          <p class="prod-desc">Prime-style execution for desks, crypto brokerages, and treasuries that need USD/BRL liquidity at scale. API-first, sub-100ms execution, full compliance package — your regulated LATAM on/off-ramp.</p>
+          <div class="prod-bullets">
+            <div class="pb">$50M+ liquidity pool across USDT, USDC, BRLA</div>
+            <div class="pb">Sub-100ms REST + FIX execution</div>
+            <div class="pb">KYC / AML / Travel Rule included — no separate vendor</div>
+            <div class="pb">Fee 0.60% · $50M+ institutional deposits</div>
+          </div>
+          <a href="#cta" class="prod-link" data-open-modal>Request desk access <i data-lucide="arrow-right" style="width:14px;height:14px"></i></a>
+        </div>
+        <div class="prod-vis">
+          <div class="prod-ui">
+            <div class="mini-dash">
+              <div class="md-header"><span>Exchange Hub</span><span style="color:var(--green);display:inline-flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Live</span></div>
+              <div class="md-big">$50M+</div>
+              <div class="md-sub">Active institutional liquidity</div>
+              <div class="md-bar-wrap"><div class="md-bar" style="width:62%"></div></div>
+              <div class="md-row"><span class="k">Execution</span><span class="v green">&lt;100ms</span></div>
+              <div class="md-row"><span class="k">Spread</span><span class="v gold">0.25%</span></div>
+              <div class="md-row"><span class="k">Partners</span><span class="v">7 live</span></div>
+              <div class="md-row"><span class="k">Protocols</span><span class="v">REST · FIX 4.4</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ══════════════════════════════════════════════════════ -->
+<section class="hiw" id="how">
+  <div class="container">
+    <div class="hiw-header fu">
+      <p class="tag" style="margin-bottom:16px"><span class="dot"></span> How it works</p>
+      <h2 class="sec-title">Stablecoin in.<br>BRL out. One API.</h2>
+      <p class="sec-sub">The same rail clears retail remittance, iGaming payouts, and institutional FX. We wrap Brazil's regulated financial layer around global stablecoin liquidity.</p>
+    </div>
+    <div class="hiw-track">
+      <div class="hiw-step active fu">
+        <div class="step-num">01</div>
+        <div class="step-title">Deposit &amp; lock</div>
+        <div class="step-desc">Client deposits USDC, USDT or BRLA to ØnStack's regulated custody. The FX rate is locked at quote — hedged intraday via our NDF desk.</div>
+        <div class="step-detail">USDC · USDT · BRLA · ETH + BTC (auto-hedge)</div>
+      </div>
+      <div class="hiw-step fu fu-d1">
+        <div class="step-num">02</div>
+        <div class="step-title">Convert &amp; clear</div>
+        <div class="step-desc">FX conversion executes against the desk. KYC, Travel Rule, and AML run in real time; BACEN reporting is generated automatically from the transaction record.</div>
+        <div class="step-detail">Sub-second FX · Travel Rule · COAF reporting</div>
+      </div>
+      <div class="hiw-step fu fu-d2">
+        <div class="step-num">03</div>
+        <div class="step-title">Payout via PIX</div>
+        <div class="step-desc">BRL lands on the recipient's PIX key in under 5 minutes. Full audit trail, instant confirmation, irrevocable settlement — ready for reconciliation.</div>
+        <div class="step-detail">Avg 3.2 min · 99.97% SLA · zero chargeback</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ UNIT ECONOMICS (replaces comparison callout + table) ══ -->
+<section class="econ" id="econ">
+  <div class="container">
+    <div class="econ-header fu">
+      <p class="tag" style="margin-bottom:16px"><span class="dot"></span> Unit economics</p>
+      <h2 class="sec-title">The real cost of moving<br>$100K into Brazil.</h2>
+      <p class="sec-sub">Same corridor, same counterparty risk profile, two cost bases. Everything below is what your end client actually pays — the spread plus the fees, not a brochure rate.</p>
+    </div>
+
+    <div class="econ-grid">
+      <div class="econ-card legacy fu">
+        <span class="ec-badge legacy">Legacy · SWIFT + correspondent</span>
+        <div class="ec-title">The 3.65% tax on every wire</div>
+        <div class="ec-sub">Typical total cost on a $100K corporate transfer</div>
+        <div class="ec-hero">
+          <div class="ec-hero-v legacy">$3,655</div>
+          <div class="ec-hero-l">Total cost · per $100K</div>
+        </div>
+        <div class="ec-rows">
+          <div class="ec-row"><span class="k">Settlement time</span><span class="v red strike">1–5 business days</span></div>
+          <div class="ec-row"><span class="k">FX spread</span><span class="v red">2.5–3.2%</span></div>
+          <div class="ec-row"><span class="k">Wire + correspondent fees</span><span class="v">$45–$85</span></div>
+          <div class="ec-row"><span class="k">Rate lock</span><span class="v red">None</span></div>
+          <div class="ec-row"><span class="k">Compliance trail</span><span class="v">Manual</span></div>
+          <div class="ec-row"><span class="k">Regulatory regime</span><span class="v">Fragmented</span></div>
+        </div>
+      </div>
+
+      <div class="econ-card onstack fu fu-d1">
+        <span class="ec-badge onstack">ØnStack · FX + stablecoin rail</span>
+        <div class="ec-title">What the same $100K should cost</div>
+        <div class="ec-sub">Quote from the live ØnStack API, delivered via PIX</div>
+        <div class="ec-hero">
+          <div class="ec-hero-v gold">$984</div>
+          <div class="ec-hero-l">Total cost · per $100K</div>
+        </div>
+        <div class="ec-rows">
+          <div class="ec-row"><span class="k">Settlement time</span><span class="v green">Under 5 minutes</span></div>
+          <div class="ec-row"><span class="k">FX spread</span><span class="v gold">0.40%</span></div>
+          <div class="ec-row"><span class="k">Network + gas</span><span class="v">~$4</span></div>
+          <div class="ec-row"><span class="k">Rate lock</span><span class="v green">NDF-hedged at quote</span></div>
+          <div class="ec-row"><span class="k">Compliance trail</span><span class="v green">Native · auto-reported</span></div>
+          <div class="ec-row"><span class="k">Regulatory regime</span><span class="v gold">BACEN + ADGM</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="econ-saving fu fu-d2">
+      <div class="econ-saving-l">
+        <div class="k">Savings per $100K · delivered</div>
+        <div class="v">$2,671 back to your P&amp;L — <span>73% cheaper</span> than the SWIFT baseline</div>
+      </div>
+      <div class="econ-saving-note">
+        Legacy cost: World Bank <em>Remittance Prices Worldwide</em> Q4 2024. ØnStack cost: projected from stablecoin settlement model (spread + gas + hedging). Subject to final product configuration.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DEMO EMBED ══ -->
+<section class="demo-embed" id="demo-embed">
+  <div class="container">
+    <div class="demo-embed-header fu">
+      <p class="tag" style="margin-bottom:16px"><span class="dot"></span> Live product</p>
+      <h2 class="sec-title">The platform your team<br>will actually ship on.</h2>
+      <p class="sec-sub">Not a screenshot deck. This is the real ØnStack operator console — remittance, FX, custody, and compliance, already wired together. Click anywhere inside to interact.</p>
+    </div>
+
+    <div class="demo-frame-wrap fu fu-d1">
+      <div class="demo-chrome">
+        <div class="demo-chrome-dots">
+          <span class="demo-chrome-dot"></span>
+          <span class="demo-chrome-dot"></span>
+          <span class="demo-chrome-dot"></span>
+        </div>
+        <div class="demo-chrome-url">app.<b>0nstack.io</b> · live demo</div>
+        <div class="demo-chrome-actions">
+          <a href="/demo/" target="_blank" class="btn-demo-open">Open full demo ↗</a>
+        </div>
+      </div>
+      <div class="demo-iframe-wrap">
+        <iframe src="/demo/" title="ØnStack live demo" loading="lazy" allow="clipboard-read; clipboard-write"></iframe>
+      </div>
+    </div>
+
+    <div class="demo-cta fu fu-d2">
+      <div class="demo-cta-label">Want API keys, sandbox access and a scoped pilot?</div>
+      <a href="#cta" class="btn-primary" data-open-modal>Request sandbox access <span class="arr">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MARKET ══════════════════════════════════════════════════════ -->
+<section class="market" id="market">
+  <div class="container">
+    <div class="fu" style="margin-bottom:56px">
+      <p class="tag" style="margin-bottom:16px"><span class="dot"></span> Market opportunity</p>
+      <h2 class="sec-title">The regulatory window<br>is open now.</h2>
+    </div>
+    <div class="market-inner">
+      <div class="market-numbers fu">
+        <div class="mn-card">
+          <div class="mn-num">$363.8B</div>
+          <div class="mn-label">Brazil-addressable market · 2025</div>
+          <div class="mn-sub">FX outflows $197B + iGaming $89B + crypto $77B · BCB 2024</div>
+        </div>
+        <div class="mn-card">
+          <div class="mn-num">$2.3T</div>
+          <div class="mn-label">Global cross-border TAM</div>
+          <div class="mn-sub">B2B payments + remittances · McKinsey 2024</div>
+        </div>
+        <div class="mn-card">
+          <div class="mn-num">$500M</div>
+          <div class="mn-label">GMV target · Year 3</div>
+          <div class="mn-sub">~50 B2B clients × $10M avg GMV · $4M revenue at blended take rate</div>
+        </div>
+      </div>
+      <div class="market-right fu fu-d2">
+        <div class="mr-point">
+          <div class="mrp-icon"><i data-lucide="trending-up" style="width:16px;height:16px"></i></div>
+          <div>
+            <div class="mrp-title">Brazil is the #2 stablecoin market globally</div>
+            <div class="mrp-desc">&gt;90% of on-chain volume is stablecoin. Structural demand for USD-denominated liquidity — not a crypto cycle bet.</div>
+          </div>
+        </div>
+        <div class="mr-point">
+          <div class="mrp-icon"><i data-lucide="scale" style="width:16px;height:16px"></i></div>
+          <div>
+            <div class="mrp-title">BACEN Res. 519–521 reclassifies stablecoins as FX</div>
+            <div class="mrp-desc">Unlicensed operators lose legal cover. Licensed rails — ours — become the default path. Enforcement pushes volume to us.</div>
+          </div>
+        </div>
+        <div class="mr-point">
+          <div class="mrp-icon"><i data-lucide="gamepad-2" style="width:16px;height:16px"></i></div>
+          <div>
+            <div class="mrp-title">iGaming regulation created a $89B settlement gap</div>
+            <div class="mrp-desc">60+ SPA-licensed operators need compliant BRL settlement rails. Legacy processors charge 8–12%. We do it at 1%.</div>
+          </div>
+        </div>
+        <div class="mr-point">
+          <div class="mrp-icon"><i data-lucide="radio" style="width:16px;height:16px"></i></div>
+          <div>
+            <div class="mrp-title">PIX is the world's fastest retail rail</div>
+            <div class="mrp-desc">150M accounts, $4B+ daily volume, instant settlement. Direct PIX access is the scarce resource — and we have it.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MOAT ══════════════════════════════════════════════════════ -->
+<section class="moat" id="moat">
+  <div class="container">
+    <div class="moat-header fu">
+      <p class="tag" style="margin-bottom:16px"><span class="dot"></span> Defensibility</p>
+      <h2 class="sec-title">Not a product.<br>A regulated layer.</h2>
+      <p class="sec-sub">Each piece of ØnStack takes time, licenses, or counterparty relationships to rebuild. Stacked together, they compound into an 18-month moat — by construction, not by marketing.</p>
+    </div>
+    <div class="moat-grid">
+      <div class="moat-card fu">
+        <div class="moat-icon"><i data-lucide="landmark" style="width:20px;height:20px"></i></div>
+        <div class="moat-title">BACEN FX authorization</div>
+        <div class="moat-desc">Acquired via M&amp;A of a licensed FX operator — 3 months to activate, vs 18–24 months from scratch. SPSAV framework compliant.</div>
+        <span class="moat-tag">3 mo vs 18–24 mo</span>
+      </div>
+      <div class="moat-card fu fu-d1">
+        <div class="moat-icon"><i data-lucide="zap" style="width:20px;height:20px"></i></div>
+        <div class="moat-title">Direct PIX access</div>
+        <div class="moat-desc">Most fintechs route PIX through an indirect bank partner, paying latency and margin. We're integrated as a direct participant — our own leg.</div>
+        <span class="moat-tag">Sub-second PIX leg</span>
+      </div>
+      <div class="moat-card fu fu-d2">
+        <div class="moat-icon"><i data-lucide="lock" style="width:20px;height:20px"></i></div>
+        <div class="moat-title">NDF hedging desk</div>
+        <div class="moat-desc">Non-Deliverable Forward book with licensed counterparties. Lets us lock rate at quote — the single feature Wise and Remessa charge a premium for.</div>
+        <span class="moat-tag">6–12 mo to replicate</span>
+      </div>
+      <div class="moat-card fu fu-d1">
+        <div class="moat-icon"><i data-lucide="globe" style="width:20px;height:20px"></i></div>
+        <div class="moat-title">ADGM global leg</div>
+        <div class="moat-desc">ADGM (Abu Dhabi) entity gives us the offshore FX + custody leg. Clean separation of BRL-side regulation from crypto-native flow.</div>
+        <span class="moat-tag">Multi-jurisdiction</span>
+      </div>
+      <div class="moat-card fu fu-d2">
+        <div class="moat-icon"><i data-lucide="layers" style="width:20px;height:20px"></i></div>
+        <div class="moat-title">Compliance-as-code</div>
+        <div class="moat-desc">Travel Rule, KYC, AML and COAF reporting compiled into the transaction path — not bolted on. The long-tail part nobody wants to rebuild.</div>
+        <span class="moat-tag">PIX · Crypto · FX · Reg</span>
+      </div>
+      <div class="moat-card fu fu-d3">
+        <div class="moat-icon"><i data-lucide="bar-chart-2" style="width:20px;height:20px"></i></div>
+        <div class="moat-title">Liquidity network</div>
+        <div class="moat-desc">$50M+ pooled across USDT, USDC, BRLA through 7 institutional counterparties plus inherited FX group book. Depth takes years to build.</div>
+        <span class="moat-tag">$50M+ live pool</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ INSTITUTIONAL PROOF (replaces testimonials) ══ -->
+<section class="proof" id="proof">
+  <div class="container">
+    <div class="proof-header fu">
+      <p class="tag" style="margin-bottom:16px"><span class="dot"></span> Institutional proof</p>
+      <h2 class="sec-title">Built on licensed rails,<br>not brochure partnerships.</h2>
+      <p class="sec-sub">Every counterparty in our stack is a real regulated entity — not a logo on a deck. This is the compliance, custody, and settlement surface our API sits on.</p>
+    </div>
+
+    <div class="proof-grid">
+      <div class="proof-card fu">
+        <div class="proof-ic"><i data-lucide="landmark" style="width:18px;height:18px"></i></div>
+        <div class="proof-title">BACEN supervised</div>
+        <div class="proof-desc">FX authorization via acquired PSAV — operating under BCB Resolutions 519 / 520 / 521 and the new SPSAV framework for crypto-as-FX.</div>
+        <span class="proof-chip">Res. 519 · 520 · 521</span>
+      </div>
+      <div class="proof-card fu fu-d1">
+        <div class="proof-ic"><i data-lucide="globe-2" style="width:18px;height:18px"></i></div>
+        <div class="proof-title">ADGM jurisdiction</div>
+        <div class="proof-desc">Abu Dhabi Global Market entity for offshore FX book, institutional custody and cross-border stablecoin treasury. Dual-jurisdiction by design.</div>
+        <span class="proof-chip">FSRA-aligned</span>
+      </div>
+      <div class="proof-card fu fu-d2">
+        <div class="proof-ic"><i data-lucide="shield-check" style="width:18px;height:18px"></i></div>
+        <div class="proof-title">CVM-registered tokenization</div>
+        <div class="proof-desc">Future tokenization layer (FIDC, CRI, CRA) under Brazilian securities regulation. Distribution through licensed channels, global custody optional.</div>
+        <span class="proof-chip">Lei 14.478 · CVM 88</span>
+      </div>
+      <div class="proof-card fu fu-d3">
+        <div class="proof-ic"><i data-lucide="key" style="width:18px;height:18px"></i></div>
+        <div class="proof-title">Institutional custody</div>
+        <div class="proof-desc">MPC custody + cold-storage reserve through licensed counterparties. Travel Rule compliant, segregated client funds, real-time attestation.</div>
+        <span class="proof-chip">MPC · Travel Rule</span>
+      </div>
+    </div>
+
+    <div class="proof-stack fu fu-d2">
+      <div class="proof-stack-title">The compliance stack your integration inherits</div>
+      <div class="proof-stack-item">
+        <span class="proof-stack-k">Identity</span>
+        <span class="proof-stack-v">Full KYC / KYB</span>
+        <span class="proof-stack-m">CPF · CNPJ · global IDV</span>
+      </div>
+      <div class="proof-stack-item">
+        <span class="proof-stack-k">AML</span>
+        <span class="proof-stack-v">COAF + FATF rules</span>
+        <span class="proof-stack-m">Real-time screening</span>
+      </div>
+      <div class="proof-stack-item">
+        <span class="proof-stack-k">On-chain</span>
+        <span class="proof-stack-v">Travel Rule</span>
+        <span class="proof-stack-m">TRISA · IVMS-101</span>
+      </div>
+      <div class="proof-stack-item">
+        <span class="proof-stack-k">Reporting</span>
+        <span class="proof-stack-v">BACEN auto-feed</span>
+        <span class="proof-stack-m">DCIEM · SINACOR</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TEAM ══════════════════════════════════════════════════════ -->
+<section class="team" id="team">
+  <div class="container">
+    <div class="team-header fu">
+      <p class="tag" style="margin-bottom:16px"><span class="dot"></span> The team</p>
+      <h2 class="sec-title">Operators who built the desks<br>we're replacing.</h2>
+      <p class="sec-sub">Four founders with 60+ combined years across FX, crypto exchanges, institutional brokerage, and regulatory access in Brazil — the exact surface ØnStack runs on.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card fu">
+        <div class="team-img-wrap">
+          <img class="team-img" src="/output/assets/founder-guilherme-prado.jpg" alt="Guilherme Prado" loading="lazy">
+          <div class="team-img-overlay"></div>
+        </div>
+        <div class="team-info">
+          <div class="team-name">Guilherme Prado</div>
+          <div class="team-role">CEO &amp; Founder</div>
+          <div class="team-bio">10+ years in fintech, crypto &amp; FX. Ex-Bybit &amp; Bitget LATAM lead. Direct BACEN / CVM relationship network.</div>
+          <div class="team-links">
+            <a href="https://www.linkedin.com/search/results/people/?keywords=Guilherme%20Prado%20OnStack" target="_blank" rel="noopener" class="tl-link" aria-label="Guilherme Prado on LinkedIn"><i data-lucide="linkedin" style="width:14px;height:14px"></i></a>
+            <a href="mailto:guilherme@0nstack.io" class="tl-link" aria-label="Email Guilherme"><i data-lucide="mail" style="width:14px;height:14px"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="team-card fu fu-d1">
+        <div class="team-img-wrap">
+          <img class="team-img" src="/output/assets/founder-gustavo-silva.png" alt="Gustavo Silva" loading="lazy">
+          <div class="team-img-overlay"></div>
+        </div>
+        <div class="team-info">
+          <div class="team-name">Gustavo Silva</div>
+          <div class="team-role">CTO · Crypto &amp; Infra</div>
+          <div class="team-bio">20+ years: Autodesk, Nokia, Huawei. Senior network &amp; software architect. High-frequency FX engine design.</div>
+          <div class="team-links">
+            <a href="https://www.linkedin.com/search/results/people/?keywords=Gustavo%20Silva%20OnStack" target="_blank" rel="noopener" class="tl-link" aria-label="Gustavo Silva on LinkedIn"><i data-lucide="linkedin" style="width:14px;height:14px"></i></a>
+            <a href="mailto:gustavo@0nstack.io" class="tl-link" aria-label="Email Gustavo"><i data-lucide="mail" style="width:14px;height:14px"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="team-card fu fu-d2">
+        <div class="team-img-wrap">
+          <img class="team-img" src="/output/assets/founder-patrick-duarte.jpg" alt="Patrick Duarte" loading="lazy">
+          <div class="team-img-overlay"></div>
+        </div>
+        <div class="team-info">
+          <div class="team-name">Patrick Duarte</div>
+          <div class="team-role">COO · Operations</div>
+          <div class="team-bio">18+ years consulting &amp; innovation. Ex-Tier 1 broker ops. MBA, IE Business School. Runs desk, vendors and licensing.</div>
+          <div class="team-links">
+            <a href="https://www.linkedin.com/search/results/people/?keywords=Patrick%20Duarte%20OnStack" target="_blank" rel="noopener" class="tl-link" aria-label="Patrick Duarte on LinkedIn"><i data-lucide="linkedin" style="width:14px;height:14px"></i></a>
+            <a href="mailto:patrick@0nstack.io" class="tl-link" aria-label="Email Patrick"><i data-lucide="mail" style="width:14px;height:14px"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="team-card fu fu-d3">
+        <div class="team-img-wrap">
+          <img class="team-img" src="/output/assets/founder-guilherme-e.jpg" alt="Guilherme Emmanouilides" loading="lazy">
+          <div class="team-img-overlay"></div>
+        </div>
+        <div class="team-info">
+          <div class="team-name">Guilherme Emmanouilides</div>
+          <div class="team-role">CMO · Expansion</div>
+          <div class="team-bio">10+ years marketing in BR finance. Product roadmap &amp; growth leadership. Multi-country expansion strategy.</div>
+          <div class="team-links">
+            <a href="https://www.linkedin.com/search/results/people/?keywords=Guilherme%20Emmanouilides%20OnStack" target="_blank" rel="noopener" class="tl-link" aria-label="Guilherme Emmanouilides on LinkedIn"><i data-lucide="linkedin" style="width:14px;height:14px"></i></a>
+            <a href="mailto:guilherme.emmanouilides@0nstack.io" class="tl-link" aria-label="Email Guilherme E."><i data-lucide="mail" style="width:14px;height:14px"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FAQ ══════════════════════════════════════════════════════ -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="faq-inner">
+      <div class="faq-left fu">
+        <p class="tag" style="margin-bottom:16px"><span class="dot"></span> FAQ</p>
+        <h2 class="sec-title" style="font-size:clamp(24px,2.5vw,34px)">Questions from operators, risk and legal teams.</h2>
+        <p style="font-size:13px;color:var(--t3);margin-top:20px;line-height:1.7">Something specific to your integration? Email the team at <a href="mailto:team@0nstack.io" style="color:var(--gold)">team@0nstack.io</a>.</p>
+      </div>
+      <div class="faq-list fu fu-d1">
+        <div class="faq-item open">
+          <div class="faq-q">Is ØnStack licensed by BACEN?<span class="faq-icon">+</span></div>
+          <div class="faq-a"><p>Yes — via acquisition. ØnStack operates under a BACEN-authorized FX institution acquired through an M&amp;A path, which is what lets us be live in 3 months instead of the 18–24 month greenfield licensing queue. We operate under Resolutions 519 / 520 / 521 and the new SPSAV framework for crypto-as-FX.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">How is the FX rate guaranteed at quote time?<span class="faq-icon">+</span></div>
+          <div class="faq-a"><p>Each quote is hedged in real time via our NDF desk. The rate is locked to the client regardless of market movement during settlement. Same mechanism Wise and Western Union use on the retail side — we've operationalized it for stablecoin corridors and made it API-callable.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Which stablecoins and chains do you support?<span class="faq-icon">+</span></div>
+          <div class="faq-a"><p>USDC (Ethereum, Stellar, Base), USDT (Tron, Ethereum), and BRLA (Polygon). EURC and PYUSD in the roadmap. BTC and ETH are accepted on the Exchange Hub via auto-hedge conversion, never as settlement asset.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">What does integration look like?<span class="faq-icon">+</span></div>
+          <div class="faq-a"><p>REST + webhooks, with a sandbox environment and Postman collection. Typical fintech goes live in 7–14 business days. KYB onboarding is the critical path — usually 5 business days — and we run it in parallel with engineering integration.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">How do you handle Travel Rule and AML?<span class="faq-icon">+</span></div>
+          <div class="faq-a"><p>Travel Rule is compiled into the payout path (TRISA + IVMS-101). AML screening runs on both sender and beneficiary in real time using a COAF-calibrated ruleset plus FATF sanctions lists. You inherit the compliance stack by integrating — no separate vendor to procure.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">What's the pricing model for partners?<span class="faq-icon">+</span></div>
+          <div class="faq-a"><p>Base take rate is 0.80% on RemitFX, 1.00% on iGamingRails, and 0.60% on Exchange Hub institutional flow. Volume breaks kick in at $1M / $10M / $50M monthly. We share a revenue model on request — ask us for the pricing tear-sheet during the sandbox call.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══════════════════════════════════════════════════════ -->
+<section class="cta-section" id="cta">
+  <div class="container">
+    <div class="cta-inner">
+      <div class="cta-glow"></div>
+      <div class="fu">
+        <p class="tag" style="margin-bottom:20px;justify-content:center"><span class="dot"></span> Early access</p>
+      </div>
+      <h2 class="cta-title fu fu-d1">
+        Brazil's cross-border backbone<br>
+        <span>in one API.</span>
+      </h2>
+      <p class="cta-sub fu fu-d2">Request sandbox keys, a scoped pilot, or a desk conversation. Under 48h response.</p>
+      <div class="cta-btns fu fu-d3">
+        <a href="#" class="btn-primary" data-open-modal style="font-size:15px;padding:17px 38px">Request Access <span class="arr">→</span></a>
+        <a href="mailto:team@0nstack.io" class="btn-ghost" style="font-size:15px;padding:17px 38px">Talk to sales</a>
+      </div>
+      <p class="cta-note fu fu-d4">BACEN · ADGM · Travel Rule · COAF · 99.97% API uptime</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══════════════════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <span><span class="mark">Ø</span>NSTACK</span>
+        </div>
+        <p class="footer-tagline">The regulated FX + stablecoin infrastructure layer for LATAM's digital economy. API-first. Multi-jurisdiction. Built for operators.</p>
+        <div class="footer-badges">
+          <span class="f-badge">BACEN</span>
+          <span class="f-badge">ADGM</span>
+          <span class="f-badge">Travel Rule</span>
+          <span class="f-badge">PIX Direct</span>
+          <span class="f-badge">API-first</span>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Products</div>
+        <ul class="footer-links">
+          <li><a href="#products">RemitFX</a></li>
+          <li><a href="#products">iGamingRails</a></li>
+          <li><a href="#products">Exchange Hub</a></li>
+          <li><a href="/demo/" target="_blank">Live demo</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a href="#team">Team</a></li>
+          <li><a href="#market">Market</a></li>
+          <li><a href="#moat">Defensibility</a></li>
+          <li><a href="mailto:team@0nstack.io">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Legal</div>
+        <ul class="footer-links">
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">AML Policy</a></li>
+          <li><a href="#">Travel Rule</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 ØnStack · São Paulo / Abu Dhabi</span>
+      <p class="footer-legal">ØnStack operates its Brazilian FX book through a BACEN-authorized Payment Institution and its offshore leg through an ADGM-registered entity. Stablecoin settlement follows Lei 14.478/2022 and BCB Resolutions 519–521. This site is informational; not an offer to sell securities.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ REQUEST ACCESS MODAL ══ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+    <button class="modal-close" id="modalClose" aria-label="Close">
+      <i data-lucide="x" style="width:16px;height:16px"></i>
+    </button>
+    <div id="modalFormWrap">
+      <div class="modal-title" id="modalTitle">Request API access</div>
+      <div class="modal-sub">Sandbox keys, scoped pilot, or a desk conversation. We respond within 48h.</div>
+      <form class="modal-form" id="modalForm" onsubmit="return false;">
+        <input type="text" class="modal-input" placeholder="Full name" required>
+        <input type="email" class="modal-input" placeholder="Work email" required>
+        <input type="text" class="modal-input" placeholder="Company / fund">
+        <select class="modal-select" required>
+          <option value="" disabled selected>What are you building?</option>
+          <option>Remittance / cross-border (RemitFX)</option>
+          <option>iGaming settlement (iGamingRails)</option>
+          <option>Institutional FX / custody (Exchange Hub)</option>
+          <option>Investor / desk conversation</option>
+          <option>Other</option>
+        </select>
+        <textarea class="modal-input" rows="3" placeholder="Corridor, expected volume, timeline (optional)"></textarea>
+        <button type="submit" class="modal-submit">Send request</button>
+      </form>
+    </div>
+    <div class="modal-success" id="modalSuccess">
+      <div class="modal-success-ic"><i data-lucide="check" style="width:22px;height:22px"></i></div>
+      <div class="modal-success-t">Request received</div>
+      <div class="modal-success-m">We've got your note. Expect a scoped reply from the team within 48 hours — usually faster.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// NAV scroll + hamburger
+(function(){
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20), { passive: true });
+  const hamb = document.getElementById('navHamb');
+  const links = document.getElementById('navLinks');
+  if(hamb && links){
+    hamb.addEventListener('click', () => {
+      hamb.classList.toggle('open');
+      links.classList.toggle('mobile-open');
+    });
+    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      hamb.classList.remove('open');
+      links.classList.remove('mobile-open');
+    }));
+  }
+})();
+
+// INFINITE GRID
+(function() {
+  const hero = document.getElementById('hero-section');
+  const patBase = document.getElementById('grid-base');
+  const patIntr = document.getElementById('grid-inter');
+  if (!hero || !patBase || !patIntr) return;
+
+  let offX = 0, offY = 0;
+  const speedX = 0.4, speedY = 0.3;
+
+  function animateGrid() {
+    offX = (offX + speedX) % 40;
+    offY = (offY + speedY) % 40;
+    patBase.setAttribute('x', offX);
+    patBase.setAttribute('y', offY);
+    patIntr.setAttribute('x', offX);
+    patIntr.setAttribute('y', offY);
+    requestAnimationFrame(animateGrid);
+  }
+  requestAnimationFrame(animateGrid);
+
+  hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    hero.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+    hero.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+  });
+  hero.style.setProperty('--mx', '50%');
+  hero.style.setProperty('--my', '50%');
+})();
+
+// TEXT ROTATE
+(function() {
+  const el = document.getElementById('text-rotate-el');
+  if (!el) return;
+
+  const texts = [
+    'under 5 minutes.',
+    '73% cheaper.',
+    'via one API.',
+    'fully regulated.',
+    'stablecoin-settled.'
+  ];
+  const colors = ['var(--gold)', 'var(--gold)', 'var(--t1)', 'var(--green)', 'var(--gold)'];
+  let index = 0, isAnimating = false;
+  const STAGGER = 28, HOLD_TIME = 2400, EXIT_DUR = 300;
+
+  function splitToChars(text) {
+    if (typeof Intl !== 'undefined' && Intl.Segmenter) {
+      const seg = new Intl.Segmenter('en', { granularity: 'grapheme' });
+      return Array.from(seg.segment(text), s => s.segment);
+    }
+    return Array.from(text);
+  }
+  function renderWord(text, color, entering) {
+    const words = text.split(' ');
+    let charIndex = 0;
+    const frags = [];
+    words.forEach((word, wi) => {
+      const wordSpan = document.createElement('span');
+      wordSpan.style.display = 'inline-flex';
+      wordSpan.style.whiteSpace = 'pre';
+      splitToChars(word).forEach((char) => {
+        const s = document.createElement('span');
+        s.textContent = char;
+        s.classList.add('tr-char');
+        s.style.color = color;
+        if (!entering) s.classList.add('exiting');
+        s.style.animationDelay = (charIndex * STAGGER) + 'ms';
+        s.style.animationFillMode = 'both';
+        wordSpan.appendChild(s);
+        charIndex++;
+      });
+      frags.push(wordSpan);
+      if (wi < words.length - 1) {
+        const sp = document.createElement('span');
+        sp.textContent = ' ';
+        frags.push(sp);
+      }
+    });
+    return frags;
+  }
+  function totalChars(text){return text.replace(/\s/g,'').length}
+  function showCurrent() {
+    if (isAnimating) return;
+    isAnimating = true;
+    const text = texts[index], color = colors[index];
+    const chars = totalChars(text);
+    el.innerHTML = '';
+    renderWord(text, color, true).forEach(n => el.appendChild(n));
+    setTimeout(() => {
+      el.innerHTML = '';
+      renderWord(text, color, false).forEach(n => el.appendChild(n));
+      const totalExitTime = chars * STAGGER + EXIT_DUR;
+      setTimeout(() => {
+        index = (index + 1) % texts.length;
+        isAnimating = false;
+        showCurrent();
+      }, totalExitTime);
+    }, HOLD_TIME);
+  }
+  showCurrent();
+})();
+
+// FADE UP
+const fuObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); fuObserver.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fu').forEach(el => fuObserver.observe(el));
+
+// COUNTER
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    const target = parseFloat(el.dataset.count);
+    const duration = 1600;
+    const start = performance.now();
+    const animate = (now) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = target * eased;
+      if (el.dataset.count === '318') el.textContent = '$' + Math.floor(current) + 'B';
+      else if (el.dataset.count === '5') el.textContent = '<' + Math.max(1, Math.ceil(current));
+      else if (el.dataset.count === '73') el.textContent = Math.floor(current) + '%';
+      else el.textContent = Math.floor(current);
+      if (progress < 1) requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+    counterObserver.unobserve(el);
+  });
+}, { threshold: 0.4 });
+document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
+
+// FAQ accordion
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+// QUOTE WIDGET — live recalc + savings vs SWIFT
+(function(){
+  const sendEl = document.getElementById('qcSend');
+  const recvEl = document.getElementById('qcRecv');
+  const feeEl = document.getElementById('qcFee');
+  const saveEl = document.getElementById('qcSavings');
+  if(!sendEl || !recvEl) return;
+  const RATE = 5.4218;
+  const ONSTACK_RATE = 0.0098; // 0.98% total
+  const SWIFT_RATE = 0.0365;   // 3.65% total
+  function parse(v){ return parseFloat(String(v).replace(/[^\d.]/g,'')) || 0 }
+  function fmt(n){ return n.toLocaleString('en-US',{maximumFractionDigits:2}) }
+  function recalc(){
+    const usd = parse(sendEl.value);
+    const fee = usd * ONSTACK_RATE;
+    const net = (usd - fee) * RATE;
+    recvEl.value = fmt(net);
+    feeEl.textContent = '$' + fmt(fee);
+    const savings = usd * (SWIFT_RATE - ONSTACK_RATE);
+    saveEl.textContent = '$' + fmt(savings);
+  }
+  sendEl.addEventListener('input', () => {
+    const raw = sendEl.value.replace(/[^\d.]/g,'');
+    const n = parseFloat(raw);
+    sendEl.value = isNaN(n) ? '' : n.toLocaleString('en-US');
+    recalc();
+  });
+  // Tab visual toggle only
+  document.querySelectorAll('.qc-tab').forEach(t => t.addEventListener('click', () => {
+    document.querySelectorAll('.qc-tab').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+  }));
+  // Swap button (cosmetic rotate)
+  const swap = document.querySelector('.qc-swap-btn');
+  if(swap) swap.addEventListener('click', (e) => { e.preventDefault(); });
+  recalc();
+})();
+
+// REQUEST ACCESS MODAL
+(function(){
+  const overlay = document.getElementById('modalOverlay');
+  const closeBtn = document.getElementById('modalClose');
+  const form = document.getElementById('modalForm');
+  const formWrap = document.getElementById('modalFormWrap');
+  const success = document.getElementById('modalSuccess');
+  function open(){ overlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function close(){ overlay.classList.remove('open'); document.body.style.overflow = ''; setTimeout(() => { formWrap.style.display = 'block'; success.classList.remove('show'); form.reset(); }, 300); }
+  document.querySelectorAll('[data-open-modal]').forEach(el => {
+    el.addEventListener('click', (e) => { e.preventDefault(); open(); });
+  });
+  if(closeBtn) closeBtn.addEventListener('click', close);
+  if(overlay) overlay.addEventListener('click', (e) => { if(e.target === overlay) close(); });
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') close(); });
+  if(form){
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      formWrap.style.display = 'none';
+      success.classList.add('show');
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    });
+  }
+})();
+
+// Lucide icons init
+window.addEventListener('load', () => { if (typeof lucide !== 'undefined') lucide.createIcons(); });
+</script>
+</body>
+</html>
