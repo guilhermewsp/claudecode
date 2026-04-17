@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>0nStack — Compre USDT/USDC 24/7 · Stablecoin On/Off-Ramp para o Brasil</title>
+<meta name="description" content="Compre dólar em stablecoin de forma fácil, 24/7. Pagamentos, remessas e trade com liquidez, compliance e uptime. Para indivíduos e PMEs.">
+<meta name="theme-color" content="#080808">
+<meta property="og:title" content="0nStack — Compre USDT/USDC 24/7">
+<meta property="og:description" content="A maneira mais simples de converter BRL para USD e stablecoins. Pagamentos, remessas e trade em uma plataforma.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://0nstack.io/website_v1/">
+<meta property="og:image" content="/output/assets/og-synopsis.png">
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="shortcut icon" href="/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200;300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+<style>
+:root {
+  --gold:    #f08c00;
+  --gold-h:  #d97d00;
+  --gold-g:  rgba(240,140,0,.07);
+  --gold-g2: rgba(240,140,0,.16);
+  --dark:    #0f0f0f;
+  --bg:      #080808;
+  --bg2:     #0f0f0f;
+  --bg3:     #161616;
+  --bg4:     #1e1e1e;
+  --border:  rgba(255,255,255,.06);
+  --border2: rgba(255,255,255,.12);
+  --t1:      #f0ede8;
+  --t2:      #8a8580;
+  --t3:      #4a4744;
+  --green:   #22c55e;
+  --red:     #ef4444;
+  --fd: 'Oxanium', sans-serif;
+  --fb: 'Plus Jakarta Sans', sans-serif;
+  --fm: 'JetBrains Mono', monospace;
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 20px; --r-2xl: 28px;
+  --ease: cubic-bezier(0.16,1,0.3,1);
+  --ease2: cubic-bezier(0.4,0,0.2,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;font-size:15px;line-height:1.65;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+img{display:block;max-width:100%}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px}::-webkit-scrollbar-thumb:hover{background:var(--gold)}
+
+/* Skip Link */
+.skip-link{position:absolute;top:-100%;left:16px;padding:12px 20px;background:var(--gold);color:#111;font-weight:700;font-size:14px;border-radius:0 0 var(--r-sm) var(--r-sm);z-index:9999;transition:top .2s}
+.skip-link:focus{top:0}
+
+/* Focus States */
+*:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:4px}
+
+/* Scroll Progress */
+.scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold),rgba(240,140,0,.6));z-index:9998;width:0%;transition:none;pointer-events:none}
+
+/* Grain Overlay */
+body::after{content:'';position:fixed;inset:0;z-index:9990;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+.container{max-width:1200px;margin:0 auto;padding:0 32px}
+.tag{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(240,140,0,.2);background:rgba(240,140,0,.05);border-radius:24px;padding:6px 16px}
+.tag .dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+.sec-title{font-family:var(--fd);font-size:clamp(28px,3.5vw,48px);font-weight:400;letter-spacing:.02em;line-height:1.12;margin-bottom:18px}
+.sec-sub{font-size:16px;color:var(--t2);line-height:1.75;max-width:580px}
+
+/* Fade-up observer */
+.fu{opacity:0;transform:translateY(32px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.fu.in{opacity:1;transform:none}
+.fu-d1{transition-delay:.12s}.fu-d2{transition-delay:.24s}.fu-d3{transition-delay:.36s}.fu-d4{transition-delay:.48s}
+
+/* ════════ NAV ════════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;align-items:center;transition:background .35s,border-color .35s,box-shadow .35s}
+nav.scrolled{background:rgba(8,8,8,.88);border-bottom:1px solid var(--border);backdrop-filter:blur(20px) saturate(1.5);box-shadow:0 1px 24px rgba(0,0,0,.3)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;width:100%;gap:24px}
+.nav-logo{font-family:var(--fd);font-size:16px;font-weight:700;letter-spacing:.2em;color:var(--t1);display:flex;align-items:center;gap:10px}
+.nav-logo .mark{color:var(--gold)}
+.nav-links{display:flex;gap:2px;align-items:center}
+.nav-links a{font-size:13px;color:var(--t2);padding:8px 16px;border-radius:var(--r-sm);transition:color .25s;font-weight:500;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:4px;left:16px;right:16px;height:1.5px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.nav-links a:hover{color:var(--t1)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-right{display:flex;align-items:center;gap:14px}
+.nav-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-family:var(--fm);color:var(--t3);border:1px solid var(--border);border-radius:24px;padding:5px 12px}
+.nav-badge .dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
+
+/* Primary Button */
+.btn-primary{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;font-weight:700;font-size:14px;border-radius:var(--r-sm);transition:all .3s var(--ease);letter-spacing:.01em;position:relative;overflow:hidden;background:var(--gold);color:#111;z-index:1}
+.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--gold-h),var(--gold));transform:translateX(-101%);transition:transform .4s var(--ease);z-index:-1}
+.btn-primary:hover::before{transform:translateX(0)}
+.btn-primary:hover{box-shadow:0 0 48px rgba(240,140,0,.4),0 4px 16px rgba(240,140,0,.25);transform:translateY(-2px)}
+.btn-primary:active{transform:translateY(0) scale(.98)}
+.btn-primary .arr{transition:transform .25s var(--ease)}
+.btn-primary:hover .arr{transform:translateX(4px)}
+.btn-nav{font-size:13px;font-weight:700;background:var(--gold);color:#111;padding:9px 22px;border-radius:var(--r-sm);transition:all .25s;letter-spacing:.01em}
+.btn-nav:hover{background:var(--gold-h);box-shadow:0 0 28px rgba(240,140,0,.35);transform:translateY(-1px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;color:var(--t2);font-size:14px;font-weight:500;border-radius:var(--r-sm);border:1px solid var(--border2);transition:all .3s var(--ease);backdrop-filter:blur(10px);background:rgba(255,255,255,.02)}
+.btn-ghost:hover{color:var(--t1);border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.06);transform:translateY(-2px)}
+.nav-hamb{display:none;width:40px;height:40px;border-radius:var(--r-sm);border:1px solid var(--border2);align-items:center;justify-content:center;flex-direction:column;gap:5px;cursor:pointer;transition:border-color .2s}
+.nav-hamb:hover{border-color:var(--gold)}
+.nav-hamb span{width:16px;height:1.5px;background:var(--t1);border-radius:1px;transition:all .3s var(--ease)}
+.nav-hamb.open span:nth-child(1){transform:translateY(3.25px) rotate(45deg)}
+.nav-hamb.open span:nth-child(2){transform:translateY(-3.25px) rotate(-45deg)}
+
+/* ════════ HERO ════════ */
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:140px 0 100px}
+.hero-igrid-base{position:absolute;inset:0;z-index:1;opacity:.04;pointer-events:none}
+.hero-igrid-interactive{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.5;-webkit-mask-image:radial-gradient(280px circle at var(--mx,50%) var(--my,50%),black,transparent);mask-image:radial-gradient(280px circle at var(--mx,50%) var(--my,50%),black,transparent)}
+.grid-svg{width:100%;height:100%}
+.hero-orb1{position:absolute;right:-10%;top:-15%;width:44%;height:44%;border-radius:50%;background:rgba(240,140,0,.18);filter:blur(140px);pointer-events:none;z-index:2}
+.hero-orb2{position:absolute;left:-10%;bottom:-15%;width:40%;height:40%;border-radius:50%;background:rgba(59,130,246,.1);filter:blur(140px);pointer-events:none;z-index:2}
+.hero-orb3{position:absolute;left:42%;top:32%;width:24%;height:24%;border-radius:50%;background:rgba(168,85,247,.06);filter:blur(120px);pointer-events:none;z-index:2}
+.hero-veil{position:absolute;inset:0;z-index:3;background:linear-gradient(to bottom,transparent 35%,rgba(8,8,8,.7) 80%,var(--bg) 100%);pointer-events:none}
+.hero-sheen{position:absolute;inset:0;z-index:3;background:radial-gradient(ellipse 80% 50% at 50% 28%,rgba(240,140,0,.035),transparent 55%);pointer-events:none}
+
+.hero-inner{position:relative;z-index:10;display:grid;grid-template-columns:1.1fr 1fr;gap:80px;align-items:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:12px;margin-bottom:28px;opacity:0;animation:fade-slide-up .65s .1s var(--ease) forwards}
+.eyebrow-badge{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);background:rgba(240,140,0,.07);border:1px solid rgba(240,140,0,.2);padding:6px 14px;border-radius:24px}
+.hero-h1{font-family:var(--fd);font-size:clamp(36px,4.8vw,68px);font-weight:300;letter-spacing:.01em;line-height:1.06;margin-bottom:24px;opacity:0;animation:fade-slide-up .75s .2s var(--ease) forwards}
+.hero-h1 .accent{color:var(--gold);font-weight:400}
+.hero-h1 .line2{display:block;margin-top:4px}
+.hero-desc{font-size:17px;color:var(--t2);line-height:1.8;max-width:520px;margin-bottom:40px;opacity:0;animation:fade-slide-up .75s .35s var(--ease) forwards}
+.hero-desc strong{color:var(--t1);font-weight:600}
+.hero-ctas{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:56px;opacity:0;animation:fade-slide-up .75s .45s var(--ease) forwards}
+.hero-trust{display:flex;gap:12px;flex-wrap:wrap;opacity:0;animation:fade-slide-up .75s .55s var(--ease) forwards}
+.trust-chip{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--t2);background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:24px;padding:8px 16px;transition:all .3s}
+.trust-chip:hover{border-color:rgba(240,140,0,.3);color:var(--t1);background:rgba(240,140,0,.04)}
+.trust-chip i{color:var(--gold)}
+
+/* Hero Right — Quote Widget */
+.hero-right{position:relative;display:flex;align-items:center;justify-content:center;opacity:0;animation:fade-slide-up .85s .3s var(--ease) forwards}
+.hero-card-wrap{position:relative;width:100%;max-width:440px}
+.quote-card{background:linear-gradient(180deg,rgba(20,20,20,.96),rgba(12,12,12,.96));border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:24px;backdrop-filter:blur(32px);box-shadow:0 40px 100px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.04);position:relative;overflow:hidden}
+.quote-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(240,140,0,.06),transparent 50%);pointer-events:none;border-radius:24px}
+.qc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.qc-title{font-family:var(--fd);font-size:14px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--t2)}
+.qc-live{display:flex;align-items:center;gap:7px;font-size:10px;font-family:var(--fm);color:var(--green);background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.18);padding:5px 12px;border-radius:24px}
+.qc-live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.qc-field{background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:var(--r-md);padding:16px;transition:border-color .25s;margin-bottom:8px}
+.qc-field:focus-within{border-color:rgba(240,140,0,.45);box-shadow:0 0 0 3px rgba(240,140,0,.08)}
+.qc-field-label{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--t3);letter-spacing:.04em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.qc-field-row{display:flex;align-items:center;gap:12px}
+.qc-input{flex:1;background:transparent;border:none;outline:none;color:var(--t1);font-family:var(--fd);font-size:28px;font-weight:500;letter-spacing:-.01em;min-width:0;padding:0}
+.qc-input::-webkit-outer-spin-button,.qc-input::-webkit-inner-spin-button{display:none}
+.qc-asset{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r-sm);padding:7px 12px;font-size:13px;font-weight:700;color:var(--t1);cursor:default;transition:border-color .2s;flex-shrink:0}
+.qc-asset-icon{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+.qc-asset-icon.brl{background:linear-gradient(135deg,#009c3b,#ffdf00);color:#002776;font-size:13px}
+.qc-asset-icon.usdc{background:#2775ca;color:#fff}
+.qc-swap-btn{display:flex;align-items:center;justify-content:center;width:34px;height:34px;margin:-4px auto;background:var(--bg);border:1px solid var(--border2);border-radius:50%;color:var(--gold);cursor:pointer;transition:all .3s var(--ease);position:relative;z-index:2}
+.qc-swap-btn:hover{border-color:var(--gold);transform:rotate(180deg);box-shadow:0 0 20px rgba(240,140,0,.2)}
+.qc-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:16px;background:var(--border);border-radius:var(--r-sm);overflow:hidden}
+.qc-mi{text-align:center;padding:14px 8px;background:rgba(8,8,8,.8)}
+.qc-mi-v{font-family:var(--fm);font-size:13px;font-weight:600;color:var(--t1)}
+.qc-mi-v.gold{color:var(--gold)}
+.qc-mi-v.green{color:var(--green)}
+.qc-mi-l{font-size:9px;color:var(--t3);margin-top:3px;letter-spacing:.04em;text-transform:uppercase}
+.qc-btn{width:100%;padding:15px;margin-top:16px;background:var(--gold);color:#111;font-weight:700;font-size:15px;border-radius:var(--r-sm);border:none;cursor:pointer;transition:all .3s var(--ease);letter-spacing:.01em;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden}
+.qc-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--gold-h),var(--gold));transform:translateX(-101%);transition:transform .4s var(--ease);z-index:0}
+.qc-btn:hover::before{transform:translateX(0)}
+.qc-btn:hover{box-shadow:0 0 28px rgba(240,140,0,.4)}
+.qc-btn span{position:relative;z-index:1;display:flex;align-items:center;gap:8px}
+
+/* Floating chips around hero card */
+.hero-float{position:absolute;background:rgba(12,12,12,.96);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-lg);padding:10px 16px;backdrop-filter:blur(20px);display:flex;align-items:center;gap:10px;z-index:20;box-shadow:0 16px 40px rgba(0,0,0,.5);font-size:12px;font-weight:600;color:var(--t1);white-space:nowrap}
+.hero-float.f1{top:-18px;right:-24px;animation:float1 7s ease-in-out infinite}
+.hero-float.f2{bottom:-14px;left:-20px;animation:float2 9s ease-in-out infinite}
+.hero-float.f3{bottom:30%;right:-32px;animation:float1 8s ease-in-out infinite 2s}
+.hf-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hf-icon.gold-bg{background:rgba(240,140,0,.14);color:var(--gold)}
+.hf-icon.green-bg{background:rgba(34,197,94,.12);color:var(--green)}
+.hf-icon.blue-bg{background:rgba(59,130,246,.12);color:var(--blue,#3b82f6)}
+@keyframes float1{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes float2{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
+@keyframes fade-slide-up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* ════════ SOCIAL PROOF STRIP ════════ */
+.social-proof{padding:48px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2)}
+.sp-inner{display:flex;align-items:center;justify-content:center;gap:48px;flex-wrap:wrap}
+.sp-text{font-size:13px;color:var(--t3);font-weight:500;letter-spacing:.02em}
+.sp-chips{display:flex;gap:10px;flex-wrap:wrap}
+.sp-chip{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--t1);background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 18px;transition:all .3s}
+.sp-chip:hover{border-color:rgba(240,140,0,.25);background:rgba(240,140,0,.04)}
+.sp-chip i{color:var(--gold)}
+
+/* ════════ LOGOS CAROUSEL ════════ */
+.logos{padding:44px 0;border-bottom:1px solid var(--border);overflow:hidden;background:var(--bg2)}
+.logos-label{text-align:center;font-size:11px;color:var(--t3);letter-spacing:.16em;text-transform:uppercase;font-weight:600;margin-bottom:24px}
+.logos-carousel{position:relative;overflow:hidden}
+.logos-carousel::before,.logos-carousel::after{content:'';position:absolute;top:0;bottom:0;width:160px;z-index:2;pointer-events:none}
+.logos-carousel::before{left:0;background:linear-gradient(to right,var(--bg2),transparent)}
+.logos-carousel::after{right:0;background:linear-gradient(to left,var(--bg2),transparent)}
+.logos-track{display:flex;align-items:center;width:max-content;animation:logos-roll 40s linear infinite}
+.logos-track:hover{animation-play-state:paused}
+@keyframes logos-roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.logo-item{display:flex;align-items:center;gap:8px;padding:0 44px;opacity:.28;filter:grayscale(1) brightness(1.8);transition:opacity .3s,filter .3s;white-space:nowrap;flex-shrink:0;font-family:var(--fd);font-size:15px;font-weight:700;letter-spacing:.1em;color:var(--t1);text-transform:uppercase}
+.logo-item:hover{opacity:.65;filter:grayscale(.2) brightness(1.4)}
+.logo-item img{height:20px;width:auto;filter:grayscale(1) brightness(2);opacity:.5;transition:all .3s}
+.logo-item:hover img{filter:grayscale(0) brightness(1);opacity:.8}
+
+/* ════════ COMPARISON ════════ */
+.compare{padding:clamp(80px,10vw,130px) 0;border-bottom:1px solid var(--border)}
+.compare-header{text-align:center;margin-bottom:64px}
+.compare-header .sec-sub{margin:0 auto}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.compare-card{border-radius:24px;padding:40px;position:relative;overflow:hidden;transition:transform .4s var(--ease),border-color .4s}
+.compare-card.legacy{background:var(--bg2);border:1px solid var(--border)}
+.compare-card.onstack{background:linear-gradient(145deg,rgba(240,140,0,.04),rgba(8,8,8,.95));border:1px solid rgba(240,140,0,.22);box-shadow:0 24px 64px rgba(240,140,0,.06)}
+.compare-card:hover{transform:translateY(-4px)}
+.compare-card.onstack::before{content:'';position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle,rgba(240,140,0,.08),transparent 60%);pointer-events:none}
+.cc-badge{display:inline-flex;align-items:center;gap:7px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 14px;border-radius:24px;margin-bottom:24px}
+.cc-badge.legacy{color:var(--t3);background:rgba(255,255,255,.03);border:1px solid var(--border)}
+.cc-badge.onstack{color:var(--gold);background:rgba(240,140,0,.07);border:1px solid rgba(240,140,0,.2)}
+.cc-title{font-family:var(--fd);font-size:22px;font-weight:500;letter-spacing:.02em;margin-bottom:28px;line-height:1.2}
+.cc-items{display:flex;flex-direction:column;gap:16px}
+.cc-item{display:flex;align-items:flex-start;gap:14px;font-size:14px;line-height:1.6}
+.cc-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.cc-icon.bad{background:rgba(239,68,68,.08);color:var(--red)}
+.cc-icon.good{background:rgba(34,197,94,.08);color:var(--green)}
+.cc-item.legacy-item{color:var(--t2)}
+.cc-item.onstack-item{color:var(--t1)}
+
+/* ════════ USE CASES ════════ */
+.use-cases{padding:clamp(80px,10vw,130px) 0;border-bottom:1px solid var(--border);background:var(--bg2)}
+.uc-header{text-align:center;margin-bottom:64px}
+.uc-header .sec-sub{margin:0 auto}
+.uc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.uc-card{background:var(--bg);border:1px solid var(--border);border-radius:24px;padding:40px 32px;position:relative;overflow:hidden;transition:all .4s var(--ease)}
+.uc-card:hover{border-color:rgba(240,140,0,.22);transform:translateY(-6px)}
+.uc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .4s}
+.uc-card:hover::before{opacity:1}
+.uc-icon{width:52px;height:52px;border-radius:14px;background:rgba(240,140,0,.06);border:1px solid rgba(240,140,0,.15);display:flex;align-items:center;justify-content:center;color:var(--gold);margin-bottom:24px;transition:all .3s}
+.uc-card:hover .uc-icon{background:rgba(240,140,0,.12);border-color:rgba(240,140,0,.3);box-shadow:0 0 32px rgba(240,140,0,.12)}
+.uc-title{font-family:var(--fd);font-size:18px;font-weight:500;letter-spacing:.03em;margin-bottom:10px}
+.uc-desc{font-size:14px;color:var(--t2);line-height:1.75}
+
+/* ════════ HOW IT WORKS ════════ */
+.hiw{padding:clamp(80px,10vw,130px) 0;border-bottom:1px solid var(--border)}
+.hiw-header{text-align:center;margin-bottom:72px}
+.hiw-header .sec-sub{margin:0 auto}
+.hiw-track{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;position:relative}
+.hiw-track::before{content:'';position:absolute;top:48px;left:calc(16.66% + 12px);right:calc(16.66% + 12px);height:1px;background:linear-gradient(90deg,transparent,rgba(240,140,0,.4),rgba(240,140,0,.4),transparent);z-index:0}
+.hiw-step{display:flex;flex-direction:column;gap:20px;padding:36px 28px;background:var(--bg2);border:1px solid var(--border);border-radius:24px;position:relative;transition:all .4s var(--ease);z-index:1}
+.hiw-step:hover{border-color:rgba(240,140,0,.22);transform:translateY(-5px)}
+.hiw-step.active{border-color:rgba(240,140,0,.3);background:linear-gradient(145deg,rgba(240,140,0,.04),var(--bg2))}
+.step-num{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:16px;font-weight:700;color:#111;background:var(--gold);box-shadow:0 0 28px rgba(240,140,0,.25)}
+.hiw-step:not(.active) .step-num{color:var(--gold);background:rgba(240,140,0,.07);border:1px solid rgba(240,140,0,.2);box-shadow:none}
+.step-title{font-family:var(--fd);font-size:18px;font-weight:500;letter-spacing:.03em}
+.step-desc{font-size:14px;color:var(--t2);line-height:1.75}
+
+/* ════════ WHY IT WORKS ════════ */
+.why{padding:clamp(80px,10vw,130px) 0;border-bottom:1px solid var(--border);background:var(--bg2)}
+.why-header{text-align:center;margin-bottom:64px}
+.why-header .sec-sub{margin:0 auto}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.why-card{background:var(--bg);border:1px solid var(--border);border-radius:24px;padding:40px 32px;text-align:center;transition:all .4s var(--ease);position:relative;overflow:hidden}
+.why-card:hover{border-color:rgba(240,140,0,.22);transform:translateY(-5px)}
+.why-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .4s}
+.why-card:hover::after{opacity:1}
+.why-icon{width:56px;height:56px;border-radius:16px;background:rgba(240,140,0,.06);border:1px solid rgba(240,140,0,.15);display:flex;align-items:center;justify-content:center;color:var(--gold);margin:0 auto 20px;transition:all .3s}
+.why-card:hover .why-icon{background:rgba(240,140,0,.12);box-shadow:0 0 36px rgba(240,140,0,.1)}
+.why-title{font-family:var(--fd);font-size:18px;font-weight:500;letter-spacing:.03em;margin-bottom:10px}
+.why-desc{font-size:14px;color:var(--t2);line-height:1.75}
+
+/* ════════ TRUST SECTION ════════ */
+.trust{padding:clamp(80px,10vw,130px) 0;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.trust::before{content:'';position:absolute;top:50%;left:50%;width:700px;height:400px;background:radial-gradient(ellipse,rgba(240,140,0,.05),transparent 60%);transform:translate(-50%,-50%);pointer-events:none}
+.trust-inner{text-align:center;position:relative;max-width:680px;margin:0 auto}
+.trust-title{font-family:var(--fd);font-size:clamp(30px,4vw,52px);font-weight:300;letter-spacing:.015em;line-height:1.12;margin-bottom:20px}
+.trust-title span{color:var(--gold);font-weight:400}
+.trust-desc{font-size:17px;color:var(--t2);line-height:1.8;margin-bottom:14px}
+.trust-note{font-size:13px;color:var(--t3);font-style:italic}
+
+/* ════════ CTA SECTION ════════ */
+.cta-section{padding:clamp(80px,10vw,140px) 0;position:relative;overflow:hidden}
+.cta-inner{text-align:center;position:relative}
+.cta-glow{position:absolute;width:900px;height:400px;background:radial-gradient(ellipse,rgba(240,140,0,.07),transparent 60%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.cta-title{font-family:var(--fd);font-size:clamp(32px,4.5vw,60px);font-weight:300;letter-spacing:.015em;line-height:1.08;margin-bottom:24px;position:relative;z-index:1}
+.cta-title span{color:var(--gold);font-weight:400}
+.cta-benefits{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:44px;position:relative;z-index:1}
+.cta-benefit{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--t2)}
+.cta-benefit i{color:var(--gold)}
+.cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+
+/* ════════ FAQ ════════ */
+.faq{padding:clamp(80px,10vw,130px) 0;border-top:1px solid var(--border);background:var(--bg2)}
+.faq-inner{display:grid;grid-template-columns:1fr 1.8fr;gap:80px;align-items:start}
+.faq-list{display:flex;flex-direction:column}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:24px 0;cursor:pointer;font-size:15px;font-weight:500;color:var(--t1);transition:color .25s;gap:20px}
+.faq-q:hover{color:var(--gold)}
+.faq-icon{font-size:18px;color:var(--t3);transition:transform .35s var(--ease),color .25s;flex-shrink:0}
+.faq-item.open .faq-icon{transform:rotate(45deg);color:var(--gold)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .45s var(--ease),padding .45s}
+.faq-item.open .faq-a{max-height:300px;padding-bottom:20px}
+.faq-a p{font-size:14px;color:var(--t2);line-height:1.8}
+
+/* ════════ FOOTER ════════ */
+footer{border-top:1px solid var(--border);padding:56px 0 28px;background:var(--bg)}
+.footer-inner{display:grid;grid-template-columns:2fr 1fr 1fr;gap:56px;margin-bottom:48px}
+.footer-logo{font-family:var(--fd);font-size:15px;font-weight:700;letter-spacing:.2em;color:var(--t1);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.footer-logo .mark{color:var(--gold)}
+.footer-tagline{font-size:13px;color:var(--t3);line-height:1.7;max-width:300px}
+.footer-col-title{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:18px}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:12px}
+.footer-links a{font-size:13px;color:var(--t2);transition:color .25s;position:relative}
+.footer-links a:hover{color:var(--t1)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid var(--border);gap:24px;flex-wrap:wrap}
+.footer-copy{font-size:11px;color:var(--t3);font-family:var(--fm)}
+
+/* ════════ MODAL ════════ */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(14px);z-index:500;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;display:flex;align-items:center;justify-content:center;padding:24px}
+.modal-overlay.open{opacity:1;visibility:visible}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:28px;padding:40px;max-width:440px;width:100%;position:relative;transform:translateY(24px) scale(.97);transition:transform .35s var(--ease);box-shadow:0 48px 120px rgba(0,0,0,.7)}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+.modal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:var(--r-sm);color:var(--t3);transition:all .2s;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:rgba(255,255,255,.06);color:var(--t1)}
+.modal-title{font-family:var(--fd);font-size:24px;font-weight:500;letter-spacing:.015em;margin-bottom:8px}
+.modal-sub{font-size:14px;color:var(--t3);line-height:1.65;margin-bottom:28px}
+.modal-form{display:flex;flex-direction:column;gap:14px}
+.modal-field{display:flex;flex-direction:column;gap:6px}
+.modal-label{font-size:11px;font-weight:600;color:var(--t3);letter-spacing:.06em;text-transform:uppercase}
+.modal-input,.modal-select{background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:13px 16px;color:var(--t1);font-family:var(--fb);font-size:14px;transition:border-color .25s;width:100%;outline:none}
+.modal-input:focus,.modal-select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(240,140,0,.08)}
+.modal-input::placeholder{color:var(--t3)}
+.modal-submit{padding:14px;background:var(--gold);color:#111;font-weight:700;font-size:15px;border-radius:var(--r-sm);border:none;cursor:pointer;transition:all .25s;margin-top:8px}
+.modal-submit:hover{background:var(--gold-h);box-shadow:0 0 28px rgba(240,140,0,.35)}
+.modal-success{text-align:center;padding:24px 0;display:none}
+.modal-success.show{display:block}
+.modal-success-ic{width:56px;height:56px;border-radius:50%;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);display:flex;align-items:center;justify-content:center;color:var(--green);margin:0 auto 16px}
+.modal-success-t{font-family:var(--fd);font-size:20px;margin-bottom:8px}
+.modal-success-m{font-size:14px;color:var(--t3);line-height:1.65}
+
+/* ════════ RESPONSIVE ════════ */
+@media(max-width:1100px){
+  .container{padding:0 24px}
+  .hero-inner{gap:56px}
+  .compare-grid{gap:16px}
+}
+@media(max-width:880px){
+  .nav-links{display:none}
+  .nav-hamb{display:flex}
+  .nav-badge{display:none}
+  .nav-links.mobile-open{display:flex;position:absolute;top:68px;left:0;right:0;flex-direction:column;background:rgba(8,8,8,.98);border-bottom:1px solid var(--border);backdrop-filter:blur(24px);padding:20px 24px;gap:4px}
+  .nav-links.mobile-open a{padding:14px 16px;font-size:15px;width:100%}
+  .nav-links.mobile-open a::after{display:none}
+  .hero{padding:110px 0 70px}
+  .hero-inner{grid-template-columns:1fr;gap:48px}
+  .hero-right{margin-top:8px}
+  .hero-card-wrap{max-width:400px;margin:0 auto}
+  .hero-trust{justify-content:center}
+  .sp-inner{flex-direction:column;gap:20px;text-align:center}
+  .compare-grid{grid-template-columns:1fr}
+  .uc-grid{grid-template-columns:1fr}
+  .uc-card{padding:32px 28px}
+  .hiw-track{grid-template-columns:1fr;gap:16px}
+  .hiw-track::before{display:none}
+  .why-grid{grid-template-columns:1fr}
+  .faq-inner{grid-template-columns:1fr;gap:32px}
+  .footer-inner{grid-template-columns:1fr 1fr;gap:40px}
+  .footer-brand{grid-column:1/-1}
+}
+@media(max-width:560px){
+  .container{padding:0 20px}
+  .hero{padding:100px 0 56px;min-height:auto}
+  .hero-h1{font-size:clamp(30px,8vw,42px)}
+  .hero-desc{font-size:15px}
+  .hero-ctas{width:100%;flex-direction:column;gap:10px}
+  .btn-primary,.btn-ghost{width:100%;justify-content:center;padding:14px 24px}
+  .quote-card{padding:20px}
+  .qc-input{font-size:24px}
+  .hero-float{display:none}
+  .trust-chip{padding:7px 14px;font-size:11px}
+  .compare-card{padding:28px 22px}
+  .footer-inner{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;align-items:flex-start;gap:12px}
+  .cta-benefits{flex-direction:column;gap:12px;align-items:center}
+}
+@media(max-width:400px){
+  .sp-chips{justify-content:center}
+  .hero-trust{gap:8px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+  .fu{opacity:1;transform:none}
+  [style*="animation"]{opacity:1 !important;transform:none !important}
+}
+
+section{position:relative;z-index:1}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Pular para o conteúdo</a>
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" aria-label="0nStack home">
+        <span><span class="mark">0</span>NSTACK</span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#use-cases">Casos de uso</a>
+        <a href="#how">Como funciona</a>
+        <a href="#why">Por que funciona</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="nav-right">
+        <div class="nav-badge"><span class="dot"></span>24/7</div>
+        <a href="#cta" class="btn-nav" data-open-modal>Abrir acesso</a>
+        <button class="nav-hamb" id="navHamb" aria-label="Abrir menu">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="hero-section">
+  <div class="hero-igrid-base">
+    <svg class="grid-svg" id="grid-svg-base">
+      <defs><pattern id="grid-base" width="44" height="44" patternUnits="userSpaceOnUse"><path d="M 44 0 L 0 0 0 44" fill="none" stroke="white" stroke-width=".8"/></pattern></defs>
+      <rect width="100%" height="100%" fill="url(#grid-base)"/>
+    </svg>
+  </div>
+  <div class="hero-igrid-interactive">
+    <svg class="grid-svg" id="grid-svg-interactive">
+      <defs><pattern id="grid-inter" width="44" height="44" patternUnits="userSpaceOnUse"><path d="M 44 0 L 0 0 0 44" fill="none" stroke="#f08c00" stroke-width="1.1"/></pattern></defs>
+      <rect width="100%" height="100%" fill="url(#grid-inter)"/>
+    </svg>
+  </div>
+  <div class="hero-orb1"></div>
+  <div class="hero-orb2"></div>
+  <div class="hero-orb3"></div>
+  <div class="hero-sheen"></div>
+  <div class="hero-veil"></div>
+
+  <div class="container">
+    <div class="hero-inner" id="main">
+      <div class="hero-left">
+        <div class="hero-eyebrow">
+          <span class="eyebrow-badge">Stablecoin on/off-ramp para o Brasil</span>
+        </div>
+        <h1 class="hero-h1">
+          Compre <span class="accent">USDT/USDC</span>
+          <span class="line2">24/7</span>
+        </h1>
+        <p class="hero-desc">
+          Compre USD e use stablecoins para <strong>pagamentos, remessas e trade</strong> com uma experiência simples, segura e sempre disponível.
+        </p>
+        <div class="hero-ctas">
+          <a href="#cta" class="btn-primary" data-open-modal>Faça sua primeira compra <span class="arr">→</span></a>
+          <a href="#how" class="btn-ghost">Como funciona</a>
+        </div>
+        <div class="hero-trust">
+          <div class="trust-chip"><i data-lucide="droplets" style="width:14px;height:14px"></i> Liquidez</div>
+          <div class="trust-chip"><i data-lucide="shield-check" style="width:14px;height:14px"></i> Compliance</div>
+          <div class="trust-chip"><i data-lucide="clock" style="width:14px;height:14px"></i> Uptime 24/7</div>
+        </div>
+      </div>
+
+      <!-- Quote Widget -->
+      <div class="hero-right">
+        <div class="hero-card-wrap">
+          <div class="hero-float f1">
+            <div class="hf-icon gold-bg"><i data-lucide="credit-card" style="width:13px;height:13px"></i></div>
+            Pagamentos
+          </div>
+          <div class="hero-float f2">
+            <div class="hf-icon green-bg"><i data-lucide="send" style="width:13px;height:13px"></i></div>
+            Remessas
+          </div>
+          <div class="hero-float f3">
+            <div class="hf-icon blue-bg"><i data-lucide="trending-up" style="width:13px;height:13px"></i></div>
+            Trade
+          </div>
+
+          <div class="quote-card" id="quoteCard">
+            <div class="qc-header">
+              <div class="qc-title">Converter</div>
+              <div class="qc-live"><span class="qc-live-dot"></span>Taxa ao vivo</div>
+            </div>
+
+            <div class="qc-field">
+              <div class="qc-field-label"><span>Você envia</span></div>
+              <div class="qc-field-row">
+                <input type="text" class="qc-input" id="qcSend" value="5.000" inputmode="decimal" aria-label="Valor em BRL"/>
+                <div class="qc-asset">
+                  <span class="qc-asset-icon brl">R$</span>
+                  <span>BRL</span>
+                </div>
+              </div>
+            </div>
+
+            <button class="qc-swap-btn" aria-label="Trocar direção">
+              <i data-lucide="arrow-down-up" style="width:13px;height:13px"></i>
+            </button>
+
+            <div class="qc-field">
+              <div class="qc-field-label"><span>Você recebe</span><span id="qcRate" style="font-family:var(--fm);font-size:10px;letter-spacing:0;text-transform:none">1 USDC = R$ 5,42</span></div>
+              <div class="qc-field-row">
+                <input type="text" class="qc-input" id="qcRecv" value="922,51" readonly aria-label="Valor em USDC"/>
+                <div class="qc-asset">
+                  <span class="qc-asset-icon usdc">$</span>
+                  <span>USDC</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="qc-meta">
+              <div class="qc-mi"><div class="qc-mi-v gold" id="qcFee">0,98%</div><div class="qc-mi-l">Taxa total</div></div>
+              <div class="qc-mi"><div class="qc-mi-v">PIX</div><div class="qc-mi-l">Pagamento</div></div>
+              <div class="qc-mi"><div class="qc-mi-v green">~5 min</div><div class="qc-mi-l">Chegada</div></div>
+            </div>
+
+            <button class="qc-btn" data-open-modal>
+              <span><i data-lucide="arrow-right" style="width:14px;height:14px"></i> Converter agora</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SOCIAL PROOF ══ -->
+<section class="social-proof">
+  <div class="container">
+    <div class="sp-inner fu">
+      <div class="sp-text">Confiabilidade operacional para uso real</div>
+      <div class="sp-chips">
+        <div class="sp-chip"><i data-lucide="droplets" style="width:14px;height:14px"></i> Liquidez</div>
+        <div class="sp-chip"><i data-lucide="shield-check" style="width:14px;height:14px"></i> Compliance</div>
+        <div class="sp-chip"><i data-lucide="wifi" style="width:14px;height:14px"></i> Uptime 24/7</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ LOGOS ══ -->
+<section class="logos">
+  <p class="logos-label">Ecossistema &amp; infraestrutura</p>
+  <div class="logos-carousel">
+    <div class="logos-track" id="logosTrack">
+      <div class="logo-item">USDC</div>
+      <div class="logo-item">USDT</div>
+      <div class="logo-item">PIX</div>
+      <div class="logo-item">Circle</div>
+      <div class="logo-item">Tether</div>
+      <div class="logo-item">Stellar</div>
+      <div class="logo-item">Fireblocks</div>
+      <div class="logo-item">Ethereum</div>
+      <div class="logo-item">Polygon</div>
+      <div class="logo-item">BACEN</div>
+      <div class="logo-item">USDC</div>
+      <div class="logo-item">USDT</div>
+      <div class="logo-item">PIX</div>
+      <div class="logo-item">Circle</div>
+      <div class="logo-item">Tether</div>
+      <div class="logo-item">Stellar</div>
+      <div class="logo-item">Fireblocks</div>
+      <div class="logo-item">Ethereum</div>
+      <div class="logo-item">Polygon</div>
+      <div class="logo-item">BACEN</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ COMPARISON ══ -->
+<section class="compare" id="compare">
+  <div class="container">
+    <div class="compare-header fu">
+      <p class="tag" style="margin-bottom:18px"><span class="dot"></span> Como você faz hoje vs. com 0nStack</p>
+      <h2 class="sec-title">Menos fricção.<br>Mais controle.</h2>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card legacy fu">
+        <span class="cc-badge legacy">Com exchanges, bancos ou P2P</span>
+        <div class="cc-title">O caminho com obstáculos</div>
+        <div class="cc-items">
+          <div class="cc-item legacy-item"><div class="cc-icon bad"><i data-lucide="x" style="width:14px;height:14px"></i></div><div>Horários limitados — depende do expediente bancário ou da exchange</div></div>
+          <div class="cc-item legacy-item"><div class="cc-icon bad"><i data-lucide="x" style="width:14px;height:14px"></i></div><div>Liquidez inconsistente — impacto no preço em volumes maiores</div></div>
+          <div class="cc-item legacy-item"><div class="cc-icon bad"><i data-lucide="x" style="width:14px;height:14px"></i></div><div>Fluxo manual e fragmentado — várias plataformas para uma operação</div></div>
+          <div class="cc-item legacy-item"><div class="cc-icon bad"><i data-lucide="x" style="width:14px;height:14px"></i></div><div>Atendimento demorado — suporte lento quando você mais precisa</div></div>
+        </div>
+      </div>
+
+      <div class="compare-card onstack fu fu-d1">
+        <span class="cc-badge onstack">Com 0nStack</span>
+        <div class="cc-title">O caminho direto</div>
+        <div class="cc-items">
+          <div class="cc-item onstack-item"><div class="cc-icon good"><i data-lucide="check" style="width:14px;height:14px"></i></div><div>Operação 24/7 — converta a qualquer hora, sem limites de horário</div></div>
+          <div class="cc-item onstack-item"><div class="cc-icon good"><i data-lucide="check" style="width:14px;height:14px"></i></div><div>BRL → USD / stablecoin de forma simples — sem complicação</div></div>
+          <div class="cc-item onstack-item"><div class="cc-icon good"><i data-lucide="check" style="width:14px;height:14px"></i></div><div>Pagamentos, remessas e trade em um só fluxo — tudo integrado</div></div>
+          <div class="cc-item onstack-item"><div class="cc-icon good"><i data-lucide="check" style="width:14px;height:14px"></i></div><div>Base operacional focada em liquidez, compliance e uptime</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ USE CASES ══ -->
+<section class="use-cases" id="use-cases">
+  <div class="container">
+    <div class="uc-header fu">
+      <p class="tag" style="margin-bottom:18px"><span class="dot"></span> Para quem é</p>
+      <h2 class="sec-title">Feito para pessoas e PMEs<br>que precisam de dólares.</h2>
+    </div>
+    <div class="uc-grid">
+      <div class="uc-card fu">
+        <div class="uc-icon"><i data-lucide="credit-card" style="width:24px;height:24px"></i></div>
+        <h3 class="uc-title">Receba e envie em stablecoin</h3>
+        <p class="uc-desc">Use stablecoins para pagamentos internacionais sem complicação. Envie e receba de qualquer lugar do mundo.</p>
+      </div>
+      <div class="uc-card fu fu-d1">
+        <div class="uc-icon"><i data-lucide="send" style="width:24px;height:24px"></i></div>
+        <h3 class="uc-title">Envie dinheiro para fora do Brasil</h3>
+        <p class="uc-desc">Converta BRL em USD ou stablecoin para remessas e transferências internacionais com agilidade.</p>
+      </div>
+      <div class="uc-card fu fu-d2">
+        <div class="uc-icon"><i data-lucide="wallet" style="width:24px;height:24px"></i></div>
+        <h3 class="uc-title">Compre dólar para investir</h3>
+        <p class="uc-desc">Leve fundos para corretoras e wallets cripto com mais agilidade. Compre USD quando quiser.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ══ -->
+<section class="hiw" id="how">
+  <div class="container">
+    <div class="hiw-header fu">
+      <p class="tag" style="margin-bottom:18px"><span class="dot"></span> Como funciona</p>
+      <h2 class="sec-title">Três passos simples.</h2>
+      <p class="sec-sub" style="margin:0 auto">Da entrada de reais à entrega em stablecoin, tudo acontece em minutos.</p>
+    </div>
+    <div class="hiw-track">
+      <div class="hiw-step active fu">
+        <div class="step-num">01</div>
+        <div class="step-title">Envie Reais via PIX</div>
+        <div class="step-desc">Inicie a operação com reais. Basta fazer um PIX — sem burocracia, sem espera.</div>
+      </div>
+      <div class="hiw-step fu fu-d1">
+        <div class="step-num">02</div>
+        <div class="step-title">Converta para USDT ou USDC</div>
+        <div class="step-desc">Receba stablecoins diretamente na sua wallet ou corretora cripto de preferência.</div>
+      </div>
+      <div class="hiw-step fu fu-d2">
+        <div class="step-num">03</div>
+        <div class="step-title">Use para pagar, enviar ou negociar</div>
+        <div class="step-desc">Finalize em pagamentos internacionais, remessas ou trade — você decide o destino.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WHY IT WORKS ══ -->
+<section class="why" id="why">
+  <div class="container">
+    <div class="why-header fu">
+      <p class="tag" style="margin-bottom:18px"><span class="dot"></span> Prova operacional</p>
+      <h2 class="sec-title">A base que sustenta<br>a experiência.</h2>
+      <p class="sec-sub" style="margin:0 auto">O que dá confiança para operar sempre.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card fu">
+        <div class="why-icon"><i data-lucide="waves" style="width:24px;height:24px"></i></div>
+        <h3 class="why-title">Liquidez</h3>
+        <p class="why-desc">Menos atrito em volumes maiores. Converta valores significativos sem impacto no preço.</p>
+      </div>
+      <div class="why-card fu fu-d1">
+        <div class="why-icon"><i data-lucide="shield" style="width:24px;height:24px"></i></div>
+        <h3 class="why-title">Compliance</h3>
+        <p class="why-desc">Fluxo desenhado para operação segura. Cada etapa é conforme e rastreável.</p>
+      </div>
+      <div class="why-card fu fu-d2">
+        <div class="why-icon"><i data-lucide="clock" style="width:24px;height:24px"></i></div>
+        <h3 class="why-title">Uptime</h3>
+        <p class="why-desc">Disponível quando o usuário precisa. Opere a qualquer hora, qualquer dia.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TRUST ══ -->
+<section class="trust" id="trust">
+  <div class="container">
+    <div class="trust-inner fu">
+      <h2 class="trust-title">Simples. <span>Seguro.</span><br>Sempre disponível.</h2>
+      <p class="trust-desc">Uma experiência direta para indivíduos e PMEs que precisam mover valor entre BRL, USD e stablecoins.</p>
+      <p class="trust-note">Sem complexidade técnica. Sem linguagem complicada.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section class="cta-section" id="cta">
+  <div class="container">
+    <div class="cta-inner">
+      <div class="cta-glow"></div>
+      <div class="fu">
+        <p class="tag" style="margin-bottom:22px;justify-content:center"><span class="dot"></span> Comece agora</p>
+      </div>
+      <h2 class="cta-title fu fu-d1">
+        Comece a mover dólares<br>
+        <span>com mais confiança.</span>
+      </h2>
+      <div class="cta-benefits fu fu-d2">
+        <div class="cta-benefit"><i data-lucide="check-circle" style="width:16px;height:16px"></i> Ramps de stablecoin 24/7</div>
+        <div class="cta-benefit"><i data-lucide="check-circle" style="width:16px;height:16px"></i> BRL → USD com simplicidade</div>
+        <div class="cta-benefit"><i data-lucide="check-circle" style="width:16px;height:16px"></i> Liquidez, compliance e uptime</div>
+      </div>
+      <div class="cta-btns fu fu-d3">
+        <a href="#" class="btn-primary" data-open-modal style="font-size:16px;padding:18px 40px">Fazer primeira transação <span class="arr">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FAQ ══ -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="faq-inner">
+      <div class="faq-left fu">
+        <p class="tag" style="margin-bottom:18px"><span class="dot"></span> FAQ</p>
+        <h2 class="sec-title" style="font-size:clamp(24px,2.8vw,36px)">Perguntas<br>frequentes.</h2>
+        <p style="font-size:14px;color:var(--t3);margin-top:20px;line-height:1.7">Dúvida específica? Fale com a gente em <a href="mailto:team@0nstack.io" style="color:var(--gold)">team@0nstack.io</a></p>
+      </div>
+      <div class="faq-list fu fu-d1">
+        <div class="faq-item open">
+          <div class="faq-q">Isso é para pessoas físicas ou empresas?<span class="faq-icon">+</span></div>
+          <div class="faq-a"><p>Para ambos. O 0nStack foi feito para indivíduos e PMEs que precisam mover dólares internacionalmente — de forma simples e segura.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Posso usar para pagamentos, remessas e trade?<span class="faq-icon">+</span></div>
+          <div class="faq-a"><p>Sim. A proposta é atender esses três fluxos principais em uma única plataforma. Converta BRL para stablecoins e use como precisar.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">O serviço funciona 24 horas por dia?<span class="faq-icon">+</span></div>
+          <div class="faq-a"><p>Sim. A proposta é operar 24/7 para dar mais flexibilidade ao usuário — sem depender de horários bancários ou comerciais.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">O que diferencia 0nStack de exchanges comuns?<span class="faq-icon">+</span></div>
+          <div class="faq-a"><p>Foco em simplicidade, liquidez, compliance e uptime para a jornada BRL → USD / stablecoin. Sem complexidade desnecessária.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Preciso entender tecnologia para usar?<span class="faq-icon">+</span></div>
+          <div class="faq-a"><p>Não. A experiência foi desenhada para ser simples e direta. Se você sabe fazer um PIX, sabe usar o 0nStack.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo"><span><span class="mark">0</span>NSTACK</span></div>
+        <p class="footer-tagline">Stablecoin on/off-ramp para o Brasil. A maneira mais simples de converter BRL para USD e stablecoins.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Produto</div>
+        <ul class="footer-links">
+          <li><a href="#use-cases">Casos de uso</a></li>
+          <li><a href="#how">Como funciona</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Legal</div>
+        <ul class="footer-links">
+          <li><a href="#">Privacidade</a></li>
+          <li><a href="#">Termos</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">&copy; 2026 0nStack. Todos os direitos reservados.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ MODAL ══ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+    <button class="modal-close" id="modalClose" aria-label="Fechar">
+      <i data-lucide="x" style="width:16px;height:16px"></i>
+    </button>
+    <div id="modalFormWrap">
+      <div class="modal-title" id="modalTitle">Abrir acesso</div>
+      <div class="modal-sub">Preencha seus dados e comece a converter BRL para stablecoins.</div>
+      <form class="modal-form" id="modalForm" onsubmit="return false;">
+        <div class="modal-field">
+          <label class="modal-label" for="mName">Nome completo</label>
+          <input type="text" class="modal-input" id="mName" placeholder="Seu nome" required>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label" for="mEmail">E-mail</label>
+          <input type="email" class="modal-input" id="mEmail" placeholder="seu@email.com" required>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label" for="mCompany">Empresa (opcional)</label>
+          <input type="text" class="modal-input" id="mCompany" placeholder="Nome da empresa">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label" for="mUse">Como pretende usar?</label>
+          <select class="modal-select" id="mUse" required>
+            <option value="" disabled selected>Selecione</option>
+            <option>Pagamentos internacionais</option>
+            <option>Remessas</option>
+            <option>Trade / investimento</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <button type="submit" class="modal-submit">Criar minha conta</button>
+      </form>
+    </div>
+    <div class="modal-success" id="modalSuccess">
+      <div class="modal-success-ic"><i data-lucide="check" style="width:22px;height:22px"></i></div>
+      <div class="modal-success-t">Cadastro recebido</div>
+      <div class="modal-success-m">Vamos preparar seu acesso. Você receberá um e-mail em breve com os próximos passos.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// NAV scroll + hamburger
+(function(){
+  const nav=document.getElementById('nav');
+  window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>20),{passive:true});
+  const hamb=document.getElementById('navHamb'),links=document.getElementById('navLinks');
+  if(hamb&&links){
+    hamb.addEventListener('click',()=>{hamb.classList.toggle('open');links.classList.toggle('mobile-open')});
+    links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{hamb.classList.remove('open');links.classList.remove('mobile-open')}));
+  }
+})();
+
+// Scroll Progress
+(function(){
+  const bar=document.getElementById('scrollProgress');
+  if(!bar)return;
+  window.addEventListener('scroll',()=>{
+    const h=document.documentElement.scrollHeight-window.innerHeight;
+    bar.style.width=h>0?(window.scrollY/h*100)+'%':'0%';
+  },{passive:true});
+})();
+
+// Infinite Grid
+(function(){
+  const hero=document.getElementById('hero-section');
+  const patBase=document.getElementById('grid-base');
+  const patIntr=document.getElementById('grid-inter');
+  if(!hero||!patBase||!patIntr)return;
+  let offX=0,offY=0;
+  function animateGrid(){
+    offX=(offX+.35)%44;offY=(offY+.25)%44;
+    patBase.setAttribute('x',offX);patBase.setAttribute('y',offY);
+    patIntr.setAttribute('x',offX);patIntr.setAttribute('y',offY);
+    requestAnimationFrame(animateGrid);
+  }
+  requestAnimationFrame(animateGrid);
+  hero.addEventListener('mousemove',(e)=>{
+    const r=hero.getBoundingClientRect();
+    hero.style.setProperty('--mx',(e.clientX-r.left)+'px');
+    hero.style.setProperty('--my',(e.clientY-r.top)+'px');
+  });
+  hero.style.setProperty('--mx','50%');
+  hero.style.setProperty('--my','50%');
+})();
+
+// Fade Up Observer
+const fuObs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');fuObs.unobserve(e.target)}});
+},{threshold:.1});
+document.querySelectorAll('.fu').forEach(el=>fuObs.observe(el));
+
+// FAQ accordion
+document.querySelectorAll('.faq-q').forEach(q=>{
+  q.addEventListener('click',()=>{
+    const item=q.parentElement,isOpen=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+    if(!isOpen)item.classList.add('open');
+  });
+});
+
+// Quote Widget — BRL → USDC
+(function(){
+  const sendEl=document.getElementById('qcSend');
+  const recvEl=document.getElementById('qcRecv');
+  const feeEl=document.getElementById('qcFee');
+  if(!sendEl||!recvEl)return;
+  const RATE=5.4218;
+  const FEE_PCT=0.0098;
+  function parse(v){return parseFloat(String(v).replace(/[^\d,]/g,'').replace(',','.')) || 0}
+  function fmtBR(n){return n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
+  function recalc(){
+    const brl=parse(sendEl.value);
+    const fee=brl*FEE_PCT;
+    const usdc=(brl-fee)/RATE;
+    recvEl.value=fmtBR(usdc);
+  }
+  sendEl.addEventListener('input',()=>{
+    const raw=sendEl.value.replace(/[^\d,]/g,'');
+    const n=parseFloat(raw.replace(',','.'));
+    sendEl.value=isNaN(n)?'':n.toLocaleString('pt-BR');
+    recalc();
+  });
+  recalc();
+})();
+
+// Modal
+(function(){
+  const overlay=document.getElementById('modalOverlay');
+  const closeBtn=document.getElementById('modalClose');
+  const form=document.getElementById('modalForm');
+  const formWrap=document.getElementById('modalFormWrap');
+  const success=document.getElementById('modalSuccess');
+  function open(){overlay.classList.add('open');document.body.style.overflow='hidden'}
+  function close(){overlay.classList.remove('open');document.body.style.overflow='';setTimeout(()=>{formWrap.style.display='block';success.classList.remove('show');form.reset()},300)}
+  document.querySelectorAll('[data-open-modal]').forEach(el=>{el.addEventListener('click',(e)=>{e.preventDefault();open()})});
+  if(closeBtn)closeBtn.addEventListener('click',close);
+  if(overlay)overlay.addEventListener('click',(e)=>{if(e.target===overlay)close()});
+  document.addEventListener('keydown',(e)=>{if(e.key==='Escape')close()});
+  if(form){form.addEventListener('submit',(e)=>{e.preventDefault();formWrap.style.display='none';success.classList.add('show');if(typeof lucide!=='undefined')lucide.createIcons()})}
+})();
+
+// Lucide
+window.addEventListener('load',()=>{if(typeof lucide!=='undefined')lucide.createIcons()});
+</script>
+</body>
+</html>
