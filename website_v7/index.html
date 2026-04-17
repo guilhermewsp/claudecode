@@ -1622,7 +1622,7 @@ section { padding: 120px 0; }
 }
 .card:hover { transform: translateY(-3px); }
 
-/* ==================== BACKGROUND (v5 — zebra dark/black) ==================== */
+/* ==================== BACKGROUND (v12 — grid tech texture YC premium, só fora hero) ==================== */
 .ethereal-wrap {
   position: relative;
   z-index: 0;
@@ -1633,9 +1633,38 @@ section { padding: 120px 0; }
   position: relative;
   z-index: 2;
 }
+/* Grid tech texture — YC premium, ofuscado, atrás de TUDO na ethereal-wrap */
+.ethereal-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(249,247,243,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(249,247,243,0.025) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: -1px -1px;
+  mask-image: radial-gradient(ellipse 120% 90% at 50% 50%, black 40%, transparent 95%);
+  -webkit-mask-image: radial-gradient(ellipse 120% 90% at 50% 50%, black 40%, transparent 95%);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.85;
+}
+/* Dot pattern sobreposto pra dar textura extra (cruzamentos do grid) */
+.ethereal-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(245,166,35,0.06) 1px, transparent 0);
+  background-size: 56px 56px;
+  background-position: -1px -1px;
+  mask-image: radial-gradient(ellipse 100% 70% at 50% 50%, black 30%, transparent 90%);
+  -webkit-mask-image: radial-gradient(ellipse 100% 70% at 50% 50%, black 30%, transparent 90%);
+  pointer-events: none;
+  z-index: 1;
+}
 /* Zebra sutil entre seções (2 tons YC-minimal) */
-.ethereal-wrap > section:nth-of-type(odd) { background: var(--black); }
-.ethereal-wrap > section:nth-of-type(even) { background: #0a0a08; }
+.ethereal-wrap > section:nth-of-type(odd) { background: transparent; }
+.ethereal-wrap > section:nth-of-type(even) { background: rgba(255,255,255,0.012); }
 
 /* Seção MERCADO com fundo warm → quebra cromática forte estilo YC */
 .ethereal-wrap > section.sec-market-light {
@@ -1749,6 +1778,238 @@ section { padding: 120px 0; }
 @media (hover: none) and (pointer: coarse) {
   input, select, textarea { font-size: 16px !important; }
   .team-action, .demo-nav-item { min-height: 36px; }
+}
+
+/* ==================== MOBILE v12 · Touch-first (ui-ux-pro-max guided) ==================== */
+/* Combina (hover:none + pointer:coarse) e max-width 860 pra cobrir touch + mobile viewport */
+@media (hover: none) and (pointer: coarse), (max-width: 860px) {
+  :root { --ease-spring: cubic-bezier(0.16, 1, 0.3, 1); }
+
+  /* Touch press (scale 0.96/0.985 simula haptic visual) */
+  .shiny-btn, .fx-btn, .login-btn, .login-social-btn, .login-tab,
+  .nav-cta, .fx-pay-opt, .team-action, .demo-main-cta, .faq-q {
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 120ms var(--ease-spring), border-color 180ms, background 180ms !important;
+  }
+  .shiny-btn:active, .fx-btn:active, .login-btn:active,
+  .login-social-btn:active, .nav-cta:active, .demo-main-cta:active,
+  .team-action:active, .fx-pay-opt:active, .login-tab:active {
+    transform: scale(0.96) !important;
+  }
+  .compare-card, .bento2-cell, .flow-step, .team-card, .market-card, .tilt-card {
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 160ms var(--ease-spring), border-color 180ms !important;
+  }
+  .compare-card:active, .bento2-cell:active, .flow-step:active,
+  .team-card:active, .market-card:active, .tilt-card:active {
+    transform: scale(0.985) !important;
+  }
+  a { -webkit-tap-highlight-color: transparent; }
+
+  /* Safe areas */
+  body {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    overscroll-behavior-y: none;
+  }
+  nav.top { padding-top: env(safe-area-inset-top, 0); }
+
+  /* Nav glass */
+  nav.top {
+    background: rgba(5, 5, 4, 0.72);
+    backdrop-filter: saturate(180%) blur(22px);
+    -webkit-backdrop-filter: saturate(180%) blur(22px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-links.open {
+    background: rgba(8, 8, 7, 0.94);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0));
+    animation: navSlideDown 280ms var(--ease-spring);
+  }
+  @keyframes navSlideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hamburger svg { transition: transform 250ms var(--ease-spring); }
+  .hamburger.open svg { transform: rotate(90deg); }
+
+  /* Modal virar bottom-sheet */
+  .modal-overlay { align-items: flex-end !important; }
+  .login-modal {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    border-radius: 24px 24px 0 0 !important;
+    padding-top: 28px !important;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0)) !important;
+    max-height: 92vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    animation: sheetSlideUp 340ms var(--ease-spring);
+    position: relative;
+  }
+  @keyframes sheetSlideUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+  .login-modal::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.25);
+  }
+  .login-modal.swiping { transition: transform 0ms !important; }
+
+  /* Desligar efeitos 3D (mobile perf) */
+  .tilt-card { transform: none !important; }
+  .scroll-card { transform: perspective(1000px) rotateX(8deg) scale(0.92) !important; }
+  .morphing-mark { animation-duration: 1.6s !important; }
+
+  /* Bg-boxes mais sutis */
+  .bg-boxes { opacity: 0.45; }
+
+  /* FX widget touch-optimized */
+  .fx-row { min-height: 62px; }
+  .fx-amount-input { font-size: 26px; padding: 8px 0; }
+  .fx-pill { min-height: 44px; padding: 8px 12px; }
+  .fx-pay-opt { min-height: 52px; font-size: 13px; }
+  .fx-btn { min-height: 54px; font-size: 15px; border-radius: 14px; }
+
+  /* FAQ touch */
+  .faq-q { min-height: 56px; padding: 18px 0 !important; }
+  .faq-icon { transition: transform 260ms var(--ease-spring); }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+  /* Simplify spotlight/radial em mobile (ganho perf) */
+  .market-card::before,
+  .bento2-cell::before,
+  .flow-step::after { display: none !important; }
+
+  /* Reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    .morphing-mark, .cta-dot, .msc-dot, .panel-status::before,
+    .ticker, .marquee-track { animation: none !important; }
+    .preloader { animation: none !important; }
+    .mobile-sticky-cta { transition: none !important; }
+  }
+
+  /* Sticky bottom CTA */
+  .mobile-sticky-cta {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 80;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0));
+    background: linear-gradient(180deg, rgba(5,5,4,0) 0%, rgba(5,5,4,0.88) 40%, rgba(5,5,4,0.96) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transform: translateY(110%);
+    transition: transform 350ms var(--ease-spring);
+    pointer-events: none;
+  }
+  .mobile-sticky-cta.visible { transform: translateY(0); pointer-events: auto; }
+  .mobile-sticky-cta .msc-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 16px;
+    background: var(--gold);
+    color: #181818;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0.01em;
+    border-radius: 14px;
+    text-decoration: none;
+    box-shadow: 0 12px 30px -8px rgba(245,166,35,0.5), 0 4px 10px rgba(0,0,0,0.4);
+    transition: transform 120ms var(--ease-spring);
+  }
+  .mobile-sticky-cta .msc-btn:active { transform: scale(0.97); }
+  .mobile-sticky-cta .msc-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #16A34A;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.2);
+    animation: pulseDot 1.6s ease-in-out infinite;
+  }
+  /* Push footer acima do sticky */
+  .footer-v5 { padding-bottom: calc(100px + env(safe-area-inset-bottom, 0)) !important; }
+}
+
+/* HERO BG fix em mobile (user report: não aparece) */
+@media (max-width: 860px) {
+  section.hero { padding: 40px 0 60px; overflow: hidden; position: relative; }
+  .bg-boxes {
+    display: block !important;
+    opacity: 0.55 !important;
+    transform: rotateX(55deg) rotateZ(-35deg) scale(1.5) translateZ(-50px);
+  }
+  /* Fallback: se .bg-boxes não render por qualquer motivo, usa gradient gold sutil */
+  section.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 40% at 50% 0%, rgba(245,166,35,0.10), transparent 60%),
+      radial-gradient(ellipse 50% 30% at 30% 80%, rgba(245,166,35,0.06), transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero-content, .hero-grid, section.hero > .container { position: relative; z-index: 1; }
+}
+
+/* Team grid horizontal scroll iOS-style em <640 */
+@media (max-width: 640px) {
+  .team-grid {
+    display: flex !important;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 4px 16px 14px;
+    margin: 0 -16px -4px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .team-grid::-webkit-scrollbar { display: none; }
+  .team-card {
+    flex: 0 0 78%;
+    scroll-snap-align: center;
+    min-width: 260px;
+  }
+  .social-proof-badge { padding: 6px 14px 6px 6px; gap: 10px; }
+  .sp-avatar { width: 28px; height: 28px; font-size: 10px; margin-left: -8px; border-width: 1.5px; }
+  .sp-label { font-size: 11px; }
+  .fx-widget {
+    background: linear-gradient(180deg, rgba(20,20,18,0.96), rgba(10,10,8,0.98));
+    box-shadow: 0 20px 50px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .hero-ctas { gap: 10px; width: 100%; }
+  .hero-ctas .shiny-btn-primary {
+    order: -1;
+    box-shadow: 0 12px 30px -10px rgba(245,166,35,0.45);
+  }
+}
+
+@media (max-width: 420px) {
+  .nav-inner { padding: 0 14px; }
+  .logo { font-size: 13px; letter-spacing: 0.18em; }
+  .container { padding: 0 14px; }
+  h1 { font-size: clamp(30px, 10vw, 44px); line-height: 1.02; }
+  .hero-cycle { font-size: clamp(36px, 11vw, 50px) !important; }
+  .sec-demo { padding-top: 56px !important; padding-bottom: 72px !important; }
+  .scroll-card { border-radius: 16px !important; }
+  .footer-v5 { padding: 48px 18px calc(96px + env(safe-area-inset-bottom, 0)) !important; text-align: center; }
+  .footer-v5-logo { justify-content: center; }
+  .footer-v5-brand { max-width: none; }
 }
 
 /* ==================== MOBILE POLISH v8 ==================== */
@@ -3142,6 +3403,14 @@ footer {
 </head>
 <body>
 
+<!-- MOBILE STICKY CTA (só aparece em mobile via CSS + JS scroll trigger) -->
+<div class="mobile-sticky-cta" id="mobileStickyCta" aria-hidden="true">
+  <a href="#" class="msc-btn" onclick="openLogin(event); hapticTap();">
+    <span class="msc-dot" aria-hidden="true"></span>
+    Abrir acesso · Early access
+  </a>
+</div>
+
 <!-- PRELOADER (primeira visita · morphing Ø mark) -->
 <div class="preloader" id="preloader" aria-hidden="true">
   <div class="morphing-mark">
@@ -4242,6 +4511,92 @@ footer {
     });
     card.addEventListener('mouseleave', () => reset(card));
   });
+})();
+
+/* ==================== MOBILE · HAPTIC, STICKY CTA, SWIPE MODAL ==================== */
+function hapticTap(intensity = 10) {
+  try { if (navigator.vibrate) navigator.vibrate(intensity); } catch (_) {}
+}
+
+/* Sticky CTA: mostra depois de scrollar o hero */
+(function initStickyCta() {
+  const cta = document.getElementById('mobileStickyCta');
+  if (!cta) return;
+  const hero = document.querySelector('section.hero');
+  if (!hero) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) cta.classList.remove('visible');
+      else cta.classList.add('visible');
+    });
+  }, { threshold: 0.15 });
+  io.observe(hero);
+})();
+
+/* Swipe-to-dismiss no modal (só touch) */
+(function initModalSwipe() {
+  const modal = document.querySelector('.modal-overlay .login-modal');
+  const overlay = document.getElementById('loginModal');
+  if (!modal || !overlay) return;
+  let startY = 0, currentY = 0, dragging = false;
+  const DISMISS_THRESHOLD = 120;
+
+  const isMobile = () => window.matchMedia('(max-width: 860px)').matches || window.matchMedia('(hover: none)').matches;
+
+  modal.addEventListener('touchstart', (e) => {
+    if (!isMobile()) return;
+    // só inicia drag se touch começou perto do topo (40px) OU se modal tá no topo do scroll
+    const t = e.touches[0];
+    const rect = modal.getBoundingClientRect();
+    const fromTopHandle = (t.clientY - rect.top) < 48;
+    if (!fromTopHandle && modal.scrollTop > 0) return;
+    startY = t.clientY;
+    dragging = true;
+    modal.classList.add('swiping');
+  }, { passive: true });
+
+  modal.addEventListener('touchmove', (e) => {
+    if (!dragging) return;
+    const t = e.touches[0];
+    currentY = t.clientY - startY;
+    if (currentY < 0) currentY = 0;
+    modal.style.transform = `translateY(${currentY}px)`;
+  }, { passive: true });
+
+  modal.addEventListener('touchend', () => {
+    if (!dragging) return;
+    dragging = false;
+    modal.classList.remove('swiping');
+    if (currentY > DISMISS_THRESHOLD) {
+      modal.style.transform = 'translateY(100%)';
+      setTimeout(() => {
+        closeLogin();
+        modal.style.transform = '';
+      }, 280);
+    } else {
+      modal.style.transform = '';
+    }
+    currentY = 0;
+  });
+})();
+
+/* Haptic em CTAs principais (dispara só em mobile que suporta vibrate) */
+(function initHaptic() {
+  const ctas = document.querySelectorAll('.shiny-btn-primary, .fx-btn, .login-btn, .msc-btn, .nav-cta');
+  ctas.forEach((btn) => {
+    btn.addEventListener('touchstart', () => hapticTap(8), { passive: true });
+  });
+})();
+
+/* Hamburger → X animation toggle class */
+(function initHamburger() {
+  const ham = document.querySelector('.hamburger');
+  if (!ham) return;
+  const orig = window.toggleNav;
+  window.toggleNav = function () {
+    ham.classList.toggle('open');
+    if (orig) orig();
+  };
 })();
 
 /* ==================== PRELOADER (primeira visita, 1.8s mínimo) ==================== */
