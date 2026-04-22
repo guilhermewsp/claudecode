@@ -64,53 +64,46 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
-/* ==================== PRELOADER Ø (v10) ==================== */
-#onstack-preloader {
-  position: fixed; inset: 0; z-index: 9999;
-  background: var(--dark);
-  display: grid; place-items: center;
-  transition: opacity .6s ease, visibility .6s ease;
+/* ==================== PRELOADER (morphing Ø mark, primeira visita) ==================== */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--black);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  transition: opacity 0.6s ease-out, visibility 0.6s;
 }
-#onstack-preloader.is-gone { opacity: 0; visibility: hidden; pointer-events: none; }
-.pl-stage { display: flex; flex-direction: column; align-items: center; gap: 28px; }
-.pl-mark { width: 96px; height: 96px; }
-.pl-mark .pl-ring {
-  stroke-dasharray: 100;
-  stroke-dashoffset: 100;
-  transform-origin: 50% 50%;
-  animation: plDraw 1.1s cubic-bezier(.7,0,.3,1) forwards,
-             plSpin 2.4s linear .8s infinite;
+.preloader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+.morphing-mark {
+  width: 72px;
+  height: 72px;
+  animation: morphRotate 2s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.pl-mark .pl-bar {
-  stroke-dasharray: 102;
-  stroke-dashoffset: 102;
-  animation: plDraw .7s cubic-bezier(.7,0,.3,1) .4s forwards;
+.morphing-mark svg { width: 100%; height: 100%; display: block; }
+@keyframes morphRotate {
+  0%   { border-radius: 18%; transform: rotate(0deg) scale(1); }
+  50%  { border-radius: 50%; transform: rotate(180deg) scale(1.12); }
+  100% { border-radius: 18%; transform: rotate(360deg) scale(1); }
 }
-@keyframes plDraw { to { stroke-dashoffset: 0; } }
-@keyframes plSpin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
-.pl-word {
-  display: flex; gap: 2px;
-  font-family: var(--font-display);
-  font-weight: 600; font-size: 22px; letter-spacing: .14em;
-  color: var(--warm);
+.preloader-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--g500);
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  opacity: 0;
+  animation: preloaderFadeIn 1.2s ease-out 0.6s forwards;
 }
-.pl-word span {
-  opacity: 0; transform: translateY(8px);
-  animation: plLetter .5s cubic-bezier(.7,0,.3,1) forwards;
-}
-.pl-word span:nth-child(1) { animation-delay: .60s; }
-.pl-word span:nth-child(2) { animation-delay: .68s; }
-.pl-word span:nth-child(3) { animation-delay: .76s; }
-.pl-word span:nth-child(4) { animation-delay: .84s; }
-.pl-word span:nth-child(5) { animation-delay: .92s; }
-.pl-word span:nth-child(6) { animation-delay: 1.00s; }
-.pl-word span:nth-child(7) { animation-delay: 1.08s; }
-@keyframes plLetter { to { opacity: 1; transform: translateY(0); } }
-html.is-loading, body.is-loading { overflow: hidden; }
+@keyframes preloaderFadeIn { to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
-  .pl-mark .pl-ring { animation: plDraw .01s forwards; }
-  .pl-mark .pl-bar { animation: plDraw .01s forwards; }
-  .pl-word span { animation: plLetter .01s forwards; }
+  .morphing-mark, .preloader { animation: none !important; }
 }
 
 /* ==================== SECTION DIVIDERS (v10) ==================== */
@@ -3147,17 +3140,16 @@ footer {
 </head>
 <body>
 
-<!-- PRELOADER Ø (v10) -->
-<div id="onstack-preloader" aria-hidden="true" role="presentation">
-  <div class="pl-stage">
-    <svg class="pl-mark" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle class="pl-ring" cx="60" cy="60" r="50" stroke="#f08c00" stroke-width="6" stroke-linecap="round" pathLength="100" />
-      <line class="pl-bar" x1="24" y1="96" x2="96" y2="24" stroke="#f08c00" stroke-width="6" stroke-linecap="round" />
+<!-- PRELOADER (primeira visita · morphing Ø mark) -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="morphing-mark">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100" height="100" rx="22" fill="#F5A623"/>
+      <rect x="28" y="22" width="44" height="56" rx="11" fill="none" stroke="#222222" stroke-width="8" stroke-linejoin="round"/>
+      <line x1="66" y1="30" x2="34" y2="70" stroke="#222222" stroke-width="8" stroke-linecap="round"/>
     </svg>
-    <div class="pl-word" aria-hidden="true">
-      <span>0</span><span>n</span><span>S</span><span>t</span><span>a</span><span>c</span><span>k</span>
-    </div>
   </div>
+  <div class="preloader-label">0nStack · carregando</div>
 </div>
 
 <!-- NAV -->
@@ -4410,27 +4402,27 @@ document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => observer.o
   targets.forEach(el => io.observe(el));
 })();
 
-/* ==================== PRELOADER Ø — hide trigger (v10) ==================== */
-(function initPreloader(){
-  document.documentElement.classList.add('is-loading');
-  document.body.classList.add('is-loading');
-  const pre = document.getElementById('onstack-preloader');
-  if (!pre) return;
-  const MIN = 1400;
+/* ==================== PRELOADER (primeira visita, 1.8s mínimo) ==================== */
+(function initPreloader() {
+  const el = document.getElementById('preloader');
+  if (!el) return;
+  const seen = sessionStorage.getItem('onstack_preloader_seen');
+  if (seen) { el.remove(); return; }
+  const minShow = 1800;
   const start = performance.now();
-  function hide(){
+  const hide = () => {
     const elapsed = performance.now() - start;
-    const wait = Math.max(0, MIN - elapsed);
+    const wait = Math.max(0, minShow - elapsed);
     setTimeout(() => {
-      pre.classList.add('is-gone');
-      document.documentElement.classList.remove('is-loading');
-      document.body.classList.remove('is-loading');
-      setTimeout(() => pre.remove(), 700);
+      el.classList.add('hide');
+      sessionStorage.setItem('onstack_preloader_seen', '1');
+      setTimeout(() => el.remove(), 700);
     }, wait);
-  }
+  };
   if (document.readyState === 'complete') hide();
   else window.addEventListener('load', hide);
-  setTimeout(hide, 4000); // failsafe
+  // failsafe: nunca trava além de 4s
+  setTimeout(hide, 4000);
 })();
 
 /* ==================== NAV MOBILE OVERLAY v9 ==================== */
