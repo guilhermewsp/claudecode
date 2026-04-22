@@ -4059,6 +4059,26 @@ footer {
   </div>
 </div>
 
+<!-- PRELOADER KILL-SWITCH (script isolado pra resistir a qualquer erro JS depois) -->
+<script>
+(function preloaderKillSwitch(){
+  // Esconde o loader incondicionalmente após 2.5s mesmo se TUDO mais quebrar.
+  setTimeout(function(){
+    var pre = document.getElementById('preloader');
+    if (pre && !pre.classList.contains('hide')) {
+      pre.classList.add('hide');
+      try { sessionStorage.setItem('onstack_preloader_seen', '1'); } catch(e){}
+      setTimeout(function(){ if (pre.parentNode) pre.parentNode.removeChild(pre); }, 700);
+    }
+  }, 2500);
+  // Backup: se window.load demorar absurdamente (>6s), força hide outra vez
+  setTimeout(function(){
+    var pre = document.getElementById('preloader');
+    if (pre && pre.parentNode) pre.parentNode.removeChild(pre);
+  }, 6000);
+})();
+</script>
+
 <script>
 /* ==================== BACKGROUND BOXES ==================== */
 (function buildBoxes() {
