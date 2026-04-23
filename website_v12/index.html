@@ -110,14 +110,53 @@ html { scroll-behavior: smooth; }
   filter: blur(30px);
   pointer-events: none;
 }
-@media (max-width: 900px) {
-  .tech-grid-lines { background-size: 36px 36px; opacity: 0.7; }
-  .tech-grid-dots { background-size: 36px 36px; opacity: 0.6; }
-  .tech-grid-glow { width: 500px; height: 320px; opacity: 0.7; }
-}
 
-/* ==================== SECTIONS TRANSPARENT (v12) — grid passa por trás ==================== */
+/* v12.1: PULSE DOTS — pontos aleatórios pulsando nas intersecções da grade */
+.tech-grid-pulse-layer {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, #000 55%, transparent 95%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, #000 55%, transparent 95%);
+}
+.pulse-dot {
+  position: absolute;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(240, 140, 0, 0.7);
+  box-shadow: 0 0 14px rgba(240, 140, 0, 0.85);
+  opacity: 0;
+  animation: gridPulseDot 4s ease-in-out infinite;
+}
+/* Posições alinhadas em "grid" de 48px imaginário, espalhadas */
+.pulse-dot-1 { top: 18%; left: 12%; animation-delay: 0s;    animation-duration: 3.4s; }
+.pulse-dot-2 { top: 32%; left: 78%; animation-delay: 1.2s;  animation-duration: 4.6s; }
+.pulse-dot-3 { top: 55%; left: 28%; animation-delay: 2.8s;  animation-duration: 3.8s; }
+.pulse-dot-4 { top: 68%; left: 82%; animation-delay: 0.6s;  animation-duration: 5.2s; }
+.pulse-dot-5 { top: 12%; left: 56%; animation-delay: 3.4s;  animation-duration: 4.2s; }
+.pulse-dot-6 { top: 80%; left: 18%; animation-delay: 1.8s;  animation-duration: 3.6s; }
+.pulse-dot-7 { top: 42%; left: 48%; animation-delay: 2.2s;  animation-duration: 4.8s; }
+.pulse-dot-8 { top: 88%; left: 64%; animation-delay: 0.3s;  animation-duration: 5.4s; }
+@keyframes gridPulseDot {
+  0%, 100% { opacity: 0; transform: scale(0.5); }
+  50%      { opacity: 1; transform: scale(1.6); }
+}
+/* Linhas do grid também respiram suavemente */
+.tech-grid-lines { animation: gridBreath 8s ease-in-out infinite; }
+.tech-grid-dots  { animation: gridBreath 11s ease-in-out infinite reverse; }
+@keyframes gridBreath {
+  0%, 100% { filter: brightness(1); }
+  50%      { filter: brightness(1.4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pulse-dot, .tech-grid-lines, .tech-grid-dots { animation: none !important; }
+}
+/* v12.1: mobile e desktop usam o MESMO grid (mesma escala/opacidade) */
+
+/* ==================== SECTIONS TRANSPARENT (v12.1) — grid passa por trás ==================== */
 html, body { background: transparent !important; }
+.ethereal-wrap { background: transparent !important; }
+.ethereal-wrap > section:nth-of-type(odd),
+.ethereal-wrap > section:nth-of-type(even),
 section,
 section.hero, section.sec-compare, section.sec-demo,
 .ethereal-wrap > section {
@@ -128,7 +167,9 @@ section.hero, section.sec-compare, section.sec-demo,
 /* EXCEÇÃO: seção warm/light cobre o grid */
 section.sec-market-light,
 section.light, section.warm,
-section[data-theme="light"], .section-light {
+section[data-theme="light"], .section-light,
+.ethereal-wrap > section.sec-market-light:nth-of-type(odd),
+.ethereal-wrap > section.sec-market-light:nth-of-type(even) {
   background: var(--warm) !important;
   position: relative;
   z-index: 2;
@@ -3468,10 +3509,20 @@ footer {
 </head>
 <body>
 
-<!-- TECH GRID BACKGROUND (v12 · YC/Linear-style) -->
+<!-- TECH GRID BACKGROUND (v12.1 · YC/Linear + pulse) -->
 <div class="tech-grid-bg" aria-hidden="true">
   <div class="tech-grid-lines"></div>
   <div class="tech-grid-dots"></div>
+  <div class="tech-grid-pulse-layer">
+    <span class="pulse-dot pulse-dot-1"></span>
+    <span class="pulse-dot pulse-dot-2"></span>
+    <span class="pulse-dot pulse-dot-3"></span>
+    <span class="pulse-dot pulse-dot-4"></span>
+    <span class="pulse-dot pulse-dot-5"></span>
+    <span class="pulse-dot pulse-dot-6"></span>
+    <span class="pulse-dot pulse-dot-7"></span>
+    <span class="pulse-dot pulse-dot-8"></span>
+  </div>
   <div class="tech-grid-vignette"></div>
   <div class="tech-grid-glow"></div>
 </div>
