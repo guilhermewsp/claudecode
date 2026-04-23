@@ -5544,7 +5544,7 @@ document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => observer.o
     progress.classList.add('is-paused');
   }
 
-  function setActive(newIdx){
+  function setActive(newIdx, userInitiated){
     idx = ((newIdx % total) + total) % total;
     if (!isMobile()) {
       chips.forEach((chip, i) => {
@@ -5563,9 +5563,15 @@ document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => observer.o
         chip.classList.toggle('is-active', i === idx);
         chip.setAttribute('aria-selected', i === idx ? 'true' : 'false');
       });
-      const activeChip = chips[idx];
-      if (activeChip && activeChip.scrollIntoView) {
-        activeChip.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      // Só centraliza chip ativo no scroll-X quando o user clicou (nunca no autoplay)
+      // — scrollIntoView arrastava a viewport para a seção #mercado
+      if (userInitiated) {
+        const col = root.querySelector('.mc-chips-col');
+        const activeChip = chips[idx];
+        if (col && activeChip) {
+          const target = activeChip.offsetLeft - (col.clientWidth - activeChip.clientWidth) / 2;
+          col.scrollTo({ left: target, behavior: 'smooth' });
+        }
       }
     }
     slides.forEach((slide, i) => {
@@ -5592,7 +5598,7 @@ document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => observer.o
   }
 
   chips.forEach((chip, i) => {
-    chip.addEventListener('click', () => { setActive(i); startAuto(); });
+    chip.addEventListener('click', () => { setActive(i, true); startAuto(); });
   });
 
   // Hover no stage inteiro pausa autoplay
