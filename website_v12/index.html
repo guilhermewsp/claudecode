@@ -216,6 +216,91 @@ section.sec-market-light .bento2-icon {
 }
 section.sec-market-light .text-gold { color: var(--gold-hover) !important; }
 
+/* ==================== MERCADO BENTO2 — gradient-blur-bg + Unsplash photos (v12.4) ==================== */
+section.sec-market-light .bento2-cell {
+  background-color: #ffffff !important;
+  background-image:
+    linear-gradient(to right, rgba(10,10,8,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(10,10,8,0.06) 1px, transparent 1px),
+    radial-gradient(circle 600px at 100% 0%, rgba(240,140,0,0.18), transparent 70%) !important;
+  background-size: 64px 64px, 64px 64px, 100% 100% !important;
+  padding: 20px !important;
+  border: 1px solid rgba(10,10,8,0.06) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  overflow: hidden;
+}
+/* Variação: cada card pega o blob em corner diferente */
+section.sec-market-light .bento2-cell:nth-child(2) {
+  background-image:
+    linear-gradient(to right, rgba(10,10,8,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(10,10,8,0.06) 1px, transparent 1px),
+    radial-gradient(circle 500px at 0% 100%, rgba(240,140,0,0.16), transparent 70%) !important;
+}
+section.sec-market-light .bento2-cell:nth-child(3) {
+  background-image:
+    linear-gradient(to right, rgba(10,10,8,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(10,10,8,0.06) 1px, transparent 1px),
+    radial-gradient(circle 500px at 100% 100%, rgba(240,140,0,0.16), transparent 70%) !important;
+}
+section.sec-market-light .bento2-cell:nth-child(4) {
+  background-image:
+    linear-gradient(to right, rgba(10,10,8,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(10,10,8,0.06) 1px, transparent 1px),
+    radial-gradient(circle 500px at 0% 0%, rgba(240,140,0,0.16), transparent 70%) !important;
+}
+section.sec-market-light .bento2-cell:nth-child(5) {
+  background-image:
+    linear-gradient(to right, rgba(10,10,8,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(10,10,8,0.06) 1px, transparent 1px),
+    radial-gradient(circle 500px at 50% 0%, rgba(240,140,0,0.16), transparent 70%) !important;
+}
+section.sec-market-light .bento2-cell:hover {
+  border-color: rgba(240,140,0,0.35) !important;
+  transform: translateY(-3px);
+}
+
+/* Foto (Unsplash) substitui o ícone SVG antigo */
+section.sec-market-light .bento2-cell .bento2-photo {
+  width: 100%;
+  height: 160px;
+  border-radius: 12px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+/* Subtle inner shadow + warm tone overlay pra integrar com paleta */
+section.sec-market-light .bento2-cell .bento2-photo::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.0) 60%, rgba(255,255,255,0.2) 100%);
+  box-shadow: inset 0 0 0 1px rgba(10,10,8,0.06);
+  border-radius: 12px;
+}
+
+/* Wide card: foto maior */
+section.sec-market-light .bento2-cell.bento2-wide .bento2-photo {
+  height: 200px;
+}
+
+/* Esconder ícone SVG antigo e pattern decorativo */
+section.sec-market-light .bento2-cell .bento2-icon,
+section.sec-market-light .bento2-cell .bento2-pattern { display: none !important; }
+
+/* Garantir z-index do conteúdo */
+section.sec-market-light .bento2-cell .bento2-body,
+section.sec-market-light .bento2-cell .bento2-tags { position: relative; z-index: 2; }
+
+/* Mobile: ajustar foto altura */
+@media (max-width: 900px) {
+  section.sec-market-light .bento2-cell .bento2-photo { height: 140px; }
+  section.sec-market-light .bento2-cell.bento2-wide .bento2-photo { height: 170px; }
+  section.sec-market-light .bento2-cell { padding: 16px !important; gap: 14px !important; }
+}
+
 /* ==================== DIVISORES sutis (v12) — substitui gold pesado ==================== */
 .ethereal-wrap > section + section::before {
   content: "" !important;
@@ -4031,10 +4116,7 @@ footer {
     <div class="bento2 reveal-stagger">
       <!-- Row 1: #2 (wide span 2) + Volume diário -->
       <article class="bento2-cell bento2-wide" data-spotlight>
-        <div class="bento2-pattern" aria-hidden="true"></div>
-        <div class="bento2-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg>
-        </div>
+        <div class="bento2-photo" style="background-image:url('https://images.unsplash.com/photo-1693420141770-c67c6a53bf55?w=900&q=80&auto=format&fit=crop')" aria-hidden="true"></div>
         <div class="bento2-body">
           <span class="bento2-status">Líder global</span>
           <h4 class="bento2-title">Brasil é o <span class="text-gold">#2 mercado de stablecoin</span> do mundo</h4>
@@ -4047,10 +4129,7 @@ footer {
       </article>
 
       <article class="bento2-cell" data-spotlight>
-        <div class="bento2-pattern" aria-hidden="true"></div>
-        <div class="bento2-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h8l-1 8 10-12h-8l1-8z"/></svg>
-        </div>
+        <div class="bento2-photo" style="background-image:url('https://images.unsplash.com/photo-1509017174183-0b7e0278f1ec?w=600&q=80&auto=format&fit=crop')" aria-hidden="true"></div>
         <div class="bento2-body">
           <span class="bento2-status">Volume diário</span>
           <h4 class="bento2-title">R$ 4,2B em PIX <span class="text-gold">por dia</span></h4>
@@ -4061,10 +4140,7 @@ footer {
 
       <!-- Row 2: Uptime + Regulação + Adoção (todos iguais, 1 col cada) -->
       <article class="bento2-cell" data-spotlight>
-        <div class="bento2-pattern" aria-hidden="true"></div>
-        <div class="bento2-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-        </div>
+        <div class="bento2-photo" style="background-image:url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&q=80&auto=format&fit=crop')" aria-hidden="true"></div>
         <div class="bento2-body">
           <span class="bento2-status">Uptime alvo</span>
           <h4 class="bento2-title"><span class="text-gold">99,97%</span> de disponibilidade</h4>
@@ -4074,10 +4150,7 @@ footer {
       </article>
 
       <article class="bento2-cell" data-spotlight>
-        <div class="bento2-pattern" aria-hidden="true"></div>
-        <div class="bento2-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v7c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V5l-8-3z"/><path d="m9 12 2 2 4-4"/></svg>
-        </div>
+        <div class="bento2-photo" style="background-image:url('https://images.unsplash.com/photo-1749092042994-618ea2d25c87?w=600&q=80&auto=format&fit=crop')" aria-hidden="true"></div>
         <div class="bento2-body">
           <span class="bento2-status">Regulação clara</span>
           <h4 class="bento2-title">Stablecoin como <span class="text-gold">câmbio oficial</span></h4>
@@ -4087,10 +4160,7 @@ footer {
       </article>
 
       <article class="bento2-cell" data-spotlight>
-        <div class="bento2-pattern" aria-hidden="true"></div>
-        <div class="bento2-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 20v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-        </div>
+        <div class="bento2-photo" style="background-image:url('https://images.unsplash.com/photo-1561188951-a13094e8c78c?w=600&q=80&auto=format&fit=crop')" aria-hidden="true"></div>
         <div class="bento2-body">
           <span class="bento2-status">Adoção</span>
           <h4 class="bento2-title"><span class="text-gold">150M</span> contas PIX ativas</h4>
