@@ -75,28 +75,24 @@ html { scroll-behavior: smooth; }
 .tech-grid-lines {
   position: absolute; inset: 0;
   background-image:
-    linear-gradient(rgba(249, 247, 243, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(249, 247, 243, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(249, 247, 243, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(249, 247, 243, 0.045) 1px, transparent 1px);
   background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, #000 55%, transparent 95%);
-  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, #000 55%, transparent 95%);
   will-change: transform;
 }
 .tech-grid-dots {
   position: absolute; inset: 0;
-  background-image: radial-gradient(circle, rgba(240, 140, 0, 0.08) 1px, transparent 1.5px);
+  background-image: radial-gradient(circle, rgba(240, 140, 0, 0.10) 1px, transparent 1.5px);
   background-size: 48px 48px; background-position: 0 0;
-  mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, #000 40%, transparent 80%);
-  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, #000 40%, transparent 80%);
   will-change: transform;
 }
 .tech-grid-vignette {
   position: absolute; inset: 0;
   background: radial-gradient(ellipse at center,
     transparent 0%,
-    transparent 40%,
-    rgba(5, 5, 4, 0.5) 90%,
-    rgba(5, 5, 4, 0.85) 100%);
+    transparent 60%,
+    rgba(5, 5, 4, 0.35) 95%,
+    rgba(5, 5, 4, 0.55) 100%);
 }
 .tech-grid-glow {
   position: absolute;
@@ -115,8 +111,6 @@ html { scroll-behavior: smooth; }
 .tech-grid-pulse-layer {
   position: absolute; inset: 0;
   pointer-events: none;
-  mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, #000 55%, transparent 95%);
-  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, #000 55%, transparent 95%);
 }
 .pulse-dot {
   position: absolute;
@@ -342,8 +336,9 @@ body {
   min-height: 100vh;
 }
 
-/* ==================== BACKGROUND BOXES (aceternity - refined) ==================== */
-.bg-boxes {
+/* ==================== BACKGROUND BOXES (DEPRECATED v12.1 — substituído por tech-grid global) ==================== */
+.bg-boxes, .bg-boxes-inner { display: none !important; }
+.bg-boxes-deprecated {
   position: absolute;
   inset: 0;
   z-index: 1;
