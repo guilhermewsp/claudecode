@@ -3546,13 +3546,14 @@ footer {
    bg-orbs mobile tuning + nav overlay polish + safe-area
    ============================================================ */
 @media (max-width: 900px) {
-  /* Esconder o FX widget grande do hero no mobile */
-  .hero .fx-widget,
-  .hero .glow-card.always-glow { display: none !important; }
+  /* HERO mobile: usar o FX widget COMPLETO igual desktop (esconde o compacto) */
+  .fx-compact-mobile { display: none !important; }
+  .hero .fx-widget { display: block !important; padding: 16px !important; border-radius: 14px !important; }
+  .hero .glow-card.always-glow { display: block !important; margin-top: 14px; }
 
-  /* Compact FX horizontal (só mobile) */
+  /* Compact FX styles (mantidos como referência; elemento já oculto acima) */
   .fx-compact-mobile {
-    display: block;
+    display: none;
     background: rgba(22, 22, 19, 0.6);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -4060,6 +4061,97 @@ footer {
   .compare-card .compare-num-wrap {
     border-top: 1px solid rgba(249,247,243,0.06) !important;
   }
+
+  /* ===== v13.x MOBILE POLISH (cards + faq + demo + icons) ===== */
+
+  /* CARDS — respiro nas bordas + animação de entrada mais marcada */
+  .container { padding-left: 18px !important; padding-right: 18px !important; }
+  .compare-grid, .products-grid, .flow-steps, .grid-3, .bento2, .faq-wrap {
+    gap: 14px !important;
+  }
+  .compare-card,
+  .product-card .tilt-inner.product-card-inner,
+  .flow-step,
+  .grid-3 .tilt-card .tilt-inner,
+  .bento2-cell,
+  .faq-item {
+    border-radius: 16px !important;
+    box-shadow: 0 8px 24px -10px rgba(0,0,0,0.45) !important;
+  }
+
+  /* SAVINGS CALLOUT — padding 2px só no wrapper (preserva ring gold), 18px no inner */
+  .savings-callout {
+    padding: 2px !important;
+    margin-top: 20px;
+    box-shadow: 0 14px 42px -12px rgba(240,140,0,0.18) !important;
+  }
+  .savings-inner { padding: 20px 18px !important; gap: 12px !important; }
+
+  /* COMO FUNCIONA — ícones maiores e mais destacados (chip topo + ícone no rodapé do card) */
+  section#como .flow-icon {
+    align-self: center;
+    color: var(--gold) !important;
+    opacity: 1 !important;
+    width: auto !important; height: auto !important;
+    margin-top: 4px;
+  }
+  section#como .flow-icon svg {
+    width: 44px !important; height: 44px !important;
+    stroke-width: 1.4 !important;
+  }
+  section#como .flow-num { font-size: 14px !important; }
+  section#como .flow-chip { font-size: 11px !important; padding: 5px 10px !important; }
+  section#como .flow-step { padding: 22px 18px !important; gap: 14px !important; }
+  section#como .flow-title { font-size: 18px !important; line-height: 1.2; }
+
+  /* PROVA OPERACIONAL — ícones maiores nos grid-3 cards */
+  section .grid-3 .icon { width: 52px !important; height: 52px !important; border-radius: 14px !important; }
+  section .grid-3 .icon svg { width: 26px !important; height: 26px !important; }
+
+  /* DEMO — mostra a demo REAL, esconde o placeholder com play button */
+  section.sec-demo .demo-mobile-preview { display: none !important; }
+  section.sec-demo .demo-body { display: grid !important; grid-template-columns: 1fr !important; min-height: auto !important; }
+  section.sec-demo .demo-main { display: flex !important; padding: 16px !important; gap: 14px !important; }
+  section.sec-demo .demo-sidebar { display: none !important; }
+  section.sec-demo .scroll-card {
+    background: rgba(16,16,14,0.92) !important;
+    border-radius: 16px !important;
+  }
+
+  /* FAQ redesign — cards com gold accent ao abrir */
+  .faq-wrap { display: flex; flex-direction: column; gap: 10px; }
+  .faq-item {
+    padding: 16px 18px !important;
+    border-radius: 14px !important;
+    border-bottom: none !important;
+    transition: border-color .25s ease, background .25s ease;
+  }
+  .faq-q {
+    padding: 0 !important;
+    font-size: 15px !important;
+    line-height: 1.35 !important;
+    gap: 14px !important;
+    align-items: flex-start;
+  }
+  .faq-icon {
+    width: 30px !important; height: 30px !important;
+    border-color: rgba(240,140,0,0.35) !important;
+    color: var(--gold) !important;
+    margin-left: 0 !important;
+    flex-shrink: 0;
+  }
+  .faq-item.open {
+    border: 1px solid rgba(240,140,0,0.42) !important;
+    background: rgba(240,140,0,0.06) !important;
+    box-shadow: 0 12px 32px -16px rgba(240,140,0,0.35) !important;
+  }
+  .faq-item.open .faq-icon { background: var(--gold); color: var(--dark); border-color: var(--gold); }
+  .faq-a {
+    color: rgba(249,247,243,0.78) !important;
+    font-size: 14px !important;
+    line-height: 1.55 !important;
+  }
+  .faq-item.open .faq-a { padding-top: 14px !important; }
 }
 </style>
 </head>
