@@ -169,6 +169,22 @@ html { scroll-behavior: smooth; }
   .tracer { animation: none !important; opacity: 0 !important; }
 }
 
+/* ============================================================
+   DARKEN LAYER (v13) — escurece o bg sem cobrir o conteúdo
+   Camada fixa entre tech-grid (z:-1) e seções (z:3)
+   ============================================================ */
+.bg-darken {
+  position: fixed;
+  inset: 0;
+  z-index: 0;                /* acima do grid (-1), abaixo das seções (3) */
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(0,0,0,0.55) 0%,
+    rgba(0,0,0,0.35) 35%,
+    rgba(0,0,0,0.30) 65%,
+    rgba(0,0,0,0.55) 100%);
+}
+
 /* v12.3: GRADIENT BLOBS — degradê vertical da página inteira
    Position absolute relative ao body, então rolam com a página.
    Conforme o user desce, blobs diferentes aparecem na viewport,
@@ -4013,6 +4029,7 @@ footer {
   </div>
   <div class="tech-grid-vignette"></div>
 </div>
+<div class="bg-darken" aria-hidden="true"></div>
 
 <!-- PRELOADER (primeira visita · morphing Ø mark) -->
 <div class="preloader" id="preloader" aria-hidden="true">
