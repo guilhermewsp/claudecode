@@ -102,6 +102,73 @@ html { scroll-behavior: smooth; }
   pointer-events: none;
 }
 
+/* ============================================================
+   GRID TRACERS (v13) — linhas gold animadas seguindo o grid 48px
+   Inspirado em 21st.dev/r/preetsuthar17/gradient-tracing
+   ============================================================ */
+.tech-grid-tracers {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+.tracer {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
+  mix-blend-mode: screen;
+}
+/* Horizontal: trilho gold de 220px viajando da esquerda → direita */
+.tracer-h {
+  height: 1px;
+  width: 220px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(240,140,0,0) 15%,
+    rgba(240,140,0,0.55) 50%,
+    rgba(240,140,0,0) 85%,
+    transparent 100%);
+  filter: blur(0.4px) drop-shadow(0 0 6px rgba(240,140,0,0.35));
+  animation: tracerH var(--dur, 9s) linear infinite;
+  animation-delay: var(--delay, 0s);
+}
+/* Vertical: trilho descendo top → bottom */
+.tracer-v {
+  width: 1px;
+  height: 220px;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(240,140,0,0) 15%,
+    rgba(240,140,0,0.55) 50%,
+    rgba(240,140,0,0) 85%,
+    transparent 100%);
+  filter: blur(0.4px) drop-shadow(0 0 6px rgba(240,140,0,0.35));
+  animation: tracerV var(--dur, 9s) linear infinite;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes tracerH {
+  0%   { transform: translateX(-240px); opacity: 0; }
+  8%   { opacity: 0.85; }
+  92%  { opacity: 0.85; }
+  100% { transform: translateX(calc(100vw + 40px)); opacity: 0; }
+}
+@keyframes tracerV {
+  0%   { transform: translateY(-240px); opacity: 0; }
+  8%   { opacity: 0.85; }
+  92%  { opacity: 0.85; }
+  100% { transform: translateY(calc(100vh + 40px)); opacity: 0; }
+}
+@media (max-width: 700px) {
+  .tracer-h { width: 140px; }
+  .tracer-v { height: 140px; }
+  .tracer-extra { display: none; }       /* menos tracers no mobile pra performance */
+}
+@media (prefers-reduced-motion: reduce) {
+  .tracer { animation: none !important; opacity: 0 !important; }
+}
+
 /* v12.3: GRADIENT BLOBS — degradê vertical da página inteira
    Position absolute relative ao body, então rolam com a página.
    Conforme o user desce, blobs diferentes aparecem na viewport,
@@ -3936,6 +4003,14 @@ footer {
 <!-- TECH GRID BACKGROUND (v12.3 · YC/Linear, fixed) -->
 <div class="tech-grid-bg" aria-hidden="true">
   <div class="tech-grid-lines"></div>
+  <div class="tech-grid-tracers" aria-hidden="true">
+    <span class="tracer tracer-h" style="top:96px;  --dur:9s;  --delay:0s"></span>
+    <span class="tracer tracer-h" style="top:432px; --dur:11s; --delay:3s"></span>
+    <span class="tracer tracer-h tracer-extra" style="top:768px; --dur:13s; --delay:6s"></span>
+    <span class="tracer tracer-v" style="left:240px;  --dur:10s; --delay:1.5s"></span>
+    <span class="tracer tracer-v" style="left:720px;  --dur:8s;  --delay:4s"></span>
+    <span class="tracer tracer-v tracer-extra" style="left:1056px; --dur:12s; --delay:7s"></span>
+  </div>
   <div class="tech-grid-vignette"></div>
 </div>
 
