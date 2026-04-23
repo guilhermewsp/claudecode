@@ -3594,47 +3594,51 @@ footer {
   position: relative;
 }
 
-/* CHIPS COLUMN (left, dark panel — discreto, lista estática centralizada) */
+/* CHIPS COLUMN (left, dark panel — roleta vertical) */
 .mc-chips-col {
   background: linear-gradient(180deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0) 100%);
   border-right: 1px solid rgba(249,247,243,0.06);
   padding: 48px 24px;
   position: relative;
   display: flex; align-items: center; justify-content: center;
+  overflow: hidden;             /* corta chips fora do quadro */
 }
 .mc-chips {
   position: relative;
   width: 100%;
+  height: 60px;                 /* altura de UMA chip; resto é translate */
   display: flex; flex-direction: column;
-  gap: 18px;             /* +50% para respirar entre chips maiores */
   align-items: stretch;
-  margin: auto 0;        /* simetria: respira igual em cima e embaixo */
+  margin: 0;
 }
 .mc-chip {
-  position: relative;
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 60px;
   display: flex; align-items: center; gap: 18px;
-  padding: 20px 30px;    /* +30% padding */
+  padding: 0 28px;
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.14);
+  border: 1px solid rgba(249,247,243,0.18);
   border-radius: 999px;
-  color: rgba(255,255,255,0.72);
+  color: rgba(249,247,243,0.6);
   font-family: var(--font-mono);
-  font-size: 18px; letter-spacing: 0.14em;   /* 14 → 18 (+30%) */
+  font-size: 18px; letter-spacing: 0.14em;
   text-transform: uppercase;
   cursor: pointer;
   text-align: left;
   white-space: nowrap;
   transition:
+    transform .6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity .4s ease,
     background .35s ease,
     color .35s ease,
     border-color .35s ease,
-    transform .35s ease,
     box-shadow .35s ease;
+  will-change: transform, opacity;
 }
 .mc-chip:hover {
   border-color: rgba(240,140,0,0.55);
   color: #fff;
-  transform: translateX(2px);
 }
 .mc-chip.is-active {
   background: var(--gold);
@@ -3643,7 +3647,7 @@ footer {
   font-weight: 700;
   box-shadow: 0 8px 24px -8px rgba(240,140,0,0.55);
 }
-.mc-chip-num { font-weight: 700; opacity: 0.85; font-size: 17px; }  /* 13 → 17 (+30%) */
+.mc-chip-num { font-weight: 700; opacity: 0.85; font-size: 17px; }
 .mc-chip-label { flex: 1; }
 
 /* STAGE COLUMN (right, image slides) */
@@ -3654,30 +3658,30 @@ footer {
   min-height: 620px;
 }
 .mc-badge {
-  position: absolute; top: 18px; left: 18px;
+  position: absolute; top: 20px; left: 20px;
   z-index: 4;
   display: inline-flex; align-items: center; gap: 8px;
   padding: 7px 12px;
   background: rgba(10,10,8,0.55);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(240,140,0,0.35);
   border-radius: 999px;
   font-family: var(--font-mono);
   font-size: 10px;
-  letter-spacing: 0.3em;
-  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.2em;
+  color: var(--gold);
   text-transform: uppercase;
 }
 .mc-dot {
   width: 6px; height: 6px; border-radius: 50%;
-  background: var(--gold);
-  box-shadow: 0 0 10px var(--gold);
+  background: #fff;
+  box-shadow: 0 0 10px #fff;
   animation: mcDotPulse 1.6s ease-in-out infinite;
 }
 @keyframes mcDotPulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 10px var(--gold); }
-  50%      { opacity: 0.4; box-shadow: 0 0 4px var(--gold); }
+  0%, 100% { opacity: 1; box-shadow: 0 0 10px #fff; }
+  50%      { opacity: 0.4; box-shadow: 0 0 4px #fff; }
 }
 
 .mc-slide {
@@ -3728,36 +3732,32 @@ footer {
 .mc-slide.is-prev,
 .mc-slide.is-next {
   opacity: 0;
-  transform: scale(0.96);
+  transform: scale(0.92);
   z-index: 1;
 }
 
-/* Overlay como painel flutuante escuro — legível sobre qualquer fundo */
+/* Overlay nativo da imagem — gradient bottom integrado */
 .mc-overlay {
   position: absolute;
-  left: 28px; bottom: 28px;
-  right: auto;
+  left: 0; right: 0; bottom: 0;
   z-index: 3;
-  max-width: min(60%, 480px);
-  padding: 22px 24px 22px;
-  background: rgba(10,10,8,0.82);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  display: flex; flex-direction: column; gap: 10px;
-  box-shadow: 0 18px 50px -20px rgba(0,0,0,0.5);
+  padding: 32px 32px 28px;
+  background: linear-gradient(180deg,
+    rgba(10,10,8,0) 0%,
+    rgba(10,10,8,0) 45%,
+    rgba(10,10,8,0.92) 100%);
+  display: flex; flex-direction: column; gap: 12px;
 }
 .mc-pill {
   align-self: flex-start;
   padding: 5px 12px;
-  background: rgba(255,255,255,0.06);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.95);
+  color: var(--dark);
+  border: 1px solid rgba(255,255,255,0.4);
   border-radius: 999px;
   font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   height: 26px;
@@ -3765,34 +3765,36 @@ footer {
 }
 .mc-title {
   font-family: var(--font-display);
-  font-size: clamp(22px, 2.3vw, 30px);
-  font-weight: 600;
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 700;
   color: #fff;
   letter-spacing: -0.018em;
   line-height: 1.18;
   max-width: 32ch;
   margin: 0;
+  text-shadow: 0 2px 18px rgba(0,0,0,0.35);
 }
 .mc-desc {
-  font-size: 14.5px;
-  color: rgba(255,255,255,0.82);
+  font-size: 15px;
+  color: rgba(255,255,255,0.8);
   line-height: 1.55;
   max-width: 56ch;
   margin: 0;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.35);
 }
 .mc-tag {
   margin-top: 4px;
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 10px;
   letter-spacing: 0.22em;
-  color: rgba(255,255,255,0.55);
+  color: rgba(255,255,255,0.5);
   text-transform: uppercase;
 }
 
 /* Progress bar — feedback de autoplay */
 .mc-progress {
   position: absolute; left: 0; right: 0; bottom: 0;
-  height: 3px; z-index: 5;
+  height: 2px; z-index: 5;
   background: rgba(255,255,255,0.06);
   overflow: hidden;
 }
@@ -3818,54 +3820,75 @@ footer {
   .mc-progress-fill { transform: scaleX(0); }
 }
 
-/* Mobile: empilhar */
+/* Mobile: imagem em cima, chips embaixo (sem vazamento horizontal) */
 @media (max-width: 900px) {
   .momento-carousel {
     grid-template-columns: 1fr;
     border-radius: 20px;
     min-height: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  .mc-stage {
+    order: 1;
+    width: 100%;
+    min-height: 0;
+    height: 420px;
   }
   .mc-chips-col {
-    padding: 14px 12px;
+    order: 2;
+    padding: 16px 0 18px;
     border-right: none;
-    border-bottom: 1px solid rgba(249,247,243,0.06);
+    border-top: 1px solid rgba(249,247,243,0.06);
+    display: block;
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 16px;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .mc-chips-col::-webkit-scrollbar { display: none; }
-  /* No mobile, chips em scroll horizontal natural (sem efeito roleta) */
   .mc-chips {
+    position: relative;
     display: flex;
     flex-direction: row;
     height: auto;
     width: max-content;
     gap: 8px;
+    padding: 0 16px;
+    margin: 0;
   }
   .mc-chip {
     position: static;
-    padding: 12px 18px;
-    font-size: 14px;
+    height: 38px;
+    padding: 10px 14px;
+    font-size: 12px;
     letter-spacing: 0.14em;
+    border-color: rgba(249,247,243,0.18);
+    color: rgba(249,247,243,0.7);
     transform: none !important;
     opacity: 1 !important;
     flex-shrink: 0;
+    width: fit-content;
+    scroll-snap-align: start;
+    transition: background .25s ease, color .25s ease, border-color .25s ease;
   }
-  .mc-chip-num { font-size: 13px; }
-  .mc-stage {
-    min-height: 0;
-    aspect-ratio: 3/4;
-  }
+  .mc-chip-num { font-size: 11px; }
   .mc-overlay {
-    left: 14px; right: 14px; bottom: 14px;
-    max-width: none;
-    padding: 18px 18px 18px;
-    border-radius: 14px;
+    left: 0; right: 0; bottom: 0;
+    padding: 24px 20px 22px;
+    background: linear-gradient(180deg,
+      rgba(10,10,8,0) 0%,
+      rgba(10,10,8,0) 40%,
+      rgba(10,10,8,0.92) 100%);
   }
   .mc-title { font-size: clamp(18px, 5vw, 22px); max-width: 100%; }
   .mc-desc { font-size: 13px; }
-  .mc-badge { top: 14px; left: 14px; padding: 5px 10px; font-size: 9px; }
+  .mc-badge { top: 16px; left: 16px; padding: 5px 10px; font-size: 9px; }
   .mc-placeholder .mc-num { font-size: clamp(120px, 28vw, 180px); }
 }
 
@@ -5252,6 +5275,7 @@ document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => observer.o
   const slides = root.querySelectorAll('.mc-slide');
   const progress = root.querySelector('.mc-progress-fill');
   if (!chips.length || !slides.length) return;
+  const ITEM_H = 74;       // 60px chip + 14px gap visual
   const AUTOPLAY_MS = 4000;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isMobile = () => window.matchMedia('(max-width: 900px)').matches;
@@ -5277,11 +5301,23 @@ document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => observer.o
 
   function setActive(newIdx){
     idx = ((newIdx % total) + total) % total;
-    chips.forEach((chip, i) => {
-      chip.classList.toggle('is-active', i === idx);
-      chip.setAttribute('aria-selected', i === idx ? 'true' : 'false');
-    });
-    if (isMobile()) {
+    if (!isMobile()) {
+      chips.forEach((chip, i) => {
+        const diff = i - idx;
+        const absD = Math.abs(diff);
+        const op = absD === 0 ? 1 : absD === 1 ? 0.75 : absD === 2 ? 0.5 : 0.25;
+        chip.style.transform = `translateY(${diff * ITEM_H}px)`;
+        chip.style.opacity = String(op);
+        chip.classList.toggle('is-active', i === idx);
+        chip.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+      });
+    } else {
+      chips.forEach((chip, i) => {
+        chip.style.transform = '';
+        chip.style.opacity = '';
+        chip.classList.toggle('is-active', i === idx);
+        chip.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+      });
       const activeChip = chips[idx];
       if (activeChip && activeChip.scrollIntoView) {
         activeChip.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
