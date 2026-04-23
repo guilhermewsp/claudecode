@@ -893,7 +893,7 @@ section.hero::before {
   border-top: 1px solid var(--g300);
 }
 .hero-stat { padding-right: 18px; }
-.hero-stat + .hero-stat { padding-left: 18px; border-left: 1px solid var(--g300); }
+.hero-stat + .hero-stat { padding-left: 18px; }
 .hero-stat-num {
   font-family: var(--font-display);
   font-size: clamp(18px, 1.8vw, 22px);
@@ -911,7 +911,7 @@ section.hero::before {
 }
 @media (max-width: 640px) {
   .hero-stats { grid-template-columns: 1fr; gap: 14px; }
-  .hero-stat + .hero-stat { padding-left: 0; border-left: 0; padding-top: 14px; border-top: 1px solid var(--g300); }
+  .hero-stat + .hero-stat { padding-left: 0; border-left: 0; padding-top: 14px; }
 }
 
 /* ==================== FX WIDGET ==================== */
@@ -3391,9 +3391,9 @@ footer {
   .fx-btn { padding: 12px; font-size: 14px; height: 44px; }
 
   /* Hero stats */
-  .hero-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding-top: 16px; margin-top: 16px; border-top: 1px solid var(--g300); }
+  .hero-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding-top: 16px; margin-top: 16px; }
   .hero-stat { padding-right: 8px; }
-  .hero-stat + .hero-stat { padding-left: 8px; border-left: 1px solid var(--g300); padding-top: 0; border-top: 0; }
+  .hero-stat + .hero-stat { padding-left: 8px; padding-top: 0; }
   .hero-stat-num { font-size: 16px; }
   .hero-stat-label { font-size: 10px; }
 
@@ -3504,7 +3504,7 @@ footer {
 @media (max-width: 380px) {
   .hero h1 { font-size: 30px; line-height: 1.04; }
   .hero-stats { grid-template-columns: 1fr; }
-  .hero-stat + .hero-stat { padding-left: 0; padding-top: 10px; border-left: 0; border-top: 1px solid var(--g300); }
+  .hero-stat + .hero-stat { padding-left: 0; padding-top: 10px; border-left: 0; }
   .cta-row { grid-template-columns: 1fr; }
   .fx-widget { padding: 14px; }
 }
