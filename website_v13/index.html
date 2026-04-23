@@ -3580,24 +3580,25 @@ footer {
 }
 
 /* ============================================================
-   MOMENTO CAROUSEL (v13) — feature carousel: chips roleta + slides crossfade
+   MOMENTO CAROUSEL (v13 fix) — chips dark/outline + imagem protagonista
    ============================================================ */
 .momento-carousel {
   display: grid;
-  grid-template-columns: 40% 60%;
+  grid-template-columns: 38% 62%;
   gap: 0;
-  border: 1px solid rgba(249,247,243,0.12);
-  border-radius: 40px;
+  border: 1px solid rgba(249,247,243,0.10);
+  border-radius: 24px;
   overflow: hidden;
   background: var(--dark);
-  min-height: 540px;
+  min-height: 580px;
   position: relative;
 }
 
-/* CHIPS COLUMN (left, gold panel) */
+/* CHIPS COLUMN (left, dark panel — discreto) */
 .mc-chips-col {
-  background: var(--gold-hover);
-  padding: 32px 20px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0) 100%);
+  border-right: 1px solid rgba(249,247,243,0.06);
+  padding: 40px 24px;
   position: relative;
   display: flex; align-items: center;
   overflow: hidden;
@@ -3605,43 +3606,43 @@ footer {
 .mc-chips {
   position: relative;
   width: 100%;
-  height: 60px;       /* altura de UMA chip; o resto é translate */
+  height: 56px;       /* altura de UMA chip; resto é translate */
   display: flex; flex-direction: column;
   align-items: stretch;
 }
 .mc-chip {
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 60px;
+  height: 56px;
   display: flex; align-items: center; gap: 14px;
-  padding: 0 22px;
+  padding: 0 26px;
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.14);
   border-radius: 999px;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.7);
   font-family: var(--font-mono);
-  font-size: 13px; letter-spacing: 0.18em;
+  font-size: 12px; letter-spacing: 0.16em;
+  text-transform: uppercase;
   cursor: pointer;
   text-align: left;
   white-space: nowrap;
   transition:
     transform .7s cubic-bezier(.34,1.56,.64,1),
     opacity .4s ease,
-    background .5s ease,
-    color .5s ease,
-    border-color .5s ease;
+    background .35s ease,
+    color .35s ease,
+    border-color .35s ease;
   will-change: transform, opacity;
 }
-.mc-chip:hover { border-color: rgba(255,255,255,0.45); color: rgba(255,255,255,0.85); }
+.mc-chip:hover { border-color: rgba(240,140,0,0.55); color: #fff; }
 .mc-chip.is-active {
-  background: #fff;
-  color: var(--gold-hover);
-  border-color: #fff;
-  font-weight: 600;
+  background: var(--gold);
+  color: var(--dark);
+  border-color: var(--gold);
+  font-weight: 700;
+  box-shadow: 0 8px 24px -8px rgba(240,140,0,0.55);
 }
-.mc-chip-num {
-  font-weight: 700; opacity: 0.85;
-}
+.mc-chip-num { font-weight: 700; opacity: 0.85; }
 .mc-chip-label { flex: 1; }
 
 /* STAGE COLUMN (right, image slides) */
@@ -3649,10 +3650,10 @@ footer {
   position: relative;
   background: #0a0a08;
   overflow: hidden;
-  min-height: 540px;
+  min-height: 580px;
 }
 .mc-badge {
-  position: absolute; top: 22px; left: 22px;
+  position: absolute; top: 18px; left: 18px;
   z-index: 4;
   display: inline-flex; align-items: center; gap: 8px;
   padding: 7px 12px;
@@ -3664,111 +3665,143 @@ footer {
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.3em;
-  color: rgba(255,255,255,0.85);
+  color: rgba(255,255,255,0.9);
   text-transform: uppercase;
 }
 .mc-dot {
   width: 6px; height: 6px; border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 10px #fff;
+  background: var(--gold);
+  box-shadow: 0 0 10px var(--gold);
   animation: mcDotPulse 1.6s ease-in-out infinite;
 }
 @keyframes mcDotPulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 10px #fff; }
-  50%      { opacity: 0.4; box-shadow: 0 0 4px #fff; }
+  0%, 100% { opacity: 1; box-shadow: 0 0 10px var(--gold); }
+  50%      { opacity: 0.4; box-shadow: 0 0 4px var(--gold); }
 }
 
 .mc-slide {
   position: absolute; inset: 0;
   opacity: 0;
-  transform: scale(0.95) rotate(2deg);
-  transition: opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1), filter .6s ease;
-  filter: grayscale(1) blur(2px) brightness(.75);
+  transform: scale(0.96);
+  transition: opacity .55s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1);
   pointer-events: none;
-  will-change: opacity, transform, filter;
+  will-change: opacity, transform;
 }
 .mc-slide img {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
   display: block;
+  background: #0a0a08;  /* esconde alt-text vazado se imagem demorar */
+  color: transparent;   /* alt-text invisível durante load */
 }
 .mc-slide.is-active {
   opacity: 1;
-  transform: scale(1) rotate(0deg);
-  filter: none;
+  transform: scale(1);
   pointer-events: auto;
   z-index: 2;
 }
 .mc-slide.is-prev,
 .mc-slide.is-next {
-  opacity: 0.4;
-  transform: scale(0.85) rotate(-3deg);
-  filter: grayscale(1) blur(2px) brightness(.75);
+  opacity: 0;
+  transform: scale(0.96);
   z-index: 1;
 }
-.mc-slide.is-next { transform: scale(0.85) rotate(3deg); }
 
 .mc-overlay {
   position: absolute; left: 0; right: 0; bottom: 0;
   z-index: 3;
-  padding: 32px 28px 28px;
+  padding: 28px 28px 32px;
   background: linear-gradient(180deg,
     rgba(10,10,8,0) 0%,
-    rgba(10,10,8,0.4) 35%,
-    rgba(10,10,8,0.85) 75%,
-    rgba(10,10,8,0.95) 100%);
-  display: flex; flex-direction: column; gap: 12px;
+    rgba(10,10,8,0) 55%,
+    rgba(10,10,8,0.85) 88%,
+    rgba(10,10,8,0.96) 100%);
+  display: flex; flex-direction: column; gap: 10px;
 }
 .mc-pill {
   align-self: flex-start;
-  padding: 6px 12px;
-  background: #fff;
-  color: var(--dark);
-  border: 1px solid rgba(10,10,8,0.1);
+  padding: 5px 12px;
+  background: rgba(10,10,8,0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.22);
   border-radius: 999px;
   font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  height: 28px;
+  display: inline-flex; align-items: center;
 }
 .mc-title {
   font-family: var(--font-display);
-  font-size: clamp(22px, 2.4vw, 30px);
+  font-size: clamp(22px, 2.3vw, 30px);
   font-weight: 600;
   color: #fff;
   letter-spacing: -0.018em;
-  line-height: 1.15;
+  line-height: 1.18;
   max-width: 32ch;
+  margin: 0;
 }
 .mc-desc {
   font-size: 14.5px;
-  color: rgba(255,255,255,0.78);
+  color: rgba(255,255,255,0.82);
   line-height: 1.55;
   max-width: 56ch;
+  margin: 0;
 }
 .mc-tag {
+  margin-top: 4px;
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
   color: rgba(255,255,255,0.55);
   text-transform: uppercase;
 }
 
+/* Progress bar — feedback de autoplay */
+.mc-progress {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 3px; z-index: 5;
+  background: rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+.mc-progress-fill {
+  display: block; height: 100%; width: 100%;
+  background: var(--gold);
+  transform-origin: left center;
+  transform: scaleX(0);
+  box-shadow: 0 0 12px rgba(240,140,0,0.6);
+}
+.mc-progress-fill.is-running {
+  animation: mcProgress 4s linear forwards;
+}
+.mc-progress-fill.is-paused { animation-play-state: paused; }
+@keyframes mcProgress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mc-chip, .mc-slide { transition: none !important; }
-  .mc-dot { animation: none !important; }
+  .mc-dot, .mc-progress-fill { animation: none !important; }
+  .mc-progress-fill { transform: scaleX(0); }
 }
 
 /* Mobile: empilhar */
 @media (max-width: 900px) {
   .momento-carousel {
     grid-template-columns: 1fr;
-    border-radius: 24px;
+    border-radius: 20px;
     min-height: 0;
   }
   .mc-chips-col {
     padding: 14px 12px;
+    border-right: none;
+    border-bottom: 1px solid rgba(249,247,243,0.06);
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
@@ -3785,7 +3818,7 @@ footer {
   }
   .mc-chip {
     position: static;
-    height: 38px;
+    height: 36px;
     padding: 0 14px;
     font-size: 11px;
     letter-spacing: 0.14em;
@@ -3795,9 +3828,9 @@ footer {
   }
   .mc-stage {
     min-height: 0;
-    aspect-ratio: 4/5;
+    aspect-ratio: 3/4;
   }
-  .mc-overlay { padding: 22px 18px 18px; }
+  .mc-overlay { padding: 22px 18px 22px; }
   .mc-title { font-size: clamp(18px, 5vw, 22px); max-width: 100%; }
   .mc-desc { font-size: 13px; }
   .mc-badge { top: 14px; left: 14px; padding: 5px 10px; font-size: 9px; }
@@ -4370,9 +4403,9 @@ footer {
         <div class="mc-badge"><span class="mc-dot"></span>SESSÃO AO VIVO</div>
 
         <div class="mc-slide is-active" data-i="0">
-          <img src="https://images.unsplash.com/photo-1483729558449-99ef09a8c325?q=80&w=1400&auto=format&fit=crop" alt="Brasil — vista urbana" loading="eager"/>
+          <img src="https://images.unsplash.com/photo-1483729558449-99ef09a8c325?q=80&w=1400&auto=format&fit=crop" alt="" loading="eager"/>
           <div class="mc-overlay">
-            <div class="mc-pill">01 · #2 MERCADO MUNDIAL</div>
+            <div class="mc-pill">#2 MERCADO MUNDIAL</div>
             <h3 class="mc-title">Brasil é o #2 mercado de stablecoin do mundo</h3>
             <p class="mc-desc">Mais de 90% do volume on-chain no Brasil é stablecoin. Demanda real — não depende de ciclo de cripto.</p>
             <div class="mc-tag">CHAINALYSIS · 2024</div>
@@ -4380,9 +4413,9 @@ footer {
         </div>
 
         <div class="mc-slide" data-i="1">
-          <img src="https://images.unsplash.com/photo-1556742044-3c52d6e88c62?q=80&w=1400&auto=format&fit=crop" alt="Pagamento mobile" loading="lazy"/>
+          <img src="https://images.unsplash.com/photo-1556742044-3c52d6e88c62?q=80&w=1400&auto=format&fit=crop" alt="" loading="lazy"/>
           <div class="mc-overlay">
-            <div class="mc-pill">02 · R$ 4,2B POR DIA</div>
+            <div class="mc-pill">R$ 4,2B POR DIA</div>
             <h3 class="mc-title">R$ 4,2B em PIX por dia</h3>
             <p class="mc-desc">Trilho mais rápido do planeta.</p>
             <div class="mc-tag">BCB · 2024</div>
@@ -4390,9 +4423,9 @@ footer {
         </div>
 
         <div class="mc-slide" data-i="2">
-          <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1400&auto=format&fit=crop" alt="Datacenter" loading="lazy"/>
+          <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1400&auto=format&fit=crop" alt="" loading="lazy"/>
           <div class="mc-overlay">
-            <div class="mc-pill">03 · 24/7 SEMPRE NO AR</div>
+            <div class="mc-pill">24/7 SEMPRE NO AR</div>
             <h3 class="mc-title">99,97% de disponibilidade</h3>
             <p class="mc-desc">Sempre no ar — fim de semana, feriado, madrugada.</p>
             <div class="mc-tag">CONTÍNUO</div>
@@ -4400,9 +4433,9 @@ footer {
         </div>
 
         <div class="mc-slide" data-i="3">
-          <img src="https://images.unsplash.com/photo-1564509027875-1f31e5ea7014?q=80&w=1400&auto=format&fit=crop" alt="Brasília institucional" loading="lazy"/>
+          <img src="https://images.unsplash.com/photo-1564509027875-1f31e5ea7014?q=80&w=1400&auto=format&fit=crop" alt="" loading="lazy"/>
           <div class="mc-overlay">
-            <div class="mc-pill">04 · CÂMBIO REGULADO</div>
+            <div class="mc-pill">CÂMBIO REGULADO</div>
             <h3 class="mc-title">Stablecoin como câmbio oficial</h3>
             <p class="mc-desc">Caminho regulado para comprar dólar existe.</p>
             <div class="mc-tag">BCB · 2025</div>
@@ -4410,14 +4443,16 @@ footer {
         </div>
 
         <div class="mc-slide" data-i="4">
-          <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1400&auto=format&fit=crop" alt="Pessoas com smartphone" loading="lazy"/>
+          <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1400&auto=format&fit=crop" alt="" loading="lazy"/>
           <div class="mc-overlay">
-            <div class="mc-pill">05 · 150M USUÁRIOS</div>
+            <div class="mc-pill">150M USUÁRIOS</div>
             <h3 class="mc-title">150M contas PIX ativas</h3>
             <p class="mc-desc">Infraestrutura que já está nas mãos do usuário.</p>
             <div class="mc-tag">BCB · 2024</div>
           </div>
         </div>
+
+        <div class="mc-progress" aria-hidden="true"><span class="mc-progress-fill"></span></div>
       </div>
     </div>
   </div>
@@ -5176,49 +5211,68 @@ document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => observer.o
   targets.forEach(el => io.observe(el));
 })();
 
-/* ==================== MOMENTO CAROUSEL (v13) ==================== */
+/* ==================== MOMENTO CAROUSEL (v13 fix) ==================== */
 (function initMomentoCarousel(){
   const root = document.querySelector('[data-momento-carousel]');
   if (!root) return;
   const chips = root.querySelectorAll('.mc-chip');
   const slides = root.querySelectorAll('.mc-slide');
+  const progress = root.querySelector('.mc-progress-fill');
   if (!chips.length || !slides.length) return;
-  const ITEM_H = 60; // altura de cada chip (desktop)
+  const ITEM_H = 68; // altura chip (56) + gap (12)
+  const AUTOPLAY_MS = 4000;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isMobile = () => window.matchMedia('(max-width: 900px)').matches;
   let idx = 0;
   let timer = null;
   const total = chips.length;
 
+  function resetProgress(){
+    if (!progress) return;
+    progress.classList.remove('is-running', 'is-paused');
+    // force reflow para reiniciar a animação
+    void progress.offsetWidth;
+  }
+  function startProgress(){
+    if (!progress || reduce) return;
+    progress.classList.remove('is-paused');
+    progress.classList.add('is-running');
+  }
+  function pauseProgress(){
+    if (!progress) return;
+    progress.classList.add('is-paused');
+  }
+
   function setActive(newIdx){
     idx = ((newIdx % total) + total) % total;
-    // Chips: efeito roleta vertical no desktop, scroll horizontal no mobile
     if (!isMobile()) {
       chips.forEach((chip, i) => {
         const diff = i - idx;
         chip.style.transform = `translateY(${diff * ITEM_H}px)`;
-        chip.style.opacity = String(1 - Math.min(Math.abs(diff) * 0.25, 0.75));
+        chip.style.opacity = String(1 - Math.min(Math.abs(diff) * 0.22, 0.7));
         chip.classList.toggle('is-active', i === idx);
         chip.setAttribute('aria-selected', i === idx ? 'true' : 'false');
       });
     } else {
       chips.forEach((chip, i) => {
+        chip.style.transform = '';
+        chip.style.opacity = '';
         chip.classList.toggle('is-active', i === idx);
         chip.setAttribute('aria-selected', i === idx ? 'true' : 'false');
       });
-      // Centralizar chip ativo no scroll horizontal
       const activeChip = chips[idx];
       if (activeChip && activeChip.scrollIntoView) {
         activeChip.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
       }
     }
-    // Slides: aplicar is-active / is-prev / is-next
     slides.forEach((slide, i) => {
       slide.classList.remove('is-active', 'is-prev', 'is-next');
       if (i === idx) slide.classList.add('is-active');
       else if (i === (idx - 1 + total) % total) slide.classList.add('is-prev');
       else if (i === (idx + 1) % total) slide.classList.add('is-next');
     });
+    resetProgress();
+    if (timer) startProgress();
   }
 
   function next(){ setActive(idx + 1); }
@@ -5226,15 +5280,30 @@ document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => observer.o
   function startAuto(){
     if (reduce) return;
     stopAuto();
-    timer = setInterval(next, 4000);
+    timer = setInterval(next, AUTOPLAY_MS);
+    startProgress();
   }
-  function stopAuto(){ if (timer) { clearInterval(timer); timer = null; } }
+  function stopAuto(){
+    if (timer) { clearInterval(timer); timer = null; }
+    pauseProgress();
+  }
 
   chips.forEach((chip, i) => {
     chip.addEventListener('click', () => { setActive(i); startAuto(); });
-    chip.addEventListener('mouseenter', stopAuto);
-    chip.addEventListener('mouseleave', startAuto);
   });
+
+  // Hover no stage inteiro pausa autoplay
+  const stage = root.querySelector('.mc-stage');
+  if (stage) {
+    stage.addEventListener('mouseenter', stopAuto);
+    stage.addEventListener('mouseleave', startAuto);
+  }
+  // Hover nos chips também pausa
+  const chipsCol = root.querySelector('.mc-chips-col');
+  if (chipsCol) {
+    chipsCol.addEventListener('mouseenter', stopAuto);
+    chipsCol.addEventListener('mouseleave', startAuto);
+  }
 
   // Pause autoplay quando seção sai da viewport
   if ('IntersectionObserver' in window) {
