@@ -773,6 +773,42 @@ section.hero {
   position: relative;
   overflow: hidden;
 }
+/* Hero bg distinto — aurora gold + fade bottom (cobre grid+darken só aqui) */
+section.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% -10%,
+      rgba(240,140,0,0.42) 0%,
+      rgba(240,140,0,0.16) 35%,
+      transparent 65%),
+    radial-gradient(ellipse 60% 80% at 105% 35%,
+      rgba(255,184,77,0.20) 0%,
+      transparent 55%),
+    radial-gradient(ellipse 50% 60% at -5% 70%,
+      rgba(199,123,22,0.16) 0%,
+      transparent 60%),
+    linear-gradient(180deg,
+      #100c08 0%,
+      #0c0a08 55%,
+      rgba(10,10,8,0.85) 100%);
+}
+section.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(249,247,243,0.06) 1px, transparent 0);
+  background-size: 28px 28px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 75% at 50% 35%, #000 30%, transparent 80%);
+          mask-image: radial-gradient(ellipse 80% 75% at 50% 35%, #000 30%, transparent 80%);
+  opacity: 0.7;
+}
 .hero-grid {
   display: grid;
   grid-template-columns: 1.15fr 1fr;
