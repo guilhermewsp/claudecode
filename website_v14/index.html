@@ -1426,6 +1426,13 @@ section { padding-block: clamp(58px, 7.2vw, 96px); }    /* -20% v13 */
   text-wrap: balance;
   -webkit-text-wrap: balance;
 }
+
+/* v14.9: "Transferência de $100K · USD → BRL" em linha única no desktop */
+.sec-compare .section-head { max-width: 960px; }
+.sec-compare .section-head h2 { font-size: clamp(22px, 3.2vw, 42px); letter-spacing: -0.015em; }
+@media (min-width: 901px) {
+  .sec-compare .section-head h2 { white-space: nowrap; text-wrap: nowrap; }
+}
 .section-head p {
   font-size: clamp(15px, 1.2vw, 18px);
   color: var(--g700);
