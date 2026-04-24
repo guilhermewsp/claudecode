@@ -4191,6 +4191,21 @@ footer {
    para deixar cada card em ~40-50% da altura de um iPhone padrão.
    ============================================================ */
 @media (max-width: 768px) {
+  /* -------- HERO H1 (v14.2) — linha única "Compre Peso 24/7." --------
+     Motivo: 3 linhas ocupam muita altura no mobile. Comprime para 1 linha
+     (quebra natural se faltar largura). O span rotativo (Dólar/Euro/...) é
+     ocultado e substituído por "Peso" via ::before na última .static. */
+  .hero h1 br { display: none !important; }
+  .hero h1 .hero-cycle { display: none !important; }
+  .hero h1 .static { display: inline !important; }
+  .hero h1 .static:last-of-type::before {
+    content: "Peso ";
+  }
+  .hero h1 {
+    white-space: normal !important;
+    line-height: 1.08 !important;
+  }
+
   /* -------- PRODUCT CARDS (Casos de Uso) -------- */
   /* v14: esconde o painel lateral (PAGAMENTOS/~1 min/TAXA/SPREAD/FALHA) — só content principal */
   .product-card .product-panel { display: none !important; }
