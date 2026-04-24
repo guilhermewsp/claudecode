@@ -1421,11 +1421,18 @@ section { padding-block: clamp(58px, 7.2vw, 96px); }    /* -20% v13 */
 @media (max-width: 900px) { section { padding-block: 45px; } }
 
 .section-head { max-width: 780px; margin-bottom: 56px; }
+.section-head h2 {
+  /* v14.8: balanceia quebras em todos os títulos de seção */
+  text-wrap: balance;
+  -webkit-text-wrap: balance;
+}
 .section-head p {
   font-size: clamp(15px, 1.2vw, 18px);
   color: var(--g700);
   line-height: 1.55;
   margin-top: 16px;
+  text-wrap: pretty;
+  -webkit-text-wrap: pretty;
 }
 
 /* Reveal */
