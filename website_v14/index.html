@@ -776,30 +776,20 @@ section.hero {
   position: relative;
   overflow: hidden;
 }
-/* Hero bg distinto — aurora gold sutil (cobre grid+darken só aqui) */
+/* Hero bg v14.7 — preto puro com fade pro transparente no bottom.
+   Antes: 3 radiais gold criavam aurora. Removidos a pedido. */
 section.hero::before {
   content: '';
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background:
-    radial-gradient(ellipse 70% 55% at 50% -10%,
-      rgba(240,140,0,0.18) 0%,
-      rgba(240,140,0,0.06) 40%,
-      transparent 70%),
-    radial-gradient(ellipse 60% 80% at 105% 35%,
-      rgba(255,184,77,0.08) 0%,
-      transparent 60%),
-    radial-gradient(ellipse 50% 55% at -5% 55%,
-      rgba(199,123,22,0.06) 0%,
-      transparent 65%),
-    linear-gradient(180deg,
-      #0d0b08 0%,
-      #0c0b08 40%,
-      rgba(11,10,8,0.85) 70%,
-      rgba(10,10,8,0.45) 88%,
-      rgba(10,10,8,0) 100%);
+  background: linear-gradient(180deg,
+    #0a0a08 0%,
+    #0a0a08 45%,
+    rgba(10,10,8,0.9) 72%,
+    rgba(10,10,8,0.55) 88%,
+    rgba(10,10,8,0) 100%);
 }
 .hero-grid {
   display: grid;
@@ -893,7 +883,7 @@ section.hero::before {
   grid-template-columns: repeat(3, 1fr);
   gap: 0;
   padding-top: 28px;
-  border-top: 1px solid var(--g300);
+  /* v14.7: border-top removido — traço acima dos stats estava pesado */
 }
 .hero-stat { padding-right: 18px; }
 .hero-stat + .hero-stat { padding-left: 18px; }
