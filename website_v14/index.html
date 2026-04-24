@@ -3252,7 +3252,14 @@ footer:not(.footer-v5) { display: none !important; }
   pointer-events: none;
 }
 .final-cta-inner { position: relative; z-index: 2; }
-.final-cta-card h2 { margin-bottom: 28px; max-width: 720px; margin-left: auto; margin-right: auto; }
+.final-cta-card h2 {
+  margin-bottom: 28px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+  text-wrap: balance;      /* v14: balanceia quebras pra não deixar palavra órfã */
+  -webkit-text-wrap: balance;
+}
 .final-benefits {
   display: flex;
   justify-content: center;
@@ -5269,7 +5276,7 @@ footer {
       <div class="final-cta-card">
         <div class="final-cta-inner">
           <span class="eyebrow" style="justify-content:center;">Early access</span>
-          <h2>Comece a mover dólares com<br/>mais confiança e mais rápido.</h2>
+          <h2>Comece a mover dólares com mais confiança e mais rápido.</h2>
           <div class="final-benefits">
             <span>Ramps de stablecoin 24/7</span>
             <span>BRL → USD com simplicidade</span>
