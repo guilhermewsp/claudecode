@@ -4345,6 +4345,54 @@ footer {
 
   /* -------- Stagger opt-in via --delay (compat com --delay existente em tracers) -------- */
   .m-reveal[style*="--delay"] { transition-delay: var(--delay) !important; }
+
+  /* -------- DEMO (v14.4): capa horizontal com screenshot do dashboard --------
+     Esconde o demo-body completo (não cabe no mobile) e mostra demo-preview.png
+     como capa em aspect ratio landscape. */
+  section.sec-demo .demo-body { display: none !important; }
+  section.sec-demo .demo-chrome { display: none !important; }
+  section.sec-demo .demo-mobile-preview {
+    display: block !important;
+    padding: 16px !important;
+    text-align: center !important;
+  }
+  section.sec-demo .pv-cover {
+    position: relative;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(240,140,0,0.22);
+    box-shadow: 0 18px 42px -16px rgba(0,0,0,0.55), 0 0 0 1px rgba(240,140,0,0.06);
+    margin-bottom: 16px;
+    background: #0d0d0b;
+  }
+  section.sec-demo .pv-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2205 / 954;  /* proporção nativa do screenshot */
+    object-fit: cover;
+  }
+  section.sec-demo .pv-cover .pv-live {
+    position: absolute;
+    top: 10px; left: 10px;
+    font-family: var(--font-mono);
+    font-size: 9px; letter-spacing: 0.18em;
+    padding: 4px 8px;
+    background: rgba(10,10,8,0.75);
+    border: 1px solid rgba(240,140,0,0.45);
+    color: var(--gold);
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 2;
+  }
+  section.sec-demo .scroll-card {
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
 }
 </style>
 </head>
@@ -5019,14 +5067,11 @@ footer {
         <div class="demo-url">0nstack.io/app</div>
         <div class="demo-tab"><span class="demo-tab-dot"></span>Ativo</div>
       </div>
-      <!-- Demo mobile preview (substitui o mockup completo no mobile) -->
+      <!-- Demo mobile preview (v14.4): capa horizontal com screenshot real do dashboard -->
       <div class="demo-mobile-preview" aria-hidden="true">
-        <div class="pv-thumb">
+        <div class="pv-cover">
+          <img class="pv-image" src="demo-preview.png" alt="Dashboard 0nStack — visão real do produto" loading="lazy" />
           <span class="pv-live">● AO VIVO</span>
-          <div class="pv-play">▶</div>
-          <div class="pv-bars">
-            <span></span><span></span><span></span><span></span><span></span>
-          </div>
         </div>
         <div class="pv-title">A plataforma completa, ao vivo</div>
         <div class="pv-sub">Dashboard multicurrency, histórico on-chain, API pronta pra produção.</div>
