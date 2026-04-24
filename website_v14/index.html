@@ -4450,6 +4450,23 @@ footer {
 
   /* Spacing enxuto da scroll-stage no mobile */
   section.sec-demo .scroll-stage { padding: 0 16px !important; }
+
+  /* -------- FOOTER (v14.6): 3 colunas lado a lado, Recursos ocultada -------- */
+  .footer-v5-cols {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 16px !important;
+  }
+  /* Ordem das cols: 1 Produto / 2 Empresa / 3 Recursos / 4 Social — some a 3ª */
+  .footer-v5-col:nth-child(3) { display: none !important; }
+  .footer-v5-col h5 {
+    font-size: 9px !important;
+    letter-spacing: 0.18em !important;
+    margin-bottom: 10px !important;
+  }
+  .footer-v5-col li { margin-bottom: 6px !important; }
+  .footer-v5-col li a { font-size: 11.5px !important; }
+  /* Social ícones menores pra caber */
+  .footer-v5-social li a svg { width: 13px !important; height: 13px !important; }
 }
 </style>
 </head>
