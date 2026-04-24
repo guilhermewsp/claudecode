@@ -4192,20 +4192,21 @@ footer {
    ============================================================ */
 @media (max-width: 768px) {
   /* -------- PRODUCT CARDS (Casos de Uso) -------- */
+  /* v14: esconde o painel lateral (PAGAMENTOS/~1 min/TAXA/SPREAD/FALHA) — só content principal */
+  .product-card .product-panel { display: none !important; }
   .product-card .tilt-inner.product-card-inner {
+    grid-template-columns: 1fr !important;
     padding: 18px !important;
-    gap: 14px !important;
+    gap: 0 !important;
   }
   .product-tag { font-size: 10px !important; letter-spacing: 0.14em !important; margin-bottom: 8px !important; }
   .product-card h3 { font-size: 1.125rem !important; line-height: 1.25 !important; margin-bottom: 6px !important; }
   .product-desc { font-size: 0.875rem !important; line-height: 1.5 !important; margin-bottom: 14px !important; }
-  .product-bullets { gap: 8px !important; margin-bottom: 14px !important; }
+  .product-bullets { gap: 8px !important; margin-bottom: 16px !important; }
   .product-bullets li { font-size: 0.8125rem !important; gap: 10px !important; line-height: 1.45 !important; }
   .product-bullets svg { width: 16px !important; height: 16px !important; }
-  .product-panel { padding: 14px !important; }
-  .product-panel-big { font-size: clamp(22px, 6.2vw, 26px) !important; }
-  .product-panel-row { font-size: 12.5px !important; }
-  .product-panel-head { font-size: 11px !important; }
+  /* CTA não precisa de margin-bottom sem o painel abaixo */
+  .product-card .shiny-btn { margin-bottom: 0 !important; }
 
   /* -------- FLOW STEPS (Como Funciona) -------- */
   section#como .flow-step { padding: 18px 16px !important; gap: 12px !important; min-height: auto !important; }
