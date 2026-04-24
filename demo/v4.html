@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ØNSTACK — Platform Demo</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200;300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+/* ── BRANDBOOK TOKENS ── */
+:root {
+  --gold: #f08c00;
+  --gold-h: #e07d00;
+  --gold-g: rgba(240,140,0,.08);
+  --gold-mid: #f9c06a;
+  --green: #16A34A;
+  --green-bg: rgba(22,163,74,.08);
+  --red: #DC2626;
+  --red-bg: rgba(220,38,38,.08);
+  --blue: #2563EB;
+  --blue-bg: rgba(37,99,235,.08);
+  --warning: #D97706;
+  --warning-bg: rgba(217,119,6,.08);
+  --fd: 'Oxanium', sans-serif;
+  --fb: 'Inter', sans-serif;
+  --fm: 'JetBrains Mono', monospace;
+  --r-xs: 4px; --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 20px; --r-2xl: 28px;
+  --ease-micro: cubic-bezier(0.4,0,0.2,1);
+  --ease-trans: cubic-bezier(0,0,0.2,1);
+  --dur-micro: 200ms;
+  --dur-trans: 300ms;
+}
+
+[data-theme="dark"] {
+  --bg:  #0d0d0d;
+  --bg2: #111111;
+  --bg3: #1a1a1a;
+  --bg4: #222222;
+  --bg5: #2a2a2a;
+  --border:  rgba(255,255,255,.05);
+  --border2: rgba(255,255,255,.10);
+  --t1: #f4f2ed;
+  --t2: #888683;
+  --t3: #4a4845;
+  --card-bg: #141414;
+  --hover-bg: rgba(255,255,255,.025);
+}
+[data-theme="light"] {
+  --bg:  #f9f7f3;
+  --bg2: #ffffff;
+  --bg3: #f4f2ed;
+  --bg4: #e8e5df;
+  --bg5: #dddad4;
+  --border:  rgba(0,0,0,.07);
+  --border2: rgba(0,0,0,.13);
+  --t1: #1a1a1a;
+  --t2: #666360;
+  --t3: #999690;
+  --card-bg: #ffffff;
+  --hover-bg: rgba(0,0,0,.025);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:var(--fb); background:var(--bg); color:var(--t1); font-size:13px; overflow:hidden; height:100vh; transition:background var(--dur-trans),color var(--dur-trans); -webkit-font-smoothing:antialiased; }
+a { text-decoration:none; color:inherit; }
+button { cursor:pointer; border:none; background:none; font-family:inherit; color:inherit; }
+::-webkit-scrollbar { width:3px; } ::-webkit-scrollbar-track { background:transparent; } ::-webkit-scrollbar-thumb { background:var(--bg5); border-radius:2px; }
+
+/* ── TOAST ── */
+.toast { position:fixed; bottom:24px; right:24px; background:var(--bg3); border:1px solid var(--border2); border-radius:var(--r-md); padding:12px 18px; font-size:12px; color:var(--t1); z-index:9999; transform:translateY(12px); opacity:0; transition:all .35s var(--ease-trans); display:flex; align-items:center; gap:8px; box-shadow:0 8px 24px rgba(0,0,0,.25); }
+.toast.show { transform:translateY(0); opacity:1; }
+.toast::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--green); flex-shrink:0; }
+
+/* ── LOGIN ── */
+#login { position:fixed; inset:0; background:var(--bg); z-index:9999; display:flex; align-items:center; justify-content:center; transition:opacity .5s, visibility .5s; }
+#login.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+.login-bg { position:absolute; inset:0; overflow:hidden; }
+.login-orb { position:absolute; border-radius:50%; filter:blur(90px); animation:orbFloat 9s ease-in-out infinite; }
+.login-orb1 { width:360px; height:360px; background:rgba(240,140,0,.07); top:15%; left:15%; }
+.login-orb2 { width:240px; height:240px; background:rgba(240,140,0,.04); bottom:20%; right:20%; animation-delay:4s; }
+@keyframes orbFloat { 0%,100%{transform:translate(0,0)} 50%{transform:translate(24px,-18px)} }
+.login-box { width:380px; padding:40px; background:var(--bg3); border:1px solid var(--border2); border-radius:var(--r-2xl); position:relative; z-index:1; backdrop-filter:blur(24px); box-shadow:0 32px 80px rgba(0,0,0,.4); }
+.login-logo { font-family:var(--fd); font-size:17px; letter-spacing:.22em; text-align:center; margin-bottom:6px; }
+.login-sub { text-align:center; font-size:11px; color:var(--t3); margin-bottom:32px; letter-spacing:.02em; }
+.field { margin-bottom:14px; }
+.field label { display:block; font-size:11px; font-weight:500; color:var(--t2); margin-bottom:5px; letter-spacing:.01em; }
+.field input, .field select { width:100%; padding:10px 14px; background:var(--bg2); border:1px solid var(--border2); border-radius:var(--r-sm); color:var(--t1); font-family:var(--fb); font-size:13px; outline:none; transition:border-color var(--dur-micro), box-shadow var(--dur-micro); }
+.field input:focus, .field select:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(240,140,0,.12); }
+.field select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888683' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:32px; }
+.field select option { background:var(--bg3); }
+.field-2fa { display:flex; gap:8px; justify-content:center; }
+.field-2fa input { width:42px; height:48px; text-align:center; font-family:var(--fm); font-size:20px; padding:0; border-radius:var(--r-sm); }
+.btn-primary { width:100%; padding:12px; background:var(--gold); color:#111; font-weight:600; font-size:14px; border:none; border-radius:var(--r-sm); cursor:pointer; transition:background var(--dur-micro), box-shadow var(--dur-micro), transform var(--dur-micro); margin-top:8px; letter-spacing:.01em; }
+.btn-primary:hover { background:var(--gold-h); box-shadow:0 0 24px rgba(240,140,0,.3); transform:translateY(-1px); }
+.btn-primary:active { transform:translateY(0); }
+
+/* ── APP SHELL ── */
+.app { display:flex; height:100vh; }
+
+/* ── SIDEBAR ── */
+.sidebar { width:216px; background:var(--bg2); border-right:1px solid var(--border); display:flex; flex-direction:column; flex-shrink:0; }
+.sb-logo { padding:18px 16px; font-family:var(--fd); font-size:13px; letter-spacing:.20em; color:var(--t1); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.sb-logo .env { font-size:9px; background:var(--gold-g); color:var(--gold); padding:2px 7px; border-radius:var(--r-xs); font-family:var(--fb); font-weight:600; letter-spacing:.05em; border:1px solid rgba(240,140,0,.2); }
+.sb-nav { flex:1; padding:8px 6px; overflow-y:auto; }
+.sb-item { display:flex; align-items:center; gap:9px; padding:9px 10px; border-radius:var(--r-sm); font-size:12.5px; color:var(--t2); cursor:pointer; transition:all var(--dur-micro) var(--ease-micro); margin-bottom:1px; position:relative; border-left:2px solid transparent; }
+.sb-item:hover { background:var(--hover-bg); color:var(--t1); }
+.sb-item.active { background:var(--gold-g); color:var(--gold); font-weight:500; border-left-color:var(--gold); }
+.sb-item .badge-count { margin-left:auto; font-size:9px; background:var(--red); color:white; padding:1px 6px; border-radius:10px; font-weight:600; }
+.sb-sep { height:1px; background:var(--border); margin:6px 10px; }
+.sb-label { font-size:9px; font-weight:700; letter-spacing:.14em; color:var(--t3); text-transform:uppercase; padding:10px 12px 4px; }
+.sb-bottom { padding:10px; border-top:1px solid var(--border); }
+.sb-user { display:flex; align-items:center; gap:10px; padding:8px; border-radius:var(--r-sm); cursor:pointer; transition:background var(--dur-micro); }
+.sb-user:hover { background:var(--hover-bg); }
+.sb-avatar { width:32px; height:32px; border-radius:50%; background:var(--gold-g); display:flex; align-items:center; justify-content:center; font-family:var(--fd); font-size:11px; color:var(--gold); border:1.5px solid rgba(240,140,0,.3); flex-shrink:0; }
+
+/* ── TOPBAR ── */
+.topbar { height:50px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 20px; background:var(--bg2); flex-shrink:0; }
+.tb-left { display:flex; align-items:center; gap:14px; }
+.tb-title { font-size:14px; font-weight:600; font-family:var(--fd); letter-spacing:.04em; }
+.tb-status { display:flex; align-items:center; gap:5px; padding:3px 9px; background:var(--green-bg); border:1px solid rgba(22,163,74,.15); border-radius:var(--r-xs); font-size:10px; }
+.tb-status .dot { width:5px; height:5px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+.tb-right { display:flex; align-items:center; gap:6px; }
+.tb-search { background:var(--bg); border:1px solid var(--border); border-radius:var(--r-sm); padding:7px 12px 7px 28px; font-size:12px; color:var(--t1); font-family:var(--fb); width:190px; outline:none; transition:all var(--dur-micro); background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%234a4845' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:9px center; }
+.tb-search:focus { border-color:var(--gold); width:240px; box-shadow:0 0 0 3px rgba(240,140,0,.1); }
+.tb-icon { width:32px; height:32px; border-radius:var(--r-sm); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all var(--dur-micro); color:var(--t2); position:relative; }
+.tb-icon:hover { background:var(--hover-bg); color:var(--t1); }
+.tb-icon .notif { position:absolute; top:6px; right:6px; width:5px; height:5px; background:var(--gold); border-radius:50%; }
+
+/* ── TICKER ── */
+.ticker { height:26px; border-bottom:1px solid var(--border); display:flex; align-items:center; overflow:hidden; background:var(--bg); flex-shrink:0; }
+.ticker-inner { display:flex; gap:20px; animation:scroll 32s linear infinite; white-space:nowrap; padding:0 12px; }
+@keyframes scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.tick { font-family:var(--fm); font-size:10px; display:flex; align-items:center; gap:5px; color:var(--t3); }
+.tick b { color:var(--t2); font-weight:500; }
+.tick .up { color:var(--green); } .tick .down { color:var(--red); }
+
+/* ── CONTENT ── */
+.main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+.content { flex:1; overflow-y:auto; padding:18px 20px; background:var(--bg); }
+.screen { display:none; animation:fadeIn .2s var(--ease-trans); }
+.screen.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+
+/* ── QUICK ACTIONS ── */
+.qa { display:flex; gap:6px; margin-bottom:18px; flex-wrap:wrap; }
+.qa-btn { display:flex; align-items:center; gap:5px; padding:7px 14px; background:var(--bg2); border:1px solid var(--border); border-radius:20px; color:var(--t2); font-size:11.5px; font-weight:500; transition:all var(--dur-micro); }
+.qa-btn:hover { background:var(--gold-g); border-color:rgba(240,140,0,.25); color:var(--gold); }
+
+/* ── CARDS ── */
+.card { background:var(--card-bg); border:1px solid var(--border); border-radius:var(--r-lg); padding:18px; transition:all var(--dur-trans) var(--ease-trans); }
+.card:hover { border-color:var(--border2); }
+.card.clickable:hover { border-color:rgba(240,140,0,.2); box-shadow:0 8px 24px rgba(0,0,0,.15); transform:translateY(-1px); }
+.card-h { font-size:11px; font-weight:600; color:var(--t2); margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; letter-spacing:.04em; text-transform:uppercase; }
+.card-h .tag { font-size:9px; background:var(--gold-g); color:var(--gold); padding:2px 7px; border-radius:var(--r-xs); font-weight:700; letter-spacing:.05em; border:1px solid rgba(240,140,0,.15); }
+.card-h a { font-size:11px; color:var(--gold); cursor:pointer; transition:opacity var(--dur-micro); text-transform:none; font-weight:400; letter-spacing:0; }
+.card-h a:hover { opacity:.7; }
+
+/* ── GRID ── */
+.g { display:grid; gap:12px; }
+.g2 { grid-template-columns:1fr 1fr; }
+.g3 { grid-template-columns:1fr 1fr 1fr; }
+.g4 { grid-template-columns:1fr 1fr 1fr 1fr; }
+
+/* ── KPI ── */
+.kpi-val { font-family:var(--fm); font-size:24px; font-weight:600; margin-bottom:3px; }
+.kpi-label { font-size:11px; color:var(--t3); margin-bottom:8px; letter-spacing:.02em; }
+.kpi-change { font-size:11px; font-weight:500; display:flex; align-items:center; gap:3px; }
+.up { color:var(--green); } .down { color:var(--red); }
+
+/* ── TABLE ── */
+.tbl { width:100%; border-collapse:collapse; }
+.tbl th { font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--t3); text-align:left; padding:8px 10px; border-bottom:1px solid var(--border); }
+.tbl td { padding:10px; border-bottom:1px solid var(--border); font-size:12px; color:var(--t2); }
+.tbl tr:last-child td { border-bottom:none; }
+.tbl tr:hover td { background:var(--hover-bg); }
+.mono { font-family:var(--fm); }
+
+/* ── BADGES ── */
+.badge { font-size:10px; font-weight:600; padding:2px 8px; border-radius:var(--r-xs); display:inline-flex; align-items:center; gap:3px; }
+.badge-green  { background:var(--green-bg);   color:var(--green); }
+.badge-gold   { background:var(--gold-g);     color:var(--gold); }
+.badge-red    { background:var(--red-bg);     color:var(--red); }
+.badge-blue   { background:var(--blue-bg);    color:var(--blue); }
+.badge-warn   { background:var(--warning-bg); color:var(--warning); }
+
+/* ── TABS (underline style — brandbook) ── */
+.tabs { display:flex; gap:0; border-bottom:1px solid var(--border); margin-bottom:16px; }
+.tab { padding:8px 16px; font-size:12px; font-weight:500; color:var(--t3); cursor:pointer; border-bottom:2px solid transparent; transition:all var(--dur-micro); margin-bottom:-1px; }
+.tab:hover { color:var(--t1); }
+.tab.active { color:var(--gold); border-bottom-color:var(--gold); }
+
+/* ── BUTTONS ── */
+.btn-gold { width:100%; padding:12px; background:var(--gold); color:#111; font-weight:600; font-size:13.5px; border:none; border-radius:var(--r-sm); cursor:pointer; transition:all var(--dur-micro) var(--ease-micro); margin-top:12px; letter-spacing:.01em; }
+.btn-gold:hover { background:var(--gold-h); box-shadow:0 0 24px rgba(240,140,0,.3); transform:translateY(-1px); }
+.btn-ghost { width:100%; padding:10px; background:none; border:1px solid var(--border2); color:var(--t2); font-size:13px; border-radius:var(--r-sm); cursor:pointer; transition:all var(--dur-micro); margin-top:8px; }
+.btn-ghost:hover { border-color:var(--gold); color:var(--gold); }
+.btn-sm { padding:5px 12px; font-size:11px; border-radius:var(--r-sm); cursor:pointer; border:1px solid var(--border); background:var(--bg3); color:var(--t2); transition:all var(--dur-micro); }
+.btn-sm:hover { border-color:var(--gold); color:var(--gold); }
+
+/* ── WATCHLIST ── */
+.wl-item { display:flex; align-items:center; justify-content:space-between; padding:9px 6px; border-bottom:1px solid var(--border); cursor:pointer; transition:background var(--dur-micro); border-radius:var(--r-sm); margin:0 -6px; }
+.wl-item:last-child { border-bottom:none; }
+.wl-item:hover { background:var(--hover-bg); }
+.wl-left { display:flex; align-items:center; gap:10px; }
+.wl-icon { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; }
+.wl-name { font-size:13px; font-weight:500; }
+.wl-pair { font-size:10px; color:var(--t3); }
+.wl-right { text-align:right; display:flex; align-items:center; gap:10px; }
+.wl-price { font-family:var(--fm); font-size:12px; font-weight:500; }
+.wl-pct { font-size:11px; font-weight:600; min-width:46px; text-align:right; }
+
+/* ── SEND FLOW ── */
+.send-box { max-width:460px; margin:0 auto; }
+.send-steps { display:flex; align-items:center; gap:8px; margin-bottom:28px; }
+.send-step { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--t3); }
+.send-step.active { color:var(--gold); font-weight:600; }
+.send-step.done { color:var(--green); }
+.send-step .num { width:20px; height:20px; border-radius:50%; border:1.5px solid currentColor; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; flex-shrink:0; }
+.send-step.active .num { background:var(--gold-g); }
+.send-step.done .num { background:var(--green); border-color:var(--green); color:white; }
+.step-line { flex:1; height:1px; background:var(--border); }
+.send-panel { display:none; animation:fadeIn .25s var(--ease-trans); }
+.send-panel.active { display:block; }
+.amount-box { background:var(--bg2); border:1px solid var(--border2); border-radius:var(--r-lg); padding:16px 18px; margin-bottom:8px; transition:border-color var(--dur-micro), box-shadow var(--dur-micro); }
+.amount-box:focus-within { border-color:var(--gold); box-shadow:0 0 0 3px rgba(240,140,0,.1); }
+.amount-box label { font-size:10px; color:var(--t3); text-transform:uppercase; letter-spacing:.08em; display:block; margin-bottom:8px; }
+.amount-row { display:flex; align-items:center; justify-content:space-between; }
+.amount-input { font-family:var(--fm); font-size:28px; font-weight:500; color:var(--t1); background:none; border:none; outline:none; width:55%; }
+.cur-select { display:flex; align-items:center; gap:6px; padding:7px 12px; background:var(--bg3); border:1px solid var(--border); border-radius:var(--r-sm); font-size:12px; font-weight:500; cursor:pointer; transition:all var(--dur-micro); }
+.cur-select:hover { border-color:var(--gold); }
+.swap-btn { width:34px; height:34px; border-radius:50%; background:var(--bg3); border:1px solid var(--border2); display:flex; align-items:center; justify-content:center; color:var(--t2); margin:6px auto; cursor:pointer; transition:all .35s var(--ease-trans); }
+.swap-btn:hover { background:var(--gold-g); border-color:var(--gold); color:var(--gold); transform:rotate(180deg); }
+.fee-box { background:var(--bg2); border:1px solid var(--border); border-radius:var(--r-md); padding:14px 16px; margin:12px 0; }
+.fee-row { display:flex; justify-content:space-between; font-size:12px; padding:3px 0; color:var(--t2); }
+.fee-row.total { color:var(--t1); font-weight:600; border-top:1px solid var(--border); padding-top:8px; margin-top:5px; }
+.save-msg { background:var(--green-bg); border:1px solid rgba(22,163,74,.15); border-radius:var(--r-sm); padding:10px 14px; font-size:11px; color:var(--green); margin:12px 0; display:flex; align-items:center; gap:8px; }
+
+/* ── DEBIT CARD ── */
+.debit-card { width:320px; height:198px; border-radius:var(--r-xl); padding:22px; position:relative; overflow:hidden; background:linear-gradient(135deg,#1a1a22 0%,#252530 50%,#1a1a22 100%); border:1px solid rgba(255,255,255,.08); transition:transform .5s var(--ease-trans); box-shadow:0 20px 48px rgba(0,0,0,.4); }
+.debit-card:hover { transform:perspective(600px) rotateY(-5deg) rotateX(2deg); }
+.debit-card::before { content:''; position:absolute; top:-40%; right:-20%; width:220px; height:220px; background:radial-gradient(circle,rgba(240,140,0,.14),transparent 70%); pointer-events:none; }
+
+/* ── EARN CARDS ── */
+.earn-card { background:var(--card-bg); border:1px solid var(--border); border-radius:var(--r-lg); overflow:hidden; transition:all var(--dur-trans) var(--ease-trans); cursor:pointer; }
+.earn-card:hover { border-color:rgba(240,140,0,.25); transform:translateY(-3px); box-shadow:0 12px 32px rgba(0,0,0,.25); }
+
+/* ── ORDER BOOK ── */
+.ob-row { display:flex; justify-content:space-between; padding:2px 4px; font-family:var(--fm); font-size:11px; position:relative; border-radius:var(--r-xs); }
+.ob-row .bar { position:absolute; right:0; top:0; bottom:0; opacity:.07; border-radius:var(--r-xs); }
+
+/* ── API CARD ── */
+.api-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--r-md); padding:14px 16px; display:flex; align-items:center; gap:12px; transition:all var(--dur-micro); cursor:pointer; }
+.api-card:hover { border-color:rgba(240,140,0,.25); background:var(--gold-g); }
+.api-logo { width:38px; height:38px; border-radius:var(--r-sm); background:var(--bg3); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; flex-shrink:0; }
+
+/* ── SKELETON ── */
+.skel { background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%); background-size:200% 100%; animation:shimmer 1.5s infinite; border-radius:var(--r-sm); }
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* ── SCREEN LOADING SKELETON ── */
+.screen-loading { position:relative; pointer-events:none; }
+.screen-loading::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent 25%,rgba(255,255,255,.02) 50%,transparent 75%); background-size:200% 100%; animation:shimmer 1s ease-in-out; border-radius:var(--r-md); z-index:10; }
+
+/* ── CARD HOVER LIFT ── */
+.card { transition:all var(--dur-trans) var(--ease-micro); }
+.card:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.18); }
+
+/* ── LIVE PULSE ── */
+@keyframes livePulse { 0%,100%{opacity:.4;transform:scale(1)} 50%{opacity:1;transform:scale(1.3)} }
+.tb-status .dot { animation:livePulse 2s ease-in-out infinite; }
+
+/* ── TABULAR FIGURES ── */
+.mono, .kpi-val, .wl-price, .ob-row span, .fee-row .mono { font-variant-numeric:tabular-nums; }
+
+/* ── ACTIVITY FILTER TRANSITION ── */
+.activity-row { transition:opacity .25s var(--ease-micro), transform .25s var(--ease-micro); }
+.activity-row.hidden { opacity:0; transform:translateY(-4px); position:absolute; pointer-events:none; }
+
+/* ── SPARKLINE ── */
+.sparkline-wrap { display:flex; align-items:flex-end; gap:2px; height:32px; margin-top:6px; }
+.sparkline-bar { width:6px; border-radius:2px 2px 0 0; background:var(--gold); opacity:.5; transition:height .5s var(--ease-micro), opacity .3s; }
+.sparkline-bar:last-child { opacity:1; }
+.sparkline-wrap:hover .sparkline-bar { opacity:.35; }
+.sparkline-wrap:hover .sparkline-bar:hover { opacity:1; }
+
+/* ── SUCCESS ANIMATION ── */
+@keyframes checkDraw { from{stroke-dashoffset:60} to{stroke-dashoffset:0} }
+@keyframes scaleIn { from{transform:scale(0)} to{transform:scale(1)} }
+
+/* ═══ MOBILE RESPONSIVE ═══ */
+
+/* Hamburger button (hidden on desktop) */
+.mobile-toggle { display:none; width:44px; height:44px; border-radius:var(--r-sm); align-items:center; justify-content:center; color:var(--t2); cursor:pointer; touch-action:manipulation; }
+
+/* Mobile overlay */
+.sidebar-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:99; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
+
+@media (max-width:768px) {
+  /* Hide sidebar, show hamburger */
+  .sidebar { position:fixed; left:-260px; top:0; bottom:0; z-index:100; width:260px; transition:left .3s cubic-bezier(0,0,.2,1); box-shadow:8px 0 32px rgba(0,0,0,.4); }
+  .sidebar.open { left:0; }
+  .sidebar-overlay.show { display:block; }
+  .mobile-toggle { display:flex; }
+
+  /* Topbar */
+  .topbar { padding:0 12px; height:48px; }
+  .tb-search { width:120px; font-size:11px; padding:7px 10px 7px 26px; }
+  .tb-search:focus { width:160px; }
+  .tb-status { display:none; }
+
+  /* Ticker */
+  .ticker { height:24px; }
+  .tick { font-size:9px; }
+
+  /* Content */
+  .content { padding:12px; }
+
+  /* Grids: responsive */
+  .g2, .g3 { grid-template-columns:1fr !important; }
+  .g4 { grid-template-columns:1fr 1fr !important; }
+  .g4 > [style*="grid-column:span 2"] { grid-column:span 2 !important; }
+
+  /* Cards */
+  .card { padding:14px; }
+
+  /* KPI values */
+  .kpi-val { font-size:20px; }
+
+  /* Table: horizontal scroll */
+  .card:has(.tbl) { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .tbl { min-width:480px; }
+
+  /* Quick actions: scroll horizontally */
+  .qa { flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px; }
+  .qa-btn { flex-shrink:0; white-space:nowrap; min-height:44px; }
+
+  /* Send box */
+  .send-box { max-width:100%; }
+  .amount-input { font-size:22px; }
+
+  /* Exchange: stack */
+  .s-exchange .g2 { grid-template-columns:1fr !important; }
+
+  /* Debit card: responsive */
+  .debit-card { width:100%; max-width:340px; }
+
+  /* Earn cards: stack */
+  .earn-card { margin-bottom:8px; }
+
+  /* API cards: 1 col */
+  .api-card { padding:12px; }
+
+  /* Tab: scrollable */
+  .tabs { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .tab { white-space:nowrap; min-height:44px; display:flex; align-items:center; padding:8px 14px; }
+
+  /* Buttons: full width + min height */
+  .btn-gold, .btn-ghost { min-height:48px; font-size:15px; }
+  .btn-sm { min-height:44px; padding:8px 14px; }
+
+  /* Watchlist items: bigger touch targets */
+  .wl-item { padding:12px 6px; min-height:48px; }
+
+  /* Fields */
+  .field input, .field select { min-height:44px; font-size:16px; }
+
+  /* Login */
+  .login-box { width:calc(100% - 32px); max-width:380px; padding:28px 20px; }
+
+  /* Toast: safe area */
+  .toast { bottom:calc(16px + env(safe-area-inset-bottom, 0px)); right:16px; left:16px; }
+
+  /* Order book */
+  .ob-row { font-size:10px; padding:4px 6px; min-height:28px; }
+
+  /* Sidebar user */
+  .sb-item { min-height:44px; padding:10px 12px; }
+}
+
+@media (max-width:420px) {
+  .kpi-val { font-size:18px; }
+  .content { padding:10px; }
+  .card { padding:12px; }
+  .amount-input { font-size:20px; }
+  .debit-card { height:auto; aspect-ratio:1.6/1; }
+}
+
+/* Safe area for iOS devices */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .app { padding-bottom:env(safe-area-inset-bottom); }
+}
+
+/* dvh for mobile viewport */
+@supports (height: 100dvh) {
+  body, .app { height:100dvh; }
+  #login { height:100dvh; }
+}
+
+/* Touch optimization */
+.sb-item, .qa-btn, .nav-btn, .wl-item, .tab, .btn-gold, .btn-ghost, .btn-sm, .api-card, .earn-card { touch-action:manipulation; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion:reduce) {
+  *, *::before, *::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-bg"><div class="login-orb login-orb1"></div><div class="login-orb login-orb2"></div></div>
+  <div class="login-box">
+    <div class="login-logo">ØNSTACK</div>
+    <div class="login-sub">Smart Digital FX Hub · Regulated Infrastructure</div>
+    <div id="login-form">
+      <div class="field"><label>Email</label><input type="email" value="guilherme.emmanouilides@0nstack.io"></div>
+      <div class="field"><label>Password</label><input type="password" value="••••••••"></div>
+      <button class="btn-primary" onclick="showTwoFA()">Sign In</button>
+    </div>
+    <div id="twofa" style="display:none;">
+      <p style="font-size:12px;color:var(--t2);margin-bottom:14px;text-align:center;">Enter your 2FA code</p>
+      <div class="field-2fa" id="twofa-inputs">
+        <input type="text" maxlength="1" oninput="tfaNext(this,0)">
+        <input type="text" maxlength="1" oninput="tfaNext(this,1)">
+        <input type="text" maxlength="1" oninput="tfaNext(this,2)">
+        <input type="text" maxlength="1" oninput="tfaNext(this,3)">
+        <input type="text" maxlength="1" oninput="tfaNext(this,4)">
+        <input type="text" maxlength="1" oninput="tfaNext(this,5)">
+      </div>
+      <button class="btn-primary" onclick="doLogin()" style="margin-top:14px;">Verify & Enter</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app">
+
+<!-- MOBILE SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sb-logo">ØNSTACK <span class="env">LIVE</span></div>
+  <div class="sb-nav">
+    <div class="sb-item active" onclick="go('dashboard',this)"><i data-lucide="layout-dashboard" width="15" height="15"></i> Dashboard</div>
+    <div class="sb-item" onclick="go('send',this)"><i data-lucide="send" width="15" height="15"></i> Send Money</div>
+    <div class="sb-item" onclick="go('exchange',this)"><i data-lucide="arrow-left-right" width="15" height="15"></i> Exchange</div>
+    <div class="sb-item" onclick="go('card',this)"><i data-lucide="credit-card" width="15" height="15"></i> Card</div>
+    <div class="sb-item" onclick="go('earn',this)"><i data-lucide="trending-up" width="15" height="15"></i> Earn & RWA</div>
+    <div class="sb-sep"></div>
+    <div class="sb-label">Operations</div>
+    <div class="sb-item" onclick="go('compliance',this)"><i data-lucide="shield-check" width="15" height="15"></i> Compliance</div>
+    <div class="sb-item" onclick="go('activity',this)"><i data-lucide="clock" width="15" height="15"></i> Activity <span class="badge-count">3</span></div>
+    <div class="sb-item" onclick="go('apikeys',this)"><i data-lucide="key" width="15" height="15"></i> API Keys</div>
+    <div class="sb-sep"></div>
+    <div class="sb-label">Account</div>
+    <div class="sb-item" onclick="go('settings',this)"><i data-lucide="settings" width="15" height="15"></i> Settings</div>
+  </div>
+  <div class="sb-bottom">
+    <div class="sb-user" onclick="go('profile',null)">
+      <div class="sb-avatar">GP</div>
+      <div><div style="font-size:12px;font-weight:500;">Guilherme P.</div><div style="font-size:10px;color:var(--t3);">Enterprise</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="tb-left">
+      <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Menu"><i data-lucide="menu" width="18" height="18"></i></button>
+      <div class="tb-title" id="page-title">Dashboard</div>
+      <div class="tb-status">
+        <span class="dot"></span>
+        <span style="color:var(--t3);">Morph L2</span>
+        <span style="color:var(--green);">Online</span>
+        <span style="color:var(--t3);margin:0 3px;">·</span>
+        <span style="color:var(--t3);">PIX</span>
+        <span style="color:var(--green);">Active</span>
+      </div>
+    </div>
+    <div class="tb-right">
+      <input type="text" class="tb-search" placeholder="Search transactions...">
+      <div class="tb-icon" onclick="toggleTheme()"><i data-lucide="moon" width="15" height="15" id="theme-icon"></i></div>
+      <div class="tb-icon"><span class="notif"></span><i data-lucide="bell" width="15" height="15"></i></div>
+    </div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="ticker"><div class="ticker-inner" id="ticker"></div></div>
+
+  <div class="content">
+
+    <!-- ═══ DASHBOARD ═══ -->
+    <div class="screen active" id="s-dashboard">
+      <div class="qa">
+        <button class="qa-btn" onclick="go('send',null)"><i data-lucide="send" width="13" height="13"></i> Send</button>
+        <button class="qa-btn"><i data-lucide="download" width="13" height="13"></i> Receive</button>
+        <button class="qa-btn" onclick="go('exchange',null)"><i data-lucide="arrow-left-right" width="13" height="13"></i> Exchange</button>
+        <button class="qa-btn"><i data-lucide="plus" width="13" height="13"></i> Top Up</button>
+        <button class="qa-btn" onclick="go('card',null)"><i data-lucide="credit-card" width="13" height="13"></i> Card</button>
+      </div>
+
+      <div class="g g4" style="margin-bottom:12px;">
+        <div class="card clickable" style="grid-column:span 2;" onclick="go('send',null)">
+          <div class="kpi-label">Total Balance</div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+            <div>
+              <div class="kpi-val" style="font-size:30px;" data-count="148392.54" data-prefix="$">$0</div>
+              <div class="kpi-change up"><i data-lucide="trending-up" width="11" height="11"></i> +5.2% today · $7,316</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:9px;color:var(--t3);margin-bottom:4px;">7-Day Volume</div>
+              <div class="sparkline-wrap" id="sparkline-volume">
+                <div class="sparkline-bar" style="height:45%"></div>
+                <div class="sparkline-bar" style="height:62%"></div>
+                <div class="sparkline-bar" style="height:38%"></div>
+                <div class="sparkline-bar" style="height:80%"></div>
+                <div class="sparkline-bar" style="height:55%"></div>
+                <div class="sparkline-bar" style="height:72%"></div>
+                <div class="sparkline-bar" style="height:92%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card clickable">
+          <div class="kpi-label">BRL Available</div>
+          <div class="kpi-val" style="font-size:20px;" data-count="234180" data-prefix="R$ ">R$ 0</div>
+          <div class="kpi-change" style="color:var(--t3);font-size:10px;">PIX · Instant settlement</div>
+        </div>
+        <div class="card clickable" onclick="go('earn',null)">
+          <div class="kpi-label">Yield (MTD)</div>
+          <div class="kpi-val" style="font-size:20px;color:var(--green);" data-count="1247.80" data-prefix="$">$0</div>
+          <div class="kpi-change" style="color:var(--gold);">Avg 5.8% APY</div>
+        </div>
+      </div>
+
+      <div class="g g2" style="margin-bottom:12px;">
+        <div class="card">
+          <div class="card-h">Portfolio · 30D <div class="tag">Live</div></div>
+          <div style="position:relative;height:160px;width:100%;padding:10px;">
+            <canvas id="portfolioChart"></canvas>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-h">Watchlist <div class="tag">Live</div></div>
+          <div class="wl-item">
+            <div class="wl-left"><div class="wl-icon" style="background:rgba(247,147,26,.1);color:#f7931a;">₿</div><div><div class="wl-name">Bitcoin</div><div class="wl-pair">BTC/USDT</div></div></div>
+            <div class="wl-right"><svg width="44" height="18" viewBox="0 0 44 18"><path d="M0,14 L7,10 L14,7 L21,9 L28,4 L35,5 L44,2" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round"/></svg><div><div class="wl-price">$67,842</div><div class="wl-pct up">+2.4%</div></div></div>
+          </div>
+          <div class="wl-item">
+            <div class="wl-left"><div class="wl-icon" style="background:rgba(98,126,234,.1);color:#627eea;">Ξ</div><div><div class="wl-name">Ethereum</div><div class="wl-pair">ETH/USDT</div></div></div>
+            <div class="wl-right"><svg width="44" height="18" viewBox="0 0 44 18"><path d="M0,12 L7,9 L14,11 L21,5 L28,7 L35,3 L44,2" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round"/></svg><div><div class="wl-price">$3,521</div><div class="wl-pct up">+1.8%</div></div></div>
+          </div>
+          <div class="wl-item">
+            <div class="wl-left"><div class="wl-icon" style="background:rgba(38,161,123,.1);color:#26a17b;">₮</div><div><div class="wl-name">USDT/BRL</div><div class="wl-pair">Stablecoin</div></div></div>
+            <div class="wl-right"><svg width="44" height="18" viewBox="0 0 44 18"><path d="M0,9 L7,9 L14,10 L21,9 L28,9 L35,9 L44,9" fill="none" stroke="var(--t3)" stroke-width="1.5" stroke-linecap="round"/></svg><div><div class="wl-price">R$ 5.42</div><div class="wl-pct" style="color:var(--t3);">0.0%</div></div></div>
+          </div>
+          <div class="wl-item">
+            <div class="wl-left"><div class="wl-icon" style="background:rgba(39,117,202,.1);color:#2775ca;">◎</div><div><div class="wl-name">USDC/BRL</div><div class="wl-pair">Stablecoin</div></div></div>
+            <div class="wl-right"><svg width="44" height="18" viewBox="0 0 44 18"><path d="M0,9 L7,10 L14,9 L21,9 L28,8 L35,9 L44,9" fill="none" stroke="var(--t3)" stroke-width="1.5" stroke-linecap="round"/></svg><div><div class="wl-price">R$ 5.41</div><div class="wl-pct down">-0.1%</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h">Recent Transactions <a onclick="go('activity',null)">View All →</a></div>
+        <table class="tbl">
+          <thead><tr><th>Type</th><th>Description</th><th>Amount</th><th>Status</th><th>Time</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge badge-gold">RemitFX</span></td><td>BRL → USDC · Morph L2</td><td class="mono">R$ 50,000</td><td><span class="badge badge-green">Settled</span></td><td class="mono live-time" data-seconds="186" style="color:var(--t3);">3.1 min</td></tr>
+            <tr><td><span class="badge badge-green">Deposit</span></td><td>PIX · Banco do Brasil</td><td class="mono">R$ 120,000</td><td><span class="badge badge-green">Confirmed</span></td><td class="mono live-time" data-seconds="12" style="color:var(--t3);">12s</td></tr>
+            <tr><td><span class="badge badge-blue">Exchange</span></td><td>USDC → USDT · OKX</td><td class="mono">$25,000</td><td><span class="badge badge-green">Filled</span></td><td class="mono live-time" data-seconds="1" style="color:var(--t3);">just now</td></tr>
+            <tr><td><span class="badge badge-gold">Card</span></td><td>Amazon US</td><td class="mono">-$342.89</td><td><span class="badge badge-green">Approved</span></td><td class="mono" style="color:var(--t3);">Instant</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ SEND MONEY ═══ -->
+    <div class="screen" id="s-send">
+      <div class="send-box">
+        <div class="send-steps">
+          <div class="send-step active" id="sl1"><div class="num">1</div> Amount</div>
+          <div class="step-line"></div>
+          <div class="send-step" id="sl2"><div class="num">2</div> Recipient</div>
+          <div class="step-line"></div>
+          <div class="send-step" id="sl3"><div class="num">3</div> Confirm</div>
+        </div>
+
+        <div class="send-panel active" id="sp1">
+          <div class="amount-box">
+            <label>You send</label>
+            <div class="amount-row">
+              <input type="text" class="amount-input" id="send-amount" value="50,000" oninput="formatSendAmount(this);calcReceive()">
+              <select class="cur-select" onchange="calcReceive()">
+                <option value="BRL">🇧🇷 BRL</option><option value="USD">🇺🇸 USD</option><option value="EUR">🇪🇺 EUR</option><option value="GBP">🇬🇧 GBP</option>
+              </select>
+            </div>
+          </div>
+          <div style="text-align:center;">
+            <button class="swap-btn"><i data-lucide="arrow-up-down" width="15" height="15"></i></button>
+          </div>
+          <div class="amount-box">
+            <label>They receive</label>
+            <div class="amount-row">
+              <span class="amount-input" style="color:var(--green);" id="recv-val">9,225.09</span>
+              <div class="cur-select">◎ USDC</div>
+            </div>
+          </div>
+          <div class="fee-box">
+            <div class="fee-row"><span>Exchange rate</span><span class="mono" style="display:flex;align-items:center;gap:6px;">1 USD = 5.42 BRL <span id="rate-timer" style="font-size:9px;background:var(--green-bg);color:var(--green);padding:1px 6px;border-radius:var(--r-xs);">47s</span></span></div>
+            <div class="fee-row"><span>ØnStack fee (0.6%)</span><span class="mono">R$ 300.00</span></div>
+            <div class="fee-row"><span>IOF (0.38%)</span><span class="mono">R$ 190.00</span></div>
+            <div class="fee-row"><span>Morph L2 gas</span><span class="mono">R$ 2.50</span></div>
+            <div class="fee-row"><span>Est. delivery</span><span style="color:var(--green);font-weight:600;">~3 minutes</span></div>
+            <div class="fee-row total"><span>Total cost</span><span class="mono">R$ 492.50 (0.98%)</span></div>
+          </div>
+          <div class="save-msg"><i data-lucide="badge-check" width="13" height="13"></i> You save R$ 1,336.25 vs SWIFT — 73% cheaper</div>
+          <button class="btn-gold" onclick="sendGo(2)">Continue to Recipient →</button>
+        </div>
+
+        <div class="send-panel" id="sp2">
+          <div style="margin-bottom:14px;">
+            <div class="card clickable" style="padding:14px;margin-bottom:8px;" onclick="sendGo(3)">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:36px;height:36px;border-radius:50%;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;"><i data-lucide="building-2" width="15" height="15" style="color:var(--blue);"></i></div>
+                <div style="flex:1;"><div style="font-size:13px;font-weight:500;">Shanghai Trading Co.</div><div style="font-size:10px;color:var(--t3);">0x7a3b...f421 · Morph L2 · <span style="color:var(--green);">KYC ✓</span></div></div>
+                <i data-lucide="chevron-right" width="15" height="15" style="color:var(--t3);"></i>
+              </div>
+            </div>
+            <div class="card clickable" style="padding:14px;" onclick="sendGo(3)">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:36px;height:36px;border-radius:50%;background:var(--gold-g);display:flex;align-items:center;justify-content:center;"><i data-lucide="user" width="15" height="15" style="color:var(--gold);"></i></div>
+                <div style="flex:1;"><div style="font-size:13px;font-weight:500;">Maria Silva</div><div style="font-size:10px;color:var(--t3);">PIX: maria@email.com · <span style="color:var(--green);">KYC ✓</span></div></div>
+                <i data-lucide="chevron-right" width="15" height="15" style="color:var(--t3);"></i>
+              </div>
+            </div>
+          </div>
+          <button class="btn-ghost" style="margin-top:4px;">+ Add New Recipient</button>
+          <button class="btn-ghost" onclick="sendGo(1)">← Back</button>
+        </div>
+
+        <div class="send-panel" id="sp3">
+          <div style="text-align:center;padding:24px 0 16px;">
+            <svg width="56" height="56" style="animation:scaleIn .4s cubic-bezier(.16,1,.3,1);margin-bottom:14px;"><circle cx="28" cy="28" r="26" fill="var(--green)"/><path d="M18 28 L25 35 L38 22" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray:60;animation:checkDraw .5s ease .35s both;"/></svg>
+            <h3 style="font-size:18px;font-family:var(--fd);letter-spacing:.04em;margin-bottom:4px;">Transfer Complete</h3>
+            <p style="font-size:12px;color:var(--t2);">Settled on Morph L2 · 3.1 minutes</p>
+          </div>
+          <div class="fee-box">
+            <div class="fee-row"><span>Sent</span><span class="mono" style="color:var(--t1);">R$ 50,000.00</span></div>
+            <div class="fee-row"><span>Received</span><span class="mono" style="color:var(--green);">9,225.09 USDC</span></div>
+            <div class="fee-row"><span>To</span><span>Shanghai Trading Co.</span></div>
+            <div class="fee-row"><span>TX Hash</span><span class="mono" style="color:var(--gold);cursor:pointer;" onclick="copyTx()">0x8f2a...b391 ⎘</span></div>
+            <div class="fee-row"><span>BACEN</span><span class="badge badge-green">Auto-filed</span></div>
+            <div class="fee-row"><span>IOF/IRRF</span><span class="badge badge-green">Calculated</span></div>
+          </div>
+          <button class="btn-gold" onclick="sendGo(1)">New Transfer</button>
+          <button class="btn-ghost">Download Receipt (PDF)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ EXCHANGE ═══ -->
+    <div class="screen" id="s-exchange">
+      <div class="tabs">
+        <div class="tab active" onclick="tabClick(this)">Spot</div>
+        <div class="tab" onclick="tabClick(this)">Convert</div>
+        <div class="tab" onclick="tabClick(this)">OTC Desk</div>
+      </div>
+      <div class="g g2">
+        <div>
+          <div class="card" style="margin-bottom:12px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+              <div style="display:flex;align-items:center;gap:6px;"><div class="wl-icon" style="width:24px;height:24px;background:rgba(38,161,123,.1);color:#26a17b;font-size:10px;">₮</div><span style="font-weight:600;">USDT</span><span style="color:var(--t3);">/BRL</span></div>
+              <div style="font-family:var(--fm);font-size:22px;font-weight:600;" id="ex-rate-display">5.42<span id="ex-rate-tick" style="transition:color .3s;">00</span></div>
+              <span class="badge badge-green">+0.12%</span>
+              <span style="font-size:10px;color:var(--t3);margin-left:auto;">Vol: R$ 42.8M</span>
+            </div>
+            <div style="position:relative;height:160px;width:100%;padding:10px;">
+              <canvas id="exchangeChart"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-h">Order Book</div>
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--t3);margin-bottom:6px;padding:0 4px;"><span>Price (BRL)</span><span>Amount</span><span>Total</span></div>
+            <div class="ob-row" style="color:var(--green);"><div class="bar" style="width:85%;background:var(--green);"></div><span>5.4210</span><span>12,450</span><span>67,501</span></div>
+            <div class="ob-row" style="color:var(--green);"><div class="bar" style="width:60%;background:var(--green);"></div><span>5.4205</span><span>8,320</span><span>45,091</span></div>
+            <div class="ob-row" style="color:var(--green);"><div class="bar" style="width:95%;background:var(--green);"></div><span>5.4200</span><span>45,100</span><span>244,442</span></div>
+            <div style="text-align:center;padding:8px;font-family:var(--fm);font-size:18px;font-weight:600;color:var(--gold);">5.4200 <span style="font-size:10px;color:var(--t3);font-weight:400;">≈ $0.1845</span></div>
+            <div class="ob-row" style="color:var(--red);"><div class="bar" style="width:75%;background:var(--red);"></div><span>5.4195</span><span>22,800</span><span>123,565</span></div>
+            <div class="ob-row" style="color:var(--red);"><div class="bar" style="width:55%;background:var(--red);"></div><span>5.4190</span><span>15,600</span><span>84,536</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:12px;">
+            <div class="tabs" style="margin-bottom:12px;">
+              <div class="tab active" onclick="tabClick(this)" style="flex:1;text-align:center;">Buy</div>
+              <div class="tab" onclick="tabClick(this)" style="flex:1;text-align:center;">Sell</div>
+            </div>
+            <div class="tabs" style="margin-bottom:12px;">
+              <div class="tab active" onclick="tabClick(this)">Limit</div>
+              <div class="tab" onclick="tabClick(this)">Market</div>
+              <div class="tab" onclick="tabClick(this)">Stop</div>
+            </div>
+            <div class="field"><label>Price (BRL)</label><input type="text" value="5.4200" style="font-family:var(--fm);" id="ex-price"></div>
+            <div class="field"><label>Amount (USDT)</label><input type="text" value="10,000" style="font-family:var(--fm);" id="ex-amount" oninput="calcExTotal()"></div>
+            <div style="display:flex;gap:4px;margin:8px 0;">
+              <button class="btn-sm" style="flex:1;" onclick="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'">25%</button>
+              <button class="btn-sm" style="flex:1;">50%</button>
+              <button class="btn-sm" style="flex:1;">75%</button>
+              <button class="btn-sm" style="flex:1;">100%</button>
+            </div>
+            <div class="fee-box" style="margin:10px 0;">
+              <div class="fee-row"><span>Total</span><span class="mono" id="ex-total">R$ 54,200.00</span></div>
+              <div class="fee-row"><span>Fee (0.1%)</span><span class="mono" id="ex-fee">R$ 54.20</span></div>
+              <div class="fee-row"><span>Available</span><span class="mono" style="color:var(--green);">R$ 234,180</span></div>
+            </div>
+            <button class="btn-gold" style="background:var(--green);margin-top:0;" onclick="toast('Order placed: Buy 10,000 USDT @ 5.4200')">Buy USDT</button>
+          </div>
+          <div class="card">
+            <div class="card-h">Open Orders <span style="color:var(--t3);font-weight:400;text-transform:none;letter-spacing:0;">0</span></div>
+            <div style="text-align:center;padding:20px;color:var(--t3);font-size:12px;"><i data-lucide="inbox" width="22" height="22" style="display:block;margin:0 auto 8px;opacity:.25;"></i>No open orders</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ CARD ═══ -->
+    <div class="screen" id="s-card">
+      <div class="g g2">
+        <div>
+          <div class="debit-card" style="margin-bottom:14px;">
+            <div style="font-family:var(--fd);font-size:10px;letter-spacing:.18em;color:var(--t2);">ØNSTACK</div>
+            <div style="width:34px;height:26px;border-radius:5px;background:linear-gradient(135deg,#d4a853,#c49234);margin:12px 0 16px;"></div>
+            <div style="font-family:var(--fm);font-size:15px;letter-spacing:.10em;color:var(--t1);margin-bottom:12px;">4392 •••• •••• 7841</div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+              <div><div style="font-size:9px;color:var(--t2);letter-spacing:.06em;text-transform:uppercase;">GUILHERME PRADO</div><div style="font-family:var(--fm);font-size:10px;color:var(--t3);">09/28</div></div>
+              <div style="font-size:13px;font-weight:700;color:var(--gold);">VISA</div>
+            </div>
+          </div>
+          <div class="g g2">
+            <div class="card"><div class="kpi-label">Card Balance</div><div class="kpi-val" style="font-size:18px;">$12,450</div><div class="kpi-change" style="color:var(--t3);font-size:10px;">USDC backed</div></div>
+            <div class="card"><div class="kpi-label">Spent (MTD)</div><div class="kpi-val" style="font-size:18px;">$3,842</div><div class="kpi-change" style="color:var(--t3);font-size:10px;">47 transactions</div></div>
+          </div>
+          <button class="btn-gold" style="margin-top:12px;" onclick="toast('Top-up initiated via USDC')">Top Up Card</button>
+          <button class="btn-ghost">Freeze Card</button>
+        </div>
+        <div class="card">
+          <div class="card-h">Recent Transactions <a>View All →</a></div>
+          <div class="wl-item"><div class="wl-left"><div class="wl-icon" style="background:var(--gold-g);font-size:14px;">🛒</div><div><div class="wl-name">Amazon US</div><div class="wl-pair">Today, 14:32 · Auto USDC→USD</div></div></div><div class="wl-right"><div class="wl-price down">-$342.89</div></div></div>
+          <div class="wl-item"><div class="wl-left"><div class="wl-icon" style="background:var(--gold-g);font-size:14px;">✈️</div><div><div class="wl-name">Latam Airlines</div><div class="wl-pair">Yesterday · Auto USDC→BRL</div></div></div><div class="wl-right"><div class="wl-price down">-$1,245</div></div></div>
+          <div class="wl-item"><div class="wl-left"><div class="wl-icon" style="background:var(--green-bg);font-size:14px;">💰</div><div><div class="wl-name">Card Top-up</div><div class="wl-pair">Mar 17 · From USDC wallet</div></div></div><div class="wl-right"><div class="wl-price up">+$5,000</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ EARN ═══ -->
+    <div class="screen" id="s-earn">
+      <div class="g g2" style="margin-bottom:12px;">
+        <div class="card"><div class="kpi-label">Total Invested</div><div class="kpi-val">$45,200</div><div class="kpi-change" style="color:var(--t3);">Across 3 products</div></div>
+        <div class="card"><div class="kpi-label">Interest (MTD)</div><div class="kpi-val" style="color:var(--green);">$1,247.80</div><div class="kpi-change" style="color:var(--gold);">Avg 5.8% APY</div></div>
+      </div>
+      <div class="g g3">
+        <div class="earn-card">
+          <div style="padding:18px;border-bottom:1px solid var(--border);">
+            <div style="font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Fixed Income</div>
+            <div style="font-size:15px;font-weight:600;margin-bottom:4px;font-family:var(--fd);letter-spacing:.02em;">FIDC Tokenizado</div>
+            <div style="font-size:11px;color:var(--t3);line-height:1.5;">Brazilian credit rights. CVM registered. Monthly payout.</div>
+          </div>
+          <div style="padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">
+            <div><div style="font-family:var(--fm);font-size:24px;font-weight:600;color:var(--green);">8.2%</div><div style="font-size:10px;color:var(--t3);">APY · Min $1,000</div></div>
+            <button style="padding:8px 18px;background:var(--gold);color:#111;font-weight:600;font-size:12px;border-radius:var(--r-sm);border:none;cursor:pointer;transition:background var(--dur-micro);" onclick="toast('Investing in FIDC Tokenizado...')">Invest</button>
+          </div>
+        </div>
+        <div class="earn-card">
+          <div style="padding:18px;border-bottom:1px solid var(--border);">
+            <div style="font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Stablecoin Yield</div>
+            <div style="font-size:15px;font-weight:600;margin-bottom:4px;font-family:var(--fd);letter-spacing:.02em;">USDC Lending</div>
+            <div style="font-size:11px;color:var(--t3);line-height:1.5;">Matrixport institutional lending. Daily accrual.</div>
+          </div>
+          <div style="padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">
+            <div><div style="font-family:var(--fm);font-size:24px;font-weight:600;color:var(--green);">5.4%</div><div style="font-size:10px;color:var(--t3);">APY · Min $100</div></div>
+            <button style="padding:8px 18px;background:var(--gold);color:#111;font-weight:600;font-size:12px;border-radius:var(--r-sm);border:none;cursor:pointer;" onclick="toast('Investing in USDC Lending...')">Invest</button>
+          </div>
+        </div>
+        <div class="earn-card">
+          <div style="padding:18px;border-bottom:1px solid var(--border);">
+            <div style="font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Real World Assets</div>
+            <div style="font-size:15px;font-weight:600;margin-bottom:4px;font-family:var(--fd);letter-spacing:.02em;">CRI/CRA Tokenizado</div>
+            <div style="font-size:11px;color:var(--t3);line-height:1.5;">Real estate & agribusiness. CVM regulated.</div>
+          </div>
+          <div style="padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">
+            <div><div style="font-family:var(--fm);font-size:24px;font-weight:600;color:var(--green);">12.4%</div><div style="font-size:10px;color:var(--t3);">APY · Min $5,000</div></div>
+            <button style="padding:8px 18px;background:var(--gold);color:#111;font-weight:600;font-size:12px;border-radius:var(--r-sm);border:none;cursor:pointer;" onclick="toast('Investing in CRI/CRA...')">Invest</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ COMPLIANCE ═══ -->
+    <div class="screen" id="s-compliance">
+      <div class="g g4" style="margin-bottom:12px;">
+        <div class="card"><div class="kpi-label">KYC Status</div><div style="font-size:14px;font-weight:600;color:var(--green);">✓ Verified</div></div>
+        <div class="card"><div class="kpi-label">BACEN Reports</div><div class="kpi-val" style="font-size:18px;">247</div><div style="font-size:10px;color:var(--green);">All auto-filed</div></div>
+        <div class="card"><div class="kpi-label">IOF Collected</div><div class="kpi-val" style="font-size:18px;">R$ 18,420</div><div style="font-size:10px;color:var(--t3);">YTD</div></div>
+        <div class="card"><div class="kpi-label">SPSAV</div><div style="font-size:14px;font-weight:600;color:var(--green);">✓ Authorized</div></div>
+      </div>
+      <div class="card">
+        <div class="card-h">Regulatory Filings <div class="tag">Auto</div></div>
+        <table class="tbl">
+          <thead><tr><th>Report</th><th>Type</th><th>Period</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>BACEN FX Report</td><td class="mono">RDE-IED</td><td>Mar 2026</td><td><span class="badge badge-green">Filed</span></td></tr>
+            <tr><td>IOF Collection</td><td class="mono">IOF-C</td><td>Mar 2026</td><td><span class="badge badge-green">Filed</span></td></tr>
+            <tr><td>Siscoserv</td><td class="mono">NBS</td><td>Q1 2026</td><td><span class="badge badge-warn">Pending</span></td></tr>
+            <tr><td>IRRF Withholding</td><td class="mono">IRRF-R</td><td>Mar 2026</td><td><span class="badge badge-green">Filed</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ ACTIVITY ═══ -->
+    <div class="screen" id="s-activity">
+      <div class="tabs" id="activity-tabs">
+        <div class="tab active" onclick="filterActivity('all',this)">All</div>
+        <div class="tab" onclick="filterActivity('transfer',this)">Transfers</div>
+        <div class="tab" onclick="filterActivity('exchange',this)">Exchange</div>
+        <div class="tab" onclick="filterActivity('card',this)">Card</div>
+        <div class="tab" onclick="filterActivity('yield',this)">Yield</div>
+      </div>
+      <div class="card">
+        <table class="tbl">
+          <thead><tr><th>Date</th><th>Type</th><th>Description</th><th>Amount</th><th>Status</th><th>TX</th></tr></thead>
+          <tbody id="activity-tbody">
+            <tr class="activity-row" data-type="transfer"><td class="mono">Mar 23, 16:42</td><td><span class="badge badge-gold">RemitFX</span></td><td>BRL → USDC</td><td class="mono">R$ 50,000</td><td><span class="badge badge-green">Settled</span></td><td class="mono" style="color:var(--gold);cursor:pointer;" onclick="copyTx()">0x8f2a..b3</td></tr>
+            <tr class="activity-row" data-type="card"><td class="mono">Mar 23, 14:32</td><td><span class="badge badge-gold">Card</span></td><td>Amazon US</td><td class="mono">-$342.89</td><td><span class="badge badge-green">Approved</span></td><td class="mono" style="color:var(--t3);">—</td></tr>
+            <tr class="activity-row" data-type="transfer"><td class="mono">Mar 23, 10:15</td><td><span class="badge badge-green">Deposit</span></td><td>PIX · BB</td><td class="mono">R$ 120,000</td><td><span class="badge badge-green">Confirmed</span></td><td class="mono" style="color:var(--t3);">PIX-2847</td></tr>
+            <tr class="activity-row" data-type="exchange"><td class="mono">Mar 22, 22:10</td><td><span class="badge badge-blue">Exchange</span></td><td>USDC → USDT</td><td class="mono">$25,000</td><td><span class="badge badge-green">Filled</span></td><td class="mono" style="color:var(--gold);cursor:pointer;">0x3c1d..a8</td></tr>
+            <tr class="activity-row" data-type="card"><td class="mono">Mar 22, 09:15</td><td><span class="badge badge-gold">Card</span></td><td>Latam Airlines</td><td class="mono">-$1,245</td><td><span class="badge badge-green">Approved</span></td><td class="mono" style="color:var(--t3);">—</td></tr>
+            <tr class="activity-row" data-type="yield"><td class="mono">Mar 21, 08:00</td><td><span class="badge badge-green">Yield</span></td><td>FIDC Interest</td><td class="mono">+$89.40</td><td><span class="badge badge-green">Credited</span></td><td class="mono" style="color:var(--gold);">0x91ef..c2</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ API KEYS ═══ -->
+    <div class="screen" id="s-apikeys">
+      <div class="card" style="margin-bottom:14px;">
+        <div class="card-h">Your API Keys</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--bg);border-radius:var(--r-sm);margin-bottom:10px;border:1px solid var(--border);">
+          <div><div style="font-size:13px;font-weight:500;">Production Key</div><div class="mono" style="font-size:11px;color:var(--t3);margin-top:2px;">ønsk_live_••••••••••••3f8a</div></div>
+          <div style="display:flex;gap:6px;">
+            <button class="btn-sm" onclick="toast('API key copied')">Copy</button>
+            <button style="padding:5px 12px;font-size:11px;border-radius:var(--r-sm);cursor:pointer;border:1px solid rgba(220,38,38,.25);background:var(--red-bg);color:var(--red);">Revoke</button>
+          </div>
+        </div>
+        <button class="btn-ghost" style="width:auto;padding:8px 16px;font-size:11px;margin-top:0;">+ Generate New Key</button>
+      </div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:.12em;color:var(--t3);text-transform:uppercase;margin:18px 0 10px;">Exchange Integrations</div>
+      <div class="g g3">
+        <div class="api-card" onclick="toast('Binance connected')"><div class="api-logo" style="color:#f3ba2f;">B</div><div><div style="font-size:13px;font-weight:500;">Binance</div><div style="font-size:10px;color:var(--t3);">Spot + Futures API</div></div><span class="badge badge-green" style="margin-left:auto;">Connected</span></div>
+        <div class="api-card" onclick="toast('Bybit connected')"><div class="api-logo" style="color:#f7a600;">Bb</div><div><div style="font-size:13px;font-weight:500;">Bybit</div><div style="font-size:10px;color:var(--t3);">Unified Trading API</div></div><span class="badge badge-green" style="margin-left:auto;">Connected</span></div>
+        <div class="api-card" onclick="toast('Setting up OKX...')"><div class="api-logo" style="color:var(--t1);">OKX</div><div><div style="font-size:13px;font-weight:500;">OKX</div><div style="font-size:10px;color:var(--t3);">Trading + Earn API</div></div><span class="badge badge-gold" style="margin-left:auto;">Setup</span></div>
+        <div class="api-card" onclick="toast('Setting up Bitget...')"><div class="api-logo" style="color:#00f0ff;">Bg</div><div><div style="font-size:13px;font-weight:500;">Bitget</div><div style="font-size:10px;color:var(--t3);">Copy Trading API</div></div><span class="badge badge-gold" style="margin-left:auto;">Setup</span></div>
+        <div class="api-card" style="opacity:.5;cursor:not-allowed;"><div class="api-logo" style="color:#6b4bff;">Kr</div><div><div style="font-size:13px;font-weight:500;">Kraken</div><div style="font-size:10px;color:var(--t3);">REST + WebSocket</div></div><span style="margin-left:auto;font-size:10px;color:var(--t3);">Soon</span></div>
+        <div class="api-card" style="opacity:.5;cursor:not-allowed;"><div class="api-logo" style="color:#0052ff;">Cb</div><div><div style="font-size:13px;font-weight:500;">Coinbase</div><div style="font-size:10px;color:var(--t3);">Advanced Trade API</div></div><span style="margin-left:auto;font-size:10px;color:var(--t3);">Soon</span></div>
+      </div>
+    </div>
+
+    <!-- ═══ SETTINGS ═══ -->
+    <div class="screen" id="s-settings">
+      <div class="tabs">
+        <div class="tab active" onclick="tabClick(this)">General</div>
+        <div class="tab" onclick="tabClick(this)">Security</div>
+        <div class="tab" onclick="tabClick(this)">Notifications</div>
+      </div>
+      <div class="g g2">
+        <div class="card">
+          <div class="card-h">Preferences</div>
+          <div class="field"><label>Language</label><select><option>English</option><option>Português (BR)</option><option>Español</option></select></div>
+          <div class="field"><label>Currency Display</label><select><option>USD ($)</option><option>BRL (R$)</option><option>EUR (€)</option></select></div>
+          <div class="field"><label>Time Zone</label><select><option>America/Sao_Paulo (GMT-3)</option><option>Asia/Abu_Dhabi (GMT+4)</option></select></div>
+          <button class="btn-gold" style="margin-top:4px;" onclick="toast('Settings saved')">Save Changes</button>
+        </div>
+        <div class="card">
+          <div class="card-h">Appearance</div>
+          <div style="display:flex;gap:8px;">
+            <div style="flex:1;padding:16px;background:var(--bg);border:2px solid var(--gold);border-radius:var(--r-sm);text-align:center;cursor:pointer;font-size:12px;" onclick="setTheme('dark')">🌙 Dark</div>
+            <div style="flex:1;padding:16px;background:#f4f2ed;border:2px solid var(--border);border-radius:var(--r-sm);text-align:center;cursor:pointer;font-size:12px;color:#333;" onclick="setTheme('light')">☀️ Light</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PROFILE ═══ -->
+    <div class="screen" id="s-profile">
+      <div style="display:flex;align-items:center;gap:20px;margin-bottom:24px;">
+        <div style="width:60px;height:60px;border-radius:50%;background:var(--gold-g);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:22px;color:var(--gold);border:2px solid rgba(240,140,0,.3);">GP</div>
+        <div>
+          <h3 style="font-size:18px;font-family:var(--fd);letter-spacing:.04em;">Guilherme Prado</h3>
+          <div style="font-size:12px;color:var(--t2);margin-top:2px;">CEO & Founder · Enterprise Account</div>
+          <div style="font-size:11px;color:var(--gold);margin-top:2px;">guilherme.emmanouilides@0nstack.io</div>
+        </div>
+      </div>
+      <div class="g g3" style="margin-bottom:12px;">
+        <div class="card"><div class="kpi-label">Account Type</div><div style="font-size:14px;font-weight:600;">Enterprise</div></div>
+        <div class="card"><div class="kpi-label">KYC Level</div><div style="font-size:14px;font-weight:600;color:var(--green);">Level 3 ✓</div></div>
+        <div class="card"><div class="kpi-label">Member Since</div><div style="font-size:14px;font-weight:600;">Jan 2026</div></div>
+      </div>
+      <div class="g g2">
+        <div class="card">
+          <div class="card-h">Personal Info</div>
+          <div class="field"><label>Full Name</label><input type="text" value="Guilherme Prado"></div>
+          <div class="field"><label>CPF</label><input type="text" value="•••.•••.•••-42"></div>
+          <div class="field"><label>Phone</label><input type="text" value="+55 11 94745-1677"></div>
+          <button class="btn-gold" style="margin-top:4px;" onclick="toast('Profile updated')">Update Profile</button>
+        </div>
+        <div class="card">
+          <div class="card-h">Company Info</div>
+          <div class="field"><label>Company</label><input type="text" value="ØnStack Tecnologia Ltda."></div>
+          <div class="field"><label>CNPJ</label><input type="text" value="••.•••.•••/0001-89"></div>
+          <div class="field"><label>Jurisdiction</label><input type="text" value="Brazil (BACEN) + ADGM"></div>
+          <button class="btn-ghost" style="margin-top:4px;">Request Limit Increase</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+// THEME
+function toggleTheme(){const t=document.documentElement.dataset.theme==='dark'?'light':'dark';setTheme(t);}
+function setTheme(t){
+  document.documentElement.dataset.theme=t;
+  const icon=document.getElementById('theme-icon');
+  icon.setAttribute('data-lucide',t==='dark'?'moon':'sun');
+  lucide.createIcons();
+  toast('Theme: '+t.charAt(0).toUpperCase()+t.slice(1));
+}
+
+// NAV
+const titles={dashboard:'Dashboard',send:'Send Money',exchange:'Exchange Hub',card:'ØnStack Card',earn:'Earn & RWA',compliance:'Compliance',activity:'Activity',apikeys:'API Keys',settings:'Settings',profile:'Profile'};
+function go(id,el){
+  closeSidebar();
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const screen=document.getElementById('s-'+id);
+  screen.classList.add('active');
+  // Animate screen loading shimmer
+  screen.classList.add('screen-loading');
+  setTimeout(()=>screen.classList.remove('screen-loading'),400);
+  document.querySelectorAll('.sb-item').forEach(s=>s.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.getElementById('page-title').textContent=titles[id]||id;
+  if(id==='send') sendGo(1);
+  if(id==='dashboard') animateSparklines();
+  // Re-animate KPIs on screen
+  screen.querySelectorAll('[data-count]').forEach(kpi=>{
+    delete kpi.dataset.animated;
+  });
+  animateScreenKPIs(screen);
+  lucide.createIcons();
+}
+
+// ANIMATE KPIs PER SCREEN
+function animateScreenKPIs(container){
+  container.querySelectorAll('[data-count]').forEach(el=>{
+    if(el.dataset.animated) return;
+    el.dataset.animated='1';
+    const target=parseFloat(el.dataset.count);
+    const prefix=el.dataset.prefix||'';
+    const start=performance.now();
+    const dur=1400;
+    (function run(now){
+      const p=Math.min((now-start)/dur,1);
+      const e=1-Math.pow(1-p,3);
+      el.textContent=prefix+(e*target).toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+      if(p<1)requestAnimationFrame(run);
+    })(performance.now());
+  });
+}
+
+// SEND
+function sendGo(n){
+  document.querySelectorAll('.send-panel').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sp'+n).classList.add('active');
+  for(let i=1;i<=3;i++){
+    const l=document.getElementById('sl'+i);
+    l.className='send-step'+(i<n?' done':i===n?' active':'');
+  }
+  lucide.createIcons();
+}
+function calcReceive(){
+  const v=parseFloat(document.querySelector('.amount-input').value.replace(/,/g,''))||0;
+  const net=v-(v*0.006)-(v*0.0038);
+  document.getElementById('recv-val').textContent=(net/5.42).toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+// LOGIN
+function showTwoFA(){document.getElementById('login-form').style.display='none';document.getElementById('twofa').style.display='block';document.querySelector('#twofa-inputs input').focus();}
+function tfaNext(el,i){if(el.value.length===1){const inputs=document.querySelectorAll('#twofa-inputs input');if(i<5)inputs[i+1].focus();if(i===5)doLogin();}}
+function doLogin(){document.getElementById('login').classList.add('hidden');animateKPIs();}
+
+// TOAST
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
+function copyTx(){navigator.clipboard&&navigator.clipboard.writeText('0x8f2a1c3d4e5f6789abcdef0123456789abcdb391');toast('TX hash copied to clipboard');}
+
+// TABS
+function tabClick(el){el.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');}
+
+// KPI COUNTER
+function animateKPIs(){
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const target=parseFloat(el.dataset.count);
+    const prefix=el.dataset.prefix||'';
+    const start=performance.now();
+    const dur=1400;
+    (function run(now){
+      const p=Math.min((now-start)/dur,1);
+      const e=1-Math.pow(1-p,3);
+      el.textContent=prefix+(e*target).toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+      if(p<1)requestAnimationFrame(run);
+    })(performance.now());
+  });
+}
+
+// TICKER
+const pairs=[
+  {p:'BRL/USD',v:'0.1845',c:'+0.12%',u:true},{p:'BRL/USDT',v:'5.4200',c:'+0.08%',u:true},
+  {p:'BTC/USD',v:'67,842',c:'+2.41%',u:true},{p:'ETH/USD',v:'3,521',c:'+1.82%',u:true},
+  {p:'SOL/USD',v:'186.4',c:'+4.21%',u:true},{p:'MORPH/USD',v:'0.384',c:'+12.6%',u:true},
+  {p:'BRL/EUR',v:'0.1698',c:'-0.05%',u:false},{p:'BRL/GBP',v:'0.1452',c:'+0.03%',u:true}
+];
+const tickerEl=document.getElementById('ticker');
+let h='';
+for(let r=0;r<2;r++) pairs.forEach(p=>{h+=`<div class="tick"><b>${p.p}</b> ${p.v} <span class="${p.u?'up':'down'}">${p.c}</span></div>`;});
+tickerEl.innerHTML=h;
+
+// FORMAT SEND AMOUNT
+function formatSendAmount(el){
+  let v=el.value.replace(/[^0-9.]/g,'');
+  const parts=v.split('.');
+  parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g,',');
+  el.value=parts.join('.');
+}
+
+// EXCHANGE TOTAL CALC
+function calcExTotal(){
+  const price=parseFloat((document.getElementById('ex-price').value||'0').replace(/,/g,''));
+  const amount=parseFloat((document.getElementById('ex-amount').value||'0').replace(/,/g,''));
+  const total=price*amount;
+  const fee=total*0.001;
+  document.getElementById('ex-total').textContent='R$ '+total.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('ex-fee').textContent='R$ '+fee.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+// ACTIVITY FILTER
+function filterActivity(type,tabEl){
+  tabEl.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  tabEl.classList.add('active');
+  document.querySelectorAll('.activity-row').forEach(row=>{
+    if(type==='all'||row.dataset.type===type){
+      row.classList.remove('hidden');row.style.display='';
+    } else {
+      row.classList.add('hidden');row.style.display='none';
+    }
+  });
+}
+
+// LIVE TIME COUNTERS
+function updateLiveTimes(){
+  document.querySelectorAll('.live-time').forEach(el=>{
+    let s=parseInt(el.dataset.seconds)||0;
+    s++;el.dataset.seconds=s;
+    if(s<60) el.textContent=s+'s';
+    else if(s<3600) el.textContent=(s/60).toFixed(1)+' min';
+    else el.textContent=Math.floor(s/3600)+'h '+Math.floor((s%3600)/60)+'m';
+  });
+}
+setInterval(updateLiveTimes,1000);
+
+// LIVE EXCHANGE RATE TICK
+let baseRate=5.4200;
+function tickRate(){
+  const delta=(Math.random()-0.48)*0.003;
+  baseRate=Math.max(5.38,Math.min(5.46,baseRate+delta));
+  const display=document.getElementById('ex-rate-display');
+  const tick=document.getElementById('ex-rate-tick');
+  if(display&&tick){
+    const whole=baseRate.toFixed(4);
+    display.innerHTML=whole.slice(0,-2)+'<span id="ex-rate-tick" style="transition:color .3s;">'+whole.slice(-2)+'</span>';
+    const newTick=document.getElementById('ex-rate-tick');
+    newTick.style.color=delta>0?'var(--green)':'var(--red)';
+    setTimeout(()=>{if(newTick)newTick.style.color='';},800);
+  }
+}
+setInterval(tickRate,2400);
+
+// LIVE WATCHLIST PRICE UPDATES
+function tickWatchlist(){
+  document.querySelectorAll('.wl-price').forEach(el=>{
+    const raw=el.textContent.replace(/[^0-9.]/g,'');
+    const val=parseFloat(raw);
+    if(!val||val<1) return;
+    const prefix=el.textContent.match(/^[^0-9]*/)?.[0]||'';
+    const pct=(Math.random()-0.45)*0.001;
+    const newVal=val*(1+pct);
+    el.textContent=prefix+newVal.toLocaleString('en',{minimumFractionDigits:val>1000?0:val>100?1:2,maximumFractionDigits:val>1000?0:val>100?1:2});
+    el.style.color=pct>0?'var(--green)':'var(--red)';
+    setTimeout(()=>{el.style.color='';},600);
+  });
+}
+setInterval(tickWatchlist,3500);
+
+// LIVE TICKER PRICES
+function tickTicker(){
+  document.querySelectorAll('.tick b').forEach(b=>{
+    const next=b.nextSibling;
+    if(!next) return;
+    const raw=next.textContent.trim();
+    const val=parseFloat(raw.replace(/,/g,''));
+    if(!val) return;
+    const pct=(Math.random()-0.45)*0.002;
+    const nv=val*(1+pct);
+    next.textContent=' '+(nv>999?nv.toLocaleString('en',{minimumFractionDigits:0,maximumFractionDigits:0}):nv.toFixed(nv<1?4:nv<10?3:1))+' ';
+  });
+}
+setInterval(tickTicker,4000);
+
+// SPARKLINE ANIMATION ON LOAD
+function animateSparklines(){
+  document.querySelectorAll('.sparkline-bar').forEach((bar,i)=>{
+    const h=bar.style.height;
+    bar.style.height='0';
+    bar.style.transition='height .6s cubic-bezier(.16,1,.3,1) '+(i*80)+'ms';
+    requestAnimationFrame(()=>{bar.style.height=h;});
+  });
+}
+
+// RATE TIMER
+let rateS=47;
+setInterval(()=>{
+  rateS--;if(rateS<=0){rateS=60;toast('Exchange rate refreshed');}
+  const el=document.getElementById('rate-timer');
+  if(el){el.textContent=rateS+'s';el.style.color=rateS<10?'var(--red)':'var(--green)';}
+},1000);
+
+// NOTIFICATION SIMULATION
+let notifCount=0;
+setInterval(()=>{
+  if(Math.random()>0.7){
+    notifCount++;
+    const dot=document.querySelector('.notif');
+    if(dot){dot.style.width='7px';dot.style.height='7px';dot.style.boxShadow='0 0 6px var(--gold)';
+      setTimeout(()=>{dot.style.width='5px';dot.style.height='5px';dot.style.boxShadow='none';},1500);
+    }
+  }
+},8000);
+
+// ORDER BOOK LIVE
+function tickOrderBook(){
+  document.querySelectorAll('.ob-row span:nth-child(2)').forEach(s=>{
+    const v=parseInt(s.textContent.replace(/,/g,''));
+    if(!v) return;
+    const delta=Math.round((Math.random()-0.5)*400);
+    s.textContent=(v+delta).toLocaleString('en');
+  });
+}
+setInterval(tickOrderBook,2000);
+
+// CHART.JS SETUP
+Chart.defaults.color = "rgba(136, 134, 131, 0.8)";
+Chart.defaults.font.family = "'JetBrains Mono', monospace";
+
+const pCtx = document.getElementById('portfolioChart');
+if (pCtx) {
+  new Chart(pCtx, {
+    type: 'line',
+    data: {
+      labels: ['Feb 22', 'Mar 1', 'Mar 8', 'Mar 15', 'Mar 22'],
+      datasets: [{
+        label: 'Portfolio Value',
+        data: [136500, 142000, 148392, 160000, 155000],
+        borderColor: '#f08c00',
+        backgroundColor: 'rgba(240,140,0,0.1)',
+        borderWidth: 2,
+        tension: 0.4,
+        fill: true,
+        pointBackgroundColor: '#f08c00',
+        pointRadius: 3,
+        pointHoverRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { display: false, min: 130000 },
+        x: { grid: { display: false, drawBorder: false } }
+      }
+    }
+  });
+}
+
+const eCtx = document.getElementById('exchangeChart');
+if (eCtx) {
+  const exChart = new Chart(eCtx, {
+    type: 'bar',
+    data: {
+      labels: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'],
+      datasets: [
+        {
+          label: 'Buy Vol',
+          data: [42, 55, 30, 45, 60, 48, 70, 50],
+          backgroundColor: '#16A34A',
+          barPercentage: 0.8
+        },
+        {
+          label: 'Sell Vol',
+          data: [25, 20, 40, 30, 22, 55, 25, 45],
+          backgroundColor: '#DC2626',
+          barPercentage: 0.8
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { display: false },
+        x: { stacked: true, grid: { display: false, drawBorder: false } }
+      }
+    }
+  });
+  
+  // Live data update
+  setInterval(() => {
+    exChart.data.datasets[0].data.shift();
+    exChart.data.datasets[0].data.push(Math.floor(Math.random() * 60) + 20);
+    exChart.data.datasets[1].data.shift();
+    exChart.data.datasets[1].data.push(Math.floor(Math.random() * 50) + 20);
+    exChart.update();
+  }, 3500);
+}
+
+// MOBILE SIDEBAR
+function toggleSidebar(){
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+function closeSidebar(){
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+}
+
+// INIT
+lucide.createIcons();
+animateSparklines();
+</script>
+</body>
+</html>

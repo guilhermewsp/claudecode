@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ONSTACK — Platform Demo v5</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200;300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+/* ══════════════════════════════════════════════
+   BRANDBOOK TOKENS
+   ══════════════════════════════════════════════ */
+:root {
+  --gold: #f08c00;
+  --gold-h: #e07d00;
+  --gold-g: rgba(240,140,0,.08);
+  --gold-glow: rgba(240,140,0,.18);
+  --gold-mid: #f9c06a;
+  --green: #00C853;
+  --green-bg: rgba(0,200,83,.08);
+  --red: #FF1744;
+  --red-bg: rgba(255,23,68,.08);
+  --blue: #2979FF;
+  --blue-bg: rgba(41,121,255,.08);
+  --warning: #FF9100;
+  --warning-bg: rgba(255,145,0,.08);
+  --fd: 'Oxanium', sans-serif;
+  --fb: 'Inter', sans-serif;
+  --fm: 'JetBrains Mono', monospace;
+  --r-xs: 4px; --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 20px; --r-2xl: 28px;
+  --ease-micro: cubic-bezier(0.4,0,0.2,1);
+  --ease-trans: cubic-bezier(0.16,1,0.3,1);
+  --ease-spring: cubic-bezier(0.34,1.56,0.64,1);
+  --dur-micro: 180ms;
+  --dur-trans: 280ms;
+  --sidebar-w: 230px;
+  --topbar-h: 52px;
+  --ticker-h: 28px;
+  --bottom-nav-h: 0px;
+  --glass-blur: blur(20px);
+  --glass-border: rgba(255,255,255,.06);
+  --shadow-card: 0 1px 3px rgba(0,0,0,.12), 0 0 0 1px rgba(255,255,255,.03);
+  --shadow-elevated: 0 8px 32px rgba(0,0,0,.32), 0 0 0 1px rgba(255,255,255,.04);
+  --shadow-glow: 0 0 40px rgba(240,140,0,.12);
+}
+
+[data-theme="dark"] {
+  --bg: #08080a; --bg2: #0e0e12; --bg3: #151518; --bg4: #1c1c22; --bg5: #26262e;
+  --border: rgba(255,255,255,.04); --border2: rgba(255,255,255,.08);
+  --t1: #f0eeeb; --t2: #8a8893; --t3: #4e4d58;
+  --card-bg: rgba(18,18,24,.8); --hover-bg: rgba(255,255,255,.03);
+  --surface-glass: rgba(14,14,18,.75);
+}
+[data-theme="light"] {
+  --bg: #f6f5f2; --bg2: #ffffff; --bg3: #f0eee9; --bg4: #e4e2dd; --bg5: #d8d6d1;
+  --border: rgba(0,0,0,.06); --border2: rgba(0,0,0,.10);
+  --t1: #18181b; --t2: #62616a; --t3: #9e9da5;
+  --card-bg: rgba(255,255,255,.9); --hover-bg: rgba(0,0,0,.02);
+  --surface-glass: rgba(255,255,255,.8);
+}
+
+/* ══════════════════════════════════════════════
+   RESET & BASE (mobile-first)
+   ══════════════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { font-size:16px; -webkit-text-size-adjust:100%; }
+body {
+  font-family: var(--fb); background: var(--bg); color: var(--t1);
+  font-size: 13px; transition: background .4s ease, color .4s ease;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  overflow: hidden; height: 100vh; height: 100dvh;
+  text-rendering: optimizeLegibility;
+}
+a { text-decoration:none; color:inherit; }
+button { cursor:pointer; border:none; background:none; font-family:inherit; color:inherit; -webkit-tap-highlight-color:transparent; }
+input, select { -webkit-tap-highlight-color:transparent; }
+
+/* ── Focus States (a11y) ── */
+:focus-visible { outline:2px solid var(--gold); outline-offset:2px; border-radius:var(--r-xs); }
+button:focus-visible, .sb-item:focus-visible, .bn-item:focus-visible, .qa-btn:focus-visible, .tab:focus-visible, .wl-item:focus-visible, .api-card:focus-visible, .earn-card:focus-visible { outline:2px solid var(--gold); outline-offset:2px; box-shadow:0 0 0 4px rgba(240,140,0,.15); }
+input:focus-visible, select:focus-visible { outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(240,140,0,.12); }
+
+/* ── Skip Link (a11y) ── */
+.skip-link { position:absolute; top:-100%; left:16px; background:var(--gold); color:#0a0a0a; padding:10px 18px; border-radius:var(--r-sm); font-size:13px; font-weight:600; z-index:99999; transition:top .2s; }
+.skip-link:focus { top:8px; }
+::-webkit-scrollbar { width:4px; } ::-webkit-scrollbar-track { background:transparent; } ::-webkit-scrollbar-thumb { background:var(--bg5); border-radius:4px; } ::-webkit-scrollbar-thumb:hover { background:var(--gold); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; } }
+
+/* ══════════════════════════════════════════════
+   TOAST
+   ══════════════════════════════════════════════ */
+.toast { position:fixed; bottom:24px; right:24px; background:var(--surface-glass); backdrop-filter:var(--glass-blur); -webkit-backdrop-filter:var(--glass-blur); border:1px solid var(--glass-border); border-radius:var(--r-md); padding:12px 20px; font-size:12px; font-weight:500; color:var(--t1); z-index:10000; transform:translateY(16px) scale(.96); opacity:0; transition:all .4s var(--ease-trans); display:flex; align-items:center; gap:10px; box-shadow:var(--shadow-elevated); max-width:calc(100vw - 32px); }
+.toast.show { transform:translateY(0) scale(1); opacity:1; }
+.toast::before { content:''; width:7px; height:7px; border-radius:50%; background:var(--green); flex-shrink:0; box-shadow:0 0 8px var(--green); }
+
+/* ══════════════════════════════════════════════
+   LOGIN
+   ══════════════════════════════════════════════ */
+#login { position:fixed; inset:0; background:var(--bg); z-index:9999; display:flex; align-items:center; justify-content:center; transition:opacity .6s var(--ease-trans), visibility .6s, transform .6s var(--ease-trans); padding:16px; }
+#login.hidden { opacity:0; visibility:hidden; pointer-events:none; transform:scale(1.04); }
+.login-bg { position:absolute; inset:0; overflow:hidden; }
+.login-bg::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 50% at 50% 50%, rgba(240,140,0,.04), transparent 70%); }
+.login-orb { position:absolute; border-radius:50%; filter:blur(100px); animation:orbFloat 12s ease-in-out infinite; }
+.login-orb1 { width:320px; height:320px; background:rgba(240,140,0,.06); top:12%; left:12%; }
+.login-orb2 { width:200px; height:200px; background:rgba(240,140,0,.03); bottom:18%; right:18%; animation-delay:5s; }
+.login-orb3 { position:absolute; width:140px; height:140px; border-radius:50%; filter:blur(80px); background:rgba(240,140,0,.025); top:50%; left:60%; animation:orbFloat 15s ease-in-out infinite reverse; }
+@keyframes orbFloat { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(30px,-20px) scale(1.05)} 66%{transform:translate(-15px,10px) scale(.95)} }
+.login-box { width:100%; max-width:400px; padding:36px 28px; background:var(--surface-glass); border:1px solid var(--glass-border); border-radius:var(--r-2xl); position:relative; z-index:1; backdrop-filter:blur(40px); -webkit-backdrop-filter:blur(40px); box-shadow:0 40px 100px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.04), inset 0 1px 0 rgba(255,255,255,.04); }
+.login-logo { font-family:var(--fd); font-size:18px; letter-spacing:.24em; text-align:center; margin-bottom:4px; background:linear-gradient(135deg, var(--t1) 0%, var(--gold) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.login-sub { text-align:center; font-size:11px; color:var(--t3); margin-bottom:36px; letter-spacing:.03em; font-weight:400; }
+.field { margin-bottom:14px; }
+.field label { display:block; font-size:11px; font-weight:500; color:var(--t2); margin-bottom:5px; letter-spacing:.01em; }
+.field input, .field select { width:100%; padding:12px 14px; background:var(--bg2); border:1px solid var(--border2); border-radius:var(--r-sm); color:var(--t1); font-family:var(--fb); font-size:16px; outline:none; transition:border-color var(--dur-micro) ease, box-shadow var(--dur-micro) ease, background var(--dur-micro) ease; min-height:44px; }
+.field input:focus, .field select:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(240,140,0,.10), 0 0 20px rgba(240,140,0,.06); background:var(--bg); }
+.field select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888683' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:32px; }
+.field select option { background:var(--bg3); }
+.field-2fa { display:flex; gap:8px; justify-content:center; }
+.field-2fa input { width:42px; height:48px; text-align:center; font-family:var(--fm); font-size:20px; padding:0; border-radius:var(--r-sm); min-height:48px; }
+.btn-primary { width:100%; padding:14px; background:linear-gradient(135deg, var(--gold) 0%, #e8a020 100%); color:#0a0a0a; font-weight:700; font-size:14px; border:none; border-radius:var(--r-sm); cursor:pointer; transition:all var(--dur-micro) var(--ease-micro); margin-top:8px; letter-spacing:.02em; min-height:48px; position:relative; overflow:hidden; }
+.btn-primary::after { content:''; position:absolute; inset:0; background:linear-gradient(135deg, rgba(255,255,255,.15) 0%, transparent 60%); opacity:0; transition:opacity var(--dur-micro); }
+.btn-primary:hover { box-shadow:0 0 32px rgba(240,140,0,.35), 0 4px 16px rgba(240,140,0,.2); transform:translateY(-1px); }
+.btn-primary:hover::after { opacity:1; }
+.btn-primary:active { transform:translateY(0) scale(.98); box-shadow:0 0 16px rgba(240,140,0,.2); }
+
+/* ══════════════════════════════════════════════
+   APP SHELL
+   ══════════════════════════════════════════════ */
+.app { display:flex; height:100vh; height:100dvh; }
+
+/* ══════════════════════════════════════════════
+   SIDEBAR
+   ══════════════════════════════════════════════ */
+.sidebar { width:var(--sidebar-w); background:var(--surface-glass); backdrop-filter:blur(32px) saturate(1.2); -webkit-backdrop-filter:blur(32px) saturate(1.2); border-right:1px solid var(--glass-border); display:flex; flex-direction:column; flex-shrink:0; position:fixed; top:0; left:0; bottom:0; z-index:1000; transform:translateX(-100%); transition:transform .35s var(--ease-trans); }
+.sidebar.open { transform:translateX(0); }
+.sidebar-backdrop { position:fixed; inset:0; background:rgba(0,0,0,.6); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); z-index:999; opacity:0; visibility:hidden; transition:opacity .35s, visibility .35s; -webkit-tap-highlight-color:transparent; }
+.sidebar-backdrop.visible { opacity:1; visibility:visible; }
+.sb-logo { padding:20px 18px; font-family:var(--fd); font-size:14px; letter-spacing:.22em; color:var(--t1); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.sb-logo .env { font-size:8px; background:var(--gold-g); color:var(--gold); padding:3px 8px; border-radius:var(--r-xs); font-family:var(--fb); font-weight:700; letter-spacing:.06em; border:1px solid rgba(240,140,0,.15); box-shadow:0 0 12px rgba(240,140,0,.08); }
+.sb-close { display:flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:var(--r-sm); color:var(--t2); cursor:pointer; transition:background var(--dur-micro); }
+.sb-close:hover { background:var(--hover-bg); }
+.sb-nav { flex:1; padding:8px 6px; overflow-y:auto; }
+.sb-item { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:var(--r-sm); font-size:12.5px; color:var(--t2); cursor:pointer; transition:all var(--dur-micro) var(--ease-micro); margin-bottom:1px; position:relative; border-left:2px solid transparent; min-height:44px; }
+.sb-item:hover { background:var(--hover-bg); color:var(--t1); }
+.sb-item:active { background:var(--gold-g); transform:scale(.98); }
+.sb-item.active { background:var(--gold-g); color:var(--gold); font-weight:500; border-left-color:var(--gold); box-shadow:inset 0 0 16px rgba(240,140,0,.04); }
+.sb-item .badge-count { margin-left:auto; font-size:9px; background:var(--red); color:white; padding:1px 6px; border-radius:10px; font-weight:600; }
+.sb-sep { height:1px; background:var(--border); margin:6px 10px; }
+.sb-label { font-size:9px; font-weight:700; letter-spacing:.14em; color:var(--t3); text-transform:uppercase; padding:10px 12px 4px; }
+.sb-bottom { padding:10px; border-top:1px solid var(--border); }
+.sb-user { display:flex; align-items:center; gap:10px; padding:8px; border-radius:var(--r-sm); cursor:pointer; transition:background var(--dur-micro); min-height:44px; }
+.sb-user:hover { background:var(--hover-bg); }
+.sb-avatar { width:34px; height:34px; border-radius:50%; background:var(--gold-g); display:flex; align-items:center; justify-content:center; font-family:var(--fd); font-size:11px; color:var(--gold); border:1.5px solid rgba(240,140,0,.25); flex-shrink:0; box-shadow:0 0 12px rgba(240,140,0,.08); }
+
+/* ══════════════════════════════════════════════
+   MOBILE HEADER
+   ══════════════════════════════════════════════ */
+.mobile-header { display:flex; align-items:center; justify-content:space-between; padding:0 16px; height:var(--topbar-h); background:var(--surface-glass); backdrop-filter:blur(24px) saturate(1.3); -webkit-backdrop-filter:blur(24px) saturate(1.3); border-bottom:1px solid var(--glass-border); flex-shrink:0; }
+.mh-left { display:flex; align-items:center; gap:12px; }
+.mh-hamburger { width:44px; height:44px; display:flex; align-items:center; justify-content:center; border-radius:var(--r-sm); color:var(--t1); cursor:pointer; -webkit-tap-highlight-color:transparent; }
+.mh-hamburger:active { background:var(--hover-bg); }
+.mh-logo { font-family:var(--fd); font-size:13px; letter-spacing:.18em; }
+.mh-right { display:flex; align-items:center; gap:4px; }
+.mh-icon { width:44px; height:44px; display:flex; align-items:center; justify-content:center; border-radius:var(--r-sm); color:var(--t2); cursor:pointer; position:relative; }
+.mh-icon:active { background:var(--hover-bg); color:var(--t1); }
+.mh-icon .notif { position:absolute; top:10px; right:10px; width:5px; height:5px; background:var(--gold); border-radius:50%; box-shadow:0 0 6px var(--gold); }
+
+/* ══════════════════════════════════════════════
+   TOPBAR (desktop)
+   ══════════════════════════════════════════════ */
+.topbar { height:var(--topbar-h); border-bottom:1px solid var(--glass-border); display:none; align-items:center; justify-content:space-between; padding:0 24px; background:var(--surface-glass); backdrop-filter:blur(24px) saturate(1.2); -webkit-backdrop-filter:blur(24px) saturate(1.2); flex-shrink:0; }
+.tb-left { display:flex; align-items:center; gap:14px; }
+.tb-title { font-size:14px; font-weight:600; font-family:var(--fd); letter-spacing:.04em; }
+.tb-status { display:flex; align-items:center; gap:5px; padding:3px 10px; background:var(--green-bg); border:1px solid rgba(0,200,83,.12); border-radius:var(--r-sm); font-size:10px; }
+.tb-status .dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse 2.5s ease-in-out infinite; box-shadow:0 0 6px var(--green); }
+@keyframes pulse { 0%,100%{opacity:.4;box-shadow:0 0 4px var(--green)} 50%{opacity:1;box-shadow:0 0 10px var(--green)} }
+.tb-right { display:flex; align-items:center; gap:6px; }
+.tb-search { background:var(--bg); border:1px solid var(--border); border-radius:var(--r-md); padding:8px 14px 8px 32px; font-size:12px; color:var(--t1); font-family:var(--fb); width:200px; outline:none; transition:all .25s var(--ease-trans); background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%234a4845' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:11px center; }
+.tb-search:focus { border-color:var(--gold); width:260px; box-shadow:0 0 0 3px rgba(240,140,0,.08), 0 0 20px rgba(240,140,0,.04); }
+.tb-icon { width:32px; height:32px; border-radius:var(--r-sm); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all var(--dur-micro); color:var(--t2); position:relative; }
+.tb-icon:hover { background:var(--hover-bg); color:var(--t1); }
+.tb-icon .notif { position:absolute; top:6px; right:6px; width:5px; height:5px; background:var(--gold); border-radius:50%; box-shadow:0 0 6px var(--gold); }
+
+/* ══════════════════════════════════════════════
+   TICKER
+   ══════════════════════════════════════════════ */
+.ticker { height:var(--ticker-h); border-bottom:1px solid var(--border); display:flex; align-items:center; overflow:hidden; background:rgba(0,0,0,.15); flex-shrink:0; }
+[data-theme="light"] .ticker { background:rgba(0,0,0,.02); }
+.ticker-inner { display:flex; gap:24px; animation:scroll 36s linear infinite; white-space:nowrap; padding:0 14px; }
+@keyframes scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.tick { font-family:var(--fm); font-size:10px; display:flex; align-items:center; gap:6px; color:var(--t3); }
+.tick b { color:var(--t2); font-weight:500; }
+.tick .up { color:var(--green); } .tick .down { color:var(--red); }
+
+/* ══════════════════════════════════════════════
+   MAIN & CONTENT
+   ══════════════════════════════════════════════ */
+.main { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
+.content { flex:1; overflow-y:auto; padding:16px; background:var(--bg); background-image:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(240,140,0,.015) 0%, transparent 70%); -webkit-overflow-scrolling:touch; padding-bottom:calc(16px + var(--bottom-nav-h)); }
+.screen { display:none; animation:screenIn .35s var(--ease-trans); }
+.screen.active { display:block; }
+@keyframes screenIn { from{opacity:0;transform:translateY(8px) scale(.995)} to{opacity:1;transform:none} }
+
+/* ══════════════════════════════════════════════
+   BOTTOM NAV (mobile)
+   ══════════════════════════════════════════════ */
+.bottom-nav { display:flex; align-items:center; justify-content:space-around; height:60px; background:var(--surface-glass); backdrop-filter:blur(24px) saturate(1.3); -webkit-backdrop-filter:blur(24px) saturate(1.3); border-top:1px solid var(--glass-border); flex-shrink:0; padding-bottom:env(safe-area-inset-bottom); }
+.bn-item { display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 0; min-width:56px; min-height:44px; justify-content:center; color:var(--t3); font-size:9.5px; font-weight:500; cursor:pointer; -webkit-tap-highlight-color:transparent; transition:all var(--dur-micro) ease; position:relative; }
+.bn-item:active { color:var(--t1); transform:scale(.92); }
+.bn-item.active { color:var(--gold); }
+.bn-item.active::after { content:''; position:absolute; top:2px; left:50%; transform:translateX(-50%); width:4px; height:4px; border-radius:50%; background:var(--gold); box-shadow:0 0 8px var(--gold); }
+.bn-item i { pointer-events:none; }
+
+/* ══════════════════════════════════════════════
+   QUICK ACTIONS
+   ══════════════════════════════════════════════ */
+.qa { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+.qa-btn { display:flex; align-items:center; gap:6px; padding:9px 16px; background:var(--card-bg); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:1px solid var(--border); border-radius:24px; color:var(--t2); font-size:11.5px; font-weight:500; transition:all var(--dur-micro) ease; min-height:44px; }
+.qa-btn:hover { background:var(--gold-g); border-color:rgba(240,140,0,.2); color:var(--gold); box-shadow:0 0 20px rgba(240,140,0,.08); }
+.qa-btn:active { background:var(--gold-g); border-color:rgba(240,140,0,.25); color:var(--gold); transform:scale(.96); }
+
+/* ══════════════════════════════════════════════
+   CARDS
+   ══════════════════════════════════════════════ */
+.card { background:var(--card-bg); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--border); border-radius:var(--r-lg); padding:18px; transition:all var(--dur-trans) var(--ease-trans); box-shadow:var(--shadow-card); }
+.card:hover { border-color:var(--border2); box-shadow:var(--shadow-card), 0 4px 16px rgba(0,0,0,.08); }
+.card.clickable { cursor:pointer; }
+.card.clickable:active { border-color:rgba(240,140,0,.2); transform:scale(.99); }
+.card-h { font-size:11px; font-weight:600; color:var(--t2); margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; letter-spacing:.04em; text-transform:uppercase; }
+.card-h .tag { font-size:9px; background:var(--gold-g); color:var(--gold); padding:2px 7px; border-radius:var(--r-xs); font-weight:700; letter-spacing:.05em; border:1px solid rgba(240,140,0,.15); }
+.card-h a { font-size:11px; color:var(--gold); cursor:pointer; transition:opacity var(--dur-micro); text-transform:none; font-weight:400; letter-spacing:0; }
+
+/* ══════════════════════════════════════════════
+   GRID (mobile-first: 1 col)
+   ══════════════════════════════════════════════ */
+.g { display:grid; gap:12px; }
+.g2 { grid-template-columns:1fr; }
+.g3 { grid-template-columns:1fr; }
+.g4 { grid-template-columns:1fr 1fr; }
+
+/* ══════════════════════════════════════════════
+   KPI
+   ══════════════════════════════════════════════ */
+.kpi-val { font-family:var(--fm); font-size:22px; font-weight:600; margin-bottom:4px; letter-spacing:-.01em; }
+.kpi-label { font-size:10.5px; color:var(--t3); margin-bottom:8px; letter-spacing:.04em; text-transform:uppercase; font-weight:500; }
+.kpi-change { font-size:11px; font-weight:500; display:flex; align-items:center; gap:4px; }
+.up { color:var(--green); } .down { color:var(--red); }
+
+/* ══════════════════════════════════════════════
+   TABLE (horizontal scroll on mobile)
+   ══════════════════════════════════════════════ */
+.tbl-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0 -16px; padding:0 16px; }
+.tbl { width:100%; border-collapse:collapse; min-width:520px; }
+.tbl th { font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--t3); text-align:left; padding:8px 10px; border-bottom:1px solid var(--border); white-space:nowrap; position:sticky; left:0; }
+.tbl td { padding:10px; border-bottom:1px solid var(--border); font-size:12px; color:var(--t2); white-space:nowrap; }
+.tbl tr:last-child td { border-bottom:none; }
+.tbl tr { transition:background var(--dur-micro); }
+.tbl tr:hover td { background:var(--hover-bg); }
+.tbl th:first-child, .tbl td:first-child { position:sticky; left:0; background:var(--card-bg); z-index:1; }
+.mono { font-family:var(--fm); }
+
+/* ══════════════════════════════════════════════
+   BADGES
+   ══════════════════════════════════════════════ */
+.badge { font-size:10px; font-weight:600; padding:3px 8px; border-radius:var(--r-xs); display:inline-flex; align-items:center; gap:3px; white-space:nowrap; letter-spacing:.01em; }
+.badge-green  { background:var(--green-bg); color:var(--green); }
+.badge-gold   { background:var(--gold-g); color:var(--gold); }
+.badge-red    { background:var(--red-bg); color:var(--red); }
+.badge-blue   { background:var(--blue-bg); color:var(--blue); }
+.badge-warn   { background:var(--warning-bg); color:var(--warning); }
+
+/* ══════════════════════════════════════════════
+   TABS
+   ══════════════════════════════════════════════ */
+.tabs { display:flex; gap:0; border-bottom:1px solid var(--border); margin-bottom:16px; overflow-x:auto; -webkit-overflow-scrolling:touch; position:relative; }
+.tab { padding:10px 18px; font-size:12px; font-weight:500; color:var(--t3); cursor:pointer; border-bottom:2px solid transparent; transition:all var(--dur-micro) ease; margin-bottom:-1px; white-space:nowrap; min-height:44px; display:flex; align-items:center; position:relative; }
+.tab:hover { color:var(--t1); }
+.tab:active { color:var(--t1); }
+.tab.active { color:var(--gold); border-bottom-color:var(--gold); text-shadow:0 0 20px rgba(240,140,0,.2); }
+
+/* ══════════════════════════════════════════════
+   BUTTONS
+   ══════════════════════════════════════════════ */
+.btn-gold { width:100%; padding:14px; background:linear-gradient(135deg, var(--gold) 0%, #e8a020 100%); color:#0a0a0a; font-weight:700; font-size:13.5px; border:none; border-radius:var(--r-sm); cursor:pointer; transition:all var(--dur-micro) var(--ease-micro); margin-top:12px; letter-spacing:.02em; min-height:48px; position:relative; overflow:hidden; }
+.btn-gold::after { content:''; position:absolute; inset:0; background:linear-gradient(135deg, rgba(255,255,255,.18) 0%, transparent 60%); opacity:0; transition:opacity var(--dur-micro); }
+.btn-gold:hover { box-shadow:0 0 36px rgba(240,140,0,.3), 0 4px 16px rgba(240,140,0,.18); transform:translateY(-1px); }
+.btn-gold:hover::after { opacity:1; }
+.btn-gold:active { transform:translateY(0) scale(.98); box-shadow:0 0 16px rgba(240,140,0,.15); }
+.btn-ghost { width:100%; padding:12px; background:none; border:1px solid var(--border2); color:var(--t2); font-size:13px; border-radius:var(--r-sm); cursor:pointer; transition:all var(--dur-micro) ease; margin-top:8px; min-height:48px; }
+.btn-ghost:hover { border-color:rgba(240,140,0,.4); color:var(--gold); background:rgba(240,140,0,.03); }
+.btn-ghost:active { border-color:var(--gold); color:var(--gold); transform:scale(.98); }
+.btn-sm { padding:8px 14px; font-size:11px; border-radius:var(--r-sm); cursor:pointer; border:1px solid var(--border); background:var(--bg3); color:var(--t2); transition:all var(--dur-micro); min-height:36px; }
+.btn-sm:hover, .btn-sm:active { border-color:var(--gold); color:var(--gold); }
+
+/* ══════════════════════════════════════════════
+   WATCHLIST
+   ══════════════════════════════════════════════ */
+.wl-item { display:flex; align-items:center; justify-content:space-between; padding:10px 8px; border-bottom:1px solid var(--border); cursor:pointer; transition:all var(--dur-micro) ease; border-radius:var(--r-sm); margin:0 -8px; min-height:48px; }
+.wl-item:last-child { border-bottom:none; }
+.wl-item:hover { background:var(--hover-bg); }
+.wl-item:active { background:var(--hover-bg); transform:scale(.99); }
+.wl-left { display:flex; align-items:center; gap:10px; min-width:0; }
+.wl-icon { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; }
+.wl-name { font-size:13px; font-weight:500; }
+.wl-pair { font-size:10px; color:var(--t3); }
+.wl-right { text-align:right; display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.wl-price { font-family:var(--fm); font-size:12px; font-weight:500; }
+.wl-pct { font-size:11px; font-weight:600; min-width:46px; text-align:right; }
+
+/* ══════════════════════════════════════════════
+   SEND FLOW
+   ══════════════════════════════════════════════ */
+.send-box { max-width:460px; margin:0 auto; }
+.send-steps { display:flex; align-items:center; gap:8px; margin-bottom:28px; }
+.send-step { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--t3); }
+.send-step.active { color:var(--gold); font-weight:600; }
+.send-step.done { color:var(--green); }
+.send-step .num { width:22px; height:22px; border-radius:50%; border:1.5px solid currentColor; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; flex-shrink:0; }
+.send-step.active .num { background:var(--gold-g); }
+.send-step.done .num { background:var(--green); border-color:var(--green); color:white; }
+.step-line { flex:1; height:1px; background:var(--border); }
+.send-panel { display:none; animation:fadeIn .25s var(--ease-trans); }
+.send-panel.active { display:block; }
+.amount-box { background:var(--bg2); border:1px solid var(--border2); border-radius:var(--r-lg); padding:18px; margin-bottom:8px; transition:border-color var(--dur-micro) ease, box-shadow var(--dur-micro) ease, background var(--dur-micro) ease; }
+.amount-box:focus-within { border-color:var(--gold); box-shadow:0 0 0 3px rgba(240,140,0,.08), 0 0 24px rgba(240,140,0,.05); background:var(--bg); }
+.amount-box label { font-size:10px; color:var(--t3); text-transform:uppercase; letter-spacing:.08em; display:block; margin-bottom:8px; }
+.amount-row { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.amount-input { font-family:var(--fm); font-size:24px; font-weight:500; color:var(--t1); background:none; border:none; outline:none; min-width:0; flex:1; }
+.cur-select { display:flex; align-items:center; gap:6px; padding:10px 14px; background:var(--bg3); border:1px solid var(--border); border-radius:var(--r-sm); font-size:12px; font-weight:500; cursor:pointer; transition:all var(--dur-micro); min-height:44px; flex-shrink:0; }
+.cur-select:hover, .cur-select:active { border-color:var(--gold); }
+.swap-btn { width:42px; height:42px; border-radius:50%; background:var(--bg3); border:1px solid var(--border2); display:flex; align-items:center; justify-content:center; color:var(--t2); margin:6px auto; cursor:pointer; transition:all .4s var(--ease-spring); }
+.swap-btn:hover { background:var(--gold-g); border-color:var(--gold); color:var(--gold); transform:rotate(180deg); box-shadow:0 0 20px rgba(240,140,0,.12); }
+.swap-btn:active { transform:rotate(180deg) scale(.9); }
+.fee-box { background:var(--bg2); border:1px solid var(--border); border-radius:var(--r-md); padding:14px 16px; margin:12px 0; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
+.fee-row { display:flex; justify-content:space-between; font-size:12px; padding:4px 0; color:var(--t2); gap:8px; }
+.fee-row.total { color:var(--t1); font-weight:600; border-top:1px solid var(--border); padding-top:8px; margin-top:5px; }
+.save-msg { background:var(--green-bg); border:1px solid rgba(0,200,83,.12); border-radius:var(--r-sm); padding:12px 16px; font-size:11px; color:var(--green); margin:12px 0; display:flex; align-items:center; gap:8px; font-weight:500; box-shadow:0 0 20px rgba(0,200,83,.04); }
+
+/* ══════════════════════════════════════════════
+   DEBIT CARD
+   ══════════════════════════════════════════════ */
+.debit-card { width:100%; max-width:340px; aspect-ratio:1.6/1; border-radius:var(--r-xl); padding:24px; position:relative; overflow:hidden; background:linear-gradient(145deg,#12121a 0%,#1e1e2a 40%,#16161f 100%); border:1px solid rgba(255,255,255,.06); transition:transform .6s var(--ease-trans), box-shadow .6s var(--ease-trans); box-shadow:0 24px 60px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05); margin:0 auto; }
+.debit-card:hover { transform:perspective(600px) rotateY(-4deg) rotateX(2deg); box-shadow:0 32px 80px rgba(0,0,0,.6), 0 0 40px rgba(240,140,0,.08), inset 0 1px 0 rgba(255,255,255,.05); }
+.debit-card::before { content:''; position:absolute; top:-40%; right:-20%; width:250px; height:250px; background:radial-gradient(circle,rgba(240,140,0,.12),transparent 65%); pointer-events:none; }
+.debit-card::after { content:''; position:absolute; bottom:-30%; left:-20%; width:180px; height:180px; background:radial-gradient(circle,rgba(240,140,0,.05),transparent 65%); pointer-events:none; }
+
+/* ══════════════════════════════════════════════
+   EARN CARDS
+   ══════════════════════════════════════════════ */
+.earn-card { background:var(--card-bg); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--border); border-radius:var(--r-lg); overflow:hidden; transition:all .35s var(--ease-trans); cursor:pointer; box-shadow:var(--shadow-card); }
+.earn-card:hover { border-color:rgba(240,140,0,.2); transform:translateY(-4px); box-shadow:var(--shadow-elevated), 0 0 32px rgba(240,140,0,.06); }
+.earn-card:active { border-color:rgba(240,140,0,.25); transform:translateY(-2px) scale(.99); }
+
+/* ══════════════════════════════════════════════
+   ORDER BOOK
+   ══════════════════════════════════════════════ */
+.ob-row { display:flex; justify-content:space-between; padding:3px 6px; font-family:var(--fm); font-size:11px; position:relative; border-radius:var(--r-xs); transition:background var(--dur-micro); }
+.ob-row:hover { background:var(--hover-bg); }
+.ob-row .bar { position:absolute; right:0; top:0; bottom:0; opacity:.06; border-radius:var(--r-xs); transition:opacity var(--dur-micro); }
+.ob-row:hover .bar { opacity:.12; }
+
+/* ══════════════════════════════════════════════
+   API CARD
+   ══════════════════════════════════════════════ */
+.api-card { background:var(--card-bg); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:1px solid var(--border); border-radius:var(--r-md); padding:14px 16px; display:flex; align-items:center; gap:12px; transition:all var(--dur-trans) var(--ease-trans); cursor:pointer; min-height:64px; box-shadow:var(--shadow-card); }
+.api-card:hover { border-color:rgba(240,140,0,.2); background:var(--gold-g); transform:translateY(-2px); box-shadow:var(--shadow-elevated); }
+.api-card:active { transform:translateY(0) scale(.99); }
+.api-logo { width:40px; height:40px; border-radius:var(--r-sm); background:var(--bg3); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; flex-shrink:0; }
+
+/* ══════════════════════════════════════════════
+   SKELETON & ANIMATIONS
+   ══════════════════════════════════════════════ */
+.skel { background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%); background-size:200% 100%; animation:shimmer 1.8s ease infinite; border-radius:var(--r-sm); }
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+@keyframes checkDraw { from{stroke-dashoffset:60} to{stroke-dashoffset:0} }
+@keyframes scaleIn { from{transform:scale(0)} to{transform:scale(1)} }
+@keyframes glowPulse { 0%,100%{box-shadow:0 0 16px rgba(240,140,0,.1)} 50%{box-shadow:0 0 32px rgba(240,140,0,.2)} }
+@keyframes subtleFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE: >= 480px
+   ══════════════════════════════════════════════ */
+@media (min-width:480px) {
+  .g3 { grid-template-columns:1fr 1fr; }
+  .amount-input { font-size:28px; }
+  .login-box { padding:40px; }
+}
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE: >= 768px (tablet+)
+   ══════════════════════════════════════════════ */
+@media (min-width:768px) {
+  :root { --bottom-nav-h: 0px; }
+  .mobile-header { display:none; }
+  .bottom-nav { display:none; }
+  .sidebar { position:relative; transform:translateX(0); z-index:auto; }
+  .sidebar-backdrop { display:none; }
+  .sb-close { display:none; }
+  .topbar { display:flex; }
+  .content { padding:20px 24px; padding-bottom:20px; }
+  .g2 { grid-template-columns:1fr 1fr; }
+  .g3 { grid-template-columns:1fr 1fr 1fr; }
+  .g4 { grid-template-columns:1fr 1fr 1fr 1fr; }
+  .kpi-val { font-size:24px; }
+  .card { padding:20px; }
+  .card.clickable:hover { border-color:rgba(240,140,0,.15); box-shadow:var(--shadow-elevated), 0 0 24px rgba(240,140,0,.05); transform:translateY(-2px); }
+  .field input, .field select { font-size:13px; padding:10px 14px; }
+  .tbl-wrap { margin:0; padding:0; }
+  .tbl { min-width:auto; }
+  .tbl th:first-child, .tbl td:first-child { position:static; }
+}
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE: >= 1024px (desktop)
+   ══════════════════════════════════════════════ */
+@media (min-width:1024px) {
+  .login-orb1 { width:360px; height:360px; }
+  .login-orb2 { width:240px; height:240px; }
+}
+
+/* ══════════════════════════════════════════════
+   MOBILE BOTTOM NAV SAFE AREA
+   ══════════════════════════════════════════════ */
+@media (max-width:767px) {
+  :root { --bottom-nav-h: 60px; }
+  .toast { bottom:calc(var(--bottom-nav-h) + 16px + env(safe-area-inset-bottom)); right:16px; left:16px; }
+  .kpi-span-2 { grid-column:span 2; }
+  .card { border-radius:var(--r-md); }
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ══════════════════════════════════════════════
+     LOGIN
+     ══════════════════════════════════════════════ -->
+<div id="login">
+  <div class="login-bg"><div class="login-orb login-orb1"></div><div class="login-orb login-orb2"></div><div class="login-orb3"></div></div>
+  <div class="login-box">
+    <div class="login-logo">ONSTACK</div>
+    <div class="login-sub">Smart Digital FX Hub -- Regulated Infrastructure</div>
+    <div id="login-form">
+      <div class="field"><label for="login-email">Email</label><input id="login-email" type="email" value="guilherme@onstack.io" autocomplete="email"></div>
+      <div class="field"><label for="login-pass">Password</label><input id="login-pass" type="password" value="--------" autocomplete="current-password"></div>
+      <button class="btn-primary" onclick="showTwoFA()">Sign In</button>
+    </div>
+    <div id="twofa" style="display:none;">
+      <p style="font-size:12px;color:var(--t2);margin-bottom:14px;text-align:center;">Enter your 2FA code</p>
+      <div class="field-2fa" id="twofa-inputs" role="group" aria-label="Two-factor authentication code">
+        <input type="text" maxlength="1" inputmode="numeric" oninput="tfaNext(this,0)" aria-label="Digit 1">
+        <input type="text" maxlength="1" inputmode="numeric" oninput="tfaNext(this,1)" aria-label="Digit 2">
+        <input type="text" maxlength="1" inputmode="numeric" oninput="tfaNext(this,2)" aria-label="Digit 3">
+        <input type="text" maxlength="1" inputmode="numeric" oninput="tfaNext(this,3)" aria-label="Digit 4">
+        <input type="text" maxlength="1" inputmode="numeric" oninput="tfaNext(this,4)" aria-label="Digit 5">
+        <input type="text" maxlength="1" inputmode="numeric" oninput="tfaNext(this,5)" aria-label="Digit 6">
+      </div>
+      <button class="btn-primary" onclick="doLogin()" style="margin-top:14px;">Verify & Enter</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     APP SHELL
+     ══════════════════════════════════════════════ -->
+<div class="app">
+
+<!-- SIDEBAR BACKDROP -->
+<div class="sidebar-backdrop" id="sidebar-backdrop" onclick="closeSidebar()" aria-hidden="true"></div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    ONSTACK <span class="env">LIVE</span>
+    <button class="sb-close" onclick="closeSidebar()" aria-label="Close menu"><i data-lucide="x" width="18" height="18"></i></button>
+  </div>
+  <div class="sb-nav" role="navigation" aria-label="Main navigation">
+    <div class="sb-item active" data-screen="dashboard" onclick="go('dashboard',this)" tabindex="0" role="button" onkeydown="if(event.key==='Enter')this.click()"><i data-lucide="layout-dashboard" width="15" height="15"></i> Dashboard</div>
+    <div class="sb-item" data-screen="send" onclick="go('send',this)" tabindex="0" role="button" onkeydown="if(event.key==='Enter')this.click()"><i data-lucide="send" width="15" height="15"></i> Send Money</div>
+    <div class="sb-item" data-screen="exchange" onclick="go('exchange',this)" tabindex="0" role="button" onkeydown="if(event.key==='Enter')this.click()"><i data-lucide="arrow-left-right" width="15" height="15"></i> Exchange</div>
+    <div class="sb-item" data-screen="card" onclick="go('card',this)" tabindex="0" role="button" onkeydown="if(event.key==='Enter')this.click()"><i data-lucide="credit-card" width="15" height="15"></i> Card</div>
+    <div class="sb-item" data-screen="earn" onclick="go('earn',this)" tabindex="0" role="button" onkeydown="if(event.key==='Enter')this.click()"><i data-lucide="trending-up" width="15" height="15"></i> Earn & RWA</div>
+    <div class="sb-sep" role="separator"></div>
+    <div class="sb-label" id="ops-label">Operations</div>
+    <div class="sb-item" data-screen="compliance" onclick="go('compliance',this)" tabindex="0" role="button" onkeydown="if(event.key==='Enter')this.click()"><i data-lucide="shield-check" width="15" height="15"></i> Compliance</div>
+    <div class="sb-item" data-screen="activity" onclick="go('activity',this)" tabindex="0" role="button" onkeydown="if(event.key==='Enter')this.click()"><i data-lucide="clock" width="15" height="15"></i> Activity <span class="badge-count">3</span></div>
+    <div class="sb-item" data-screen="apikeys" onclick="go('apikeys',this)" tabindex="0" role="button" onkeydown="if(event.key==='Enter')this.click()"><i data-lucide="key" width="15" height="15"></i> API Keys</div>
+    <div class="sb-sep" role="separator"></div>
+    <div class="sb-label">Account</div>
+    <div class="sb-item" data-screen="settings" onclick="go('settings',this)" tabindex="0" role="button" onkeydown="if(event.key==='Enter')this.click()"><i data-lucide="settings" width="15" height="15"></i> Settings</div>
+  </div>
+  <div class="sb-bottom">
+    <div class="sb-user" onclick="go('profile',null)">
+      <div class="sb-avatar">GP</div>
+      <div><div style="font-size:12px;font-weight:500;">Guilherme P.</div><div style="font-size:10px;color:var(--t3);">Enterprise</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- MOBILE HEADER -->
+  <div class="mobile-header">
+    <div class="mh-left">
+      <button class="mh-hamburger" onclick="openSidebar()" aria-label="Open menu"><i data-lucide="menu" width="20" height="20"></i></button>
+      <div class="mh-logo">ONSTACK</div>
+    </div>
+    <div class="mh-right">
+      <button class="mh-icon" onclick="toggleTheme()" aria-label="Toggle theme"><i data-lucide="moon" width="18" height="18" class="theme-icon-el"></i></button>
+      <button class="mh-icon" aria-label="Notifications"><span class="notif"></span><i data-lucide="bell" width="18" height="18"></i></button>
+    </div>
+  </div>
+
+  <!-- TOPBAR (desktop) -->
+  <div class="topbar">
+    <div class="tb-left">
+      <div class="tb-title" id="page-title">Dashboard</div>
+      <div class="tb-status">
+        <span class="dot"></span>
+        <span style="color:var(--t3);">Morph L2</span>
+        <span style="color:var(--green);">Online</span>
+        <span style="color:var(--t3);margin:0 3px;">--</span>
+        <span style="color:var(--t3);">PIX</span>
+        <span style="color:var(--green);">Active</span>
+      </div>
+    </div>
+    <div class="tb-right">
+      <input type="text" class="tb-search" placeholder="Search transactions...">
+      <button class="tb-icon" onclick="toggleTheme()" aria-label="Toggle theme"><i data-lucide="moon" width="15" height="15" class="theme-icon-el"></i></button>
+      <button class="tb-icon" aria-label="Notifications"><span class="notif"></span><i data-lucide="bell" width="15" height="15"></i></button>
+    </div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="ticker"><div class="ticker-inner" id="ticker"></div></div>
+
+  <div class="content" id="main-content" role="main">
+
+    <!-- ═══ DASHBOARD ═══ -->
+    <div class="screen active" id="s-dashboard">
+      <div class="qa">
+        <button class="qa-btn" onclick="go('send',null)"><i data-lucide="send" width="13" height="13"></i> Send</button>
+        <button class="qa-btn"><i data-lucide="download" width="13" height="13"></i> Receive</button>
+        <button class="qa-btn" onclick="go('exchange',null)"><i data-lucide="arrow-left-right" width="13" height="13"></i> Exchange</button>
+        <button class="qa-btn"><i data-lucide="plus" width="13" height="13"></i> Top Up</button>
+        <button class="qa-btn" onclick="go('card',null)"><i data-lucide="credit-card" width="13" height="13"></i> Card</button>
+      </div>
+
+      <div class="g g4" style="margin-bottom:12px;">
+        <div class="card clickable kpi-span-2" onclick="go('send',null)">
+          <div class="kpi-label">Total Balance</div>
+          <div class="kpi-val" style="font-size:28px;" data-count="148392.54" data-prefix="$">$0</div>
+          <div class="kpi-change up"><i data-lucide="trending-up" width="11" height="11"></i> +5.2% today -- $7,316</div>
+        </div>
+        <div class="card clickable">
+          <div class="kpi-label">BRL Available</div>
+          <div class="kpi-val" style="font-size:18px;" data-count="234180" data-prefix="R$ ">R$ 0</div>
+          <div class="kpi-change" style="color:var(--t3);font-size:10px;">PIX -- Instant settlement</div>
+        </div>
+        <div class="card clickable" onclick="go('earn',null)">
+          <div class="kpi-label">Yield (MTD)</div>
+          <div class="kpi-val" style="font-size:18px;color:var(--green);" data-count="1247.80" data-prefix="$">$0</div>
+          <div class="kpi-change" style="color:var(--gold);">Avg 5.8% APY</div>
+        </div>
+      </div>
+
+      <div class="g g2" style="margin-bottom:12px;">
+        <div class="card">
+          <div class="card-h">Portfolio -- 30D <div class="tag">Live</div></div>
+          <div style="position:relative;height:160px;padding:0 0 18px 38px;">
+            <span style="position:absolute;left:0;top:5%;font-family:var(--fm);font-size:9px;color:var(--t3);">$160k</span>
+            <span style="position:absolute;left:0;top:38%;font-family:var(--fm);font-size:9px;color:var(--t3);">$148k</span>
+            <span style="position:absolute;left:0;top:70%;font-family:var(--fm);font-size:9px;color:var(--t3);">$136k</span>
+            <svg viewBox="0 0 500 130" width="100%" height="130" style="touch-action:none;">
+              <defs>
+                <linearGradient id="pg" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="rgba(240,140,0,.18)"/>
+                  <stop offset="100%" stop-color="rgba(240,140,0,0)"/>
+                </linearGradient>
+              </defs>
+              <path d="M0,105 Q40,95 80,88 T160,70 T240,74 T320,50 T400,34 T480,16" fill="none" stroke="var(--gold)" stroke-width="2"/>
+              <path d="M0,105 Q40,95 80,88 T160,70 T240,74 T320,50 T400,34 T480,16 L500,16 L500,130 L0,130Z" fill="url(#pg)"/>
+              <circle cx="480" cy="16" r="3.5" fill="var(--gold)">
+                <animate attributeName="r" values="3.5;5.5;3.5" dur="2s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="1;.5;1" dur="2s" repeatCount="indefinite"/>
+              </circle>
+            </svg>
+            <div style="display:flex;justify-content:space-between;font-family:var(--fm);font-size:9px;color:var(--t3);">
+              <span>Feb 22</span><span>Mar 1</span><span>Mar 8</span><span>Mar 15</span><span>Mar 22</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-h">Watchlist <div class="tag">Live</div></div>
+          <div class="wl-item">
+            <div class="wl-left"><div class="wl-icon" style="background:rgba(247,147,26,.1);color:#f7931a;">B</div><div><div class="wl-name">Bitcoin</div><div class="wl-pair">BTC/USDT</div></div></div>
+            <div class="wl-right"><svg width="44" height="18" viewBox="0 0 44 18"><path d="M0,14 L7,10 L14,7 L21,9 L28,4 L35,5 L44,2" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round"/></svg><div><div class="wl-price">$67,842</div><div class="wl-pct up">+2.4%</div></div></div>
+          </div>
+          <div class="wl-item">
+            <div class="wl-left"><div class="wl-icon" style="background:rgba(98,126,234,.1);color:#627eea;">E</div><div><div class="wl-name">Ethereum</div><div class="wl-pair">ETH/USDT</div></div></div>
+            <div class="wl-right"><svg width="44" height="18" viewBox="0 0 44 18"><path d="M0,12 L7,9 L14,11 L21,5 L28,7 L35,3 L44,2" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round"/></svg><div><div class="wl-price">$3,521</div><div class="wl-pct up">+1.8%</div></div></div>
+          </div>
+          <div class="wl-item">
+            <div class="wl-left"><div class="wl-icon" style="background:rgba(38,161,123,.1);color:#26a17b;">T</div><div><div class="wl-name">USDT/BRL</div><div class="wl-pair">Stablecoin</div></div></div>
+            <div class="wl-right"><svg width="44" height="18" viewBox="0 0 44 18"><path d="M0,9 L7,9 L14,10 L21,9 L28,9 L35,9 L44,9" fill="none" stroke="var(--t3)" stroke-width="1.5" stroke-linecap="round"/></svg><div><div class="wl-price">R$ 5.42</div><div class="wl-pct" style="color:var(--t3);">0.0%</div></div></div>
+          </div>
+          <div class="wl-item">
+            <div class="wl-left"><div class="wl-icon" style="background:rgba(39,117,202,.1);color:#2775ca;">C</div><div><div class="wl-name">USDC/BRL</div><div class="wl-pair">Stablecoin</div></div></div>
+            <div class="wl-right"><svg width="44" height="18" viewBox="0 0 44 18"><path d="M0,9 L7,10 L14,9 L21,9 L28,8 L35,9 L44,9" fill="none" stroke="var(--t3)" stroke-width="1.5" stroke-linecap="round"/></svg><div><div class="wl-price">R$ 5.41</div><div class="wl-pct down">-0.1%</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h">Recent Transactions <a onclick="go('activity',null)">View All</a></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Type</th><th>Description</th><th>Amount</th><th>Status</th><th>Time</th></tr></thead>
+            <tbody>
+              <tr><td><span class="badge badge-gold">RemitFX</span></td><td>BRL -> USDC -- Morph L2</td><td class="mono">R$ 50,000</td><td><span class="badge badge-green">Settled</span></td><td class="mono" style="color:var(--t3);">3.1 min</td></tr>
+              <tr><td><span class="badge badge-green">Deposit</span></td><td>PIX -- Banco do Brasil</td><td class="mono">R$ 120,000</td><td><span class="badge badge-green">Confirmed</span></td><td class="mono" style="color:var(--t3);">12s</td></tr>
+              <tr><td><span class="badge badge-blue">Exchange</span></td><td>USDC -> USDT -- OKX</td><td class="mono">$25,000</td><td><span class="badge badge-green">Filled</span></td><td class="mono" style="color:var(--t3);">1.4s</td></tr>
+              <tr><td><span class="badge badge-gold">Card</span></td><td>Amazon US</td><td class="mono">-$342.89</td><td><span class="badge badge-green">Approved</span></td><td class="mono" style="color:var(--t3);">Instant</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SEND MONEY ═══ -->
+    <div class="screen" id="s-send">
+      <div class="send-box">
+        <div class="send-steps">
+          <div class="send-step active" id="sl1"><div class="num">1</div> Amount</div>
+          <div class="step-line"></div>
+          <div class="send-step" id="sl2"><div class="num">2</div> Recipient</div>
+          <div class="step-line"></div>
+          <div class="send-step" id="sl3"><div class="num">3</div> Confirm</div>
+        </div>
+
+        <div class="send-panel active" id="sp1">
+          <div class="amount-box">
+            <label>You send</label>
+            <div class="amount-row">
+              <input type="text" class="amount-input" value="50,000" inputmode="decimal" oninput="calcReceive()">
+              <select class="cur-select" onchange="calcReceive()" style="appearance:none;border:1px solid var(--border);background:var(--bg3);padding:10px 32px 10px 14px;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888683' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E&quot;);background-repeat:no-repeat;background-position:right 8px center;">
+                <option value="BRL">BRL</option><option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option>
+              </select>
+            </div>
+          </div>
+          <div style="text-align:center;">
+            <button class="swap-btn"><i data-lucide="arrow-up-down" width="15" height="15"></i></button>
+          </div>
+          <div class="amount-box">
+            <label>They receive</label>
+            <div class="amount-row">
+              <span class="amount-input" style="color:var(--green);" id="recv-val">9,225.09</span>
+              <div class="cur-select" style="pointer-events:none;">USDC</div>
+            </div>
+          </div>
+          <div class="fee-box">
+            <div class="fee-row"><span>Exchange rate</span><span class="mono" style="display:flex;align-items:center;gap:6px;">1 USD = 5.42 BRL <span id="rate-timer" style="font-size:9px;background:var(--green-bg);color:var(--green);padding:1px 6px;border-radius:var(--r-xs);">47s</span></span></div>
+            <div class="fee-row"><span>OnStack fee (0.6%)</span><span class="mono">R$ 300.00</span></div>
+            <div class="fee-row"><span>IOF (0.38%)</span><span class="mono">R$ 190.00</span></div>
+            <div class="fee-row"><span>Morph L2 gas</span><span class="mono">R$ 2.50</span></div>
+            <div class="fee-row"><span>Est. delivery</span><span style="color:var(--green);font-weight:600;">~3 minutes</span></div>
+            <div class="fee-row total"><span>Total cost</span><span class="mono">R$ 492.50 (0.98%)</span></div>
+          </div>
+          <div class="save-msg"><i data-lucide="badge-check" width="13" height="13"></i> You save R$ 1,336.25 vs SWIFT -- 73% cheaper</div>
+          <button class="btn-gold" onclick="sendGo(2)">Continue to Recipient</button>
+        </div>
+
+        <div class="send-panel" id="sp2">
+          <div style="margin-bottom:14px;">
+            <div class="card clickable" style="padding:14px;margin-bottom:8px;" onclick="sendGo(3)">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:40px;height:40px;border-radius:50%;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i data-lucide="building-2" width="15" height="15" style="color:var(--blue);"></i></div>
+                <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;">Shanghai Trading Co.</div><div style="font-size:10px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;">0x7a3b...f421 -- Morph L2 -- <span style="color:var(--green);">KYC OK</span></div></div>
+                <i data-lucide="chevron-right" width="15" height="15" style="color:var(--t3);flex-shrink:0;"></i>
+              </div>
+            </div>
+            <div class="card clickable" style="padding:14px;" onclick="sendGo(3)">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:40px;height:40px;border-radius:50%;background:var(--gold-g);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i data-lucide="user" width="15" height="15" style="color:var(--gold);"></i></div>
+                <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;">Maria Silva</div><div style="font-size:10px;color:var(--t3);">PIX: maria@email.com -- <span style="color:var(--green);">KYC OK</span></div></div>
+                <i data-lucide="chevron-right" width="15" height="15" style="color:var(--t3);flex-shrink:0;"></i>
+              </div>
+            </div>
+          </div>
+          <button class="btn-ghost" style="margin-top:4px;">+ Add New Recipient</button>
+          <button class="btn-ghost" onclick="sendGo(1)">Back</button>
+        </div>
+
+        <div class="send-panel" id="sp3">
+          <div style="text-align:center;padding:24px 0 16px;">
+            <svg width="56" height="56" style="animation:scaleIn .4s cubic-bezier(.16,1,.3,1);margin-bottom:14px;"><circle cx="28" cy="28" r="26" fill="var(--green)"/><path d="M18 28 L25 35 L38 22" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray:60;animation:checkDraw .5s ease .35s both;"/></svg>
+            <h3 style="font-size:18px;font-family:var(--fd);letter-spacing:.04em;margin-bottom:4px;">Transfer Complete</h3>
+            <p style="font-size:12px;color:var(--t2);">Settled on Morph L2 -- 3.1 minutes</p>
+          </div>
+          <div class="fee-box">
+            <div class="fee-row"><span>Sent</span><span class="mono" style="color:var(--t1);">R$ 50,000.00</span></div>
+            <div class="fee-row"><span>Received</span><span class="mono" style="color:var(--green);">9,225.09 USDC</span></div>
+            <div class="fee-row"><span>To</span><span>Shanghai Trading Co.</span></div>
+            <div class="fee-row"><span>TX Hash</span><span class="mono" style="color:var(--gold);cursor:pointer;" onclick="copyTx()">0x8f2a...b391</span></div>
+            <div class="fee-row"><span>BACEN</span><span class="badge badge-green">Auto-filed</span></div>
+            <div class="fee-row"><span>IOF/IRRF</span><span class="badge badge-green">Calculated</span></div>
+          </div>
+          <button class="btn-gold" onclick="sendGo(1)">New Transfer</button>
+          <button class="btn-ghost">Download Receipt (PDF)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ EXCHANGE ═══ -->
+    <div class="screen" id="s-exchange">
+      <div class="tabs">
+        <div class="tab active" onclick="tabClick(this)">Spot</div>
+        <div class="tab" onclick="tabClick(this)">Convert</div>
+        <div class="tab" onclick="tabClick(this)">OTC Desk</div>
+      </div>
+      <div class="g g2">
+        <div>
+          <div class="card" style="margin-bottom:12px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+              <div style="display:flex;align-items:center;gap:6px;"><div class="wl-icon" style="width:24px;height:24px;background:rgba(38,161,123,.1);color:#26a17b;font-size:10px;">T</div><span style="font-weight:600;">USDT</span><span style="color:var(--t3);">/BRL</span></div>
+              <div style="font-family:var(--fm);font-size:20px;font-weight:600;">5.4200</div>
+              <span class="badge badge-green">+0.12%</span>
+              <span style="font-size:10px;color:var(--t3);">Vol: R$ 42.8M</span>
+            </div>
+            <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+              <svg viewBox="0 0 600 160" width="100%" height="160" style="min-width:400px;">
+                <g opacity=".12">
+                  <rect x="20" y="130" width="8" height="30" fill="var(--green)" rx="1"/>
+                  <rect x="50" y="120" width="8" height="40" fill="var(--green)" rx="1"/>
+                  <rect x="80" y="135" width="8" height="25" fill="var(--red)" rx="1"/>
+                  <rect x="110" y="140" width="8" height="20" fill="var(--red)" rx="1"/>
+                  <rect x="140" y="115" width="8" height="45" fill="var(--green)" rx="1"/>
+                  <rect x="170" y="105" width="8" height="55" fill="var(--green)" rx="1"/>
+                  <rect x="200" y="100" width="8" height="60" fill="var(--green)" rx="1"/>
+                  <rect x="230" y="120" width="8" height="40" fill="var(--red)" rx="1"/>
+                  <rect x="260" y="110" width="8" height="50" fill="var(--green)" rx="1"/>
+                  <rect x="290" y="95" width="8" height="65" fill="var(--green)" rx="1"/>
+                  <rect x="320" y="115" width="8" height="45" fill="var(--red)" rx="1"/>
+                  <rect x="350" y="100" width="8" height="60" fill="var(--green)" rx="1"/>
+                  <rect x="380" y="88" width="8" height="72" fill="var(--green)" rx="1"/>
+                  <rect x="410" y="105" width="8" height="55" fill="var(--red)" rx="1"/>
+                  <rect x="440" y="82" width="8" height="78" fill="var(--green)" rx="1"/>
+                  <rect x="470" y="72" width="8" height="88" fill="var(--green)" rx="1"/>
+                </g>
+                <g stroke-width="1">
+                  <line x1="24" y1="45" x2="24" y2="90" stroke="var(--green)"/><rect x="20" y="53" width="8" height="26" fill="var(--green)" rx="1"/>
+                  <line x1="54" y1="35" x2="54" y2="80" stroke="var(--green)"/><rect x="50" y="42" width="8" height="26" fill="var(--green)" rx="1"/>
+                  <line x1="84" y1="30" x2="84" y2="75" stroke="var(--red)"/><rect x="80" y="38" width="8" height="26" fill="var(--red)" rx="1"/>
+                  <line x1="144" y1="44" x2="144" y2="92" stroke="var(--green)"/><rect x="140" y="50" width="8" height="32" fill="var(--green)" rx="1"/>
+                  <line x1="204" y1="20" x2="204" y2="62" stroke="var(--green)"/><rect x="200" y="24" width="8" height="28" fill="var(--green)" rx="1"/>
+                  <line x1="264" y1="22" x2="264" y2="62" stroke="var(--green)"/><rect x="260" y="26" width="8" height="26" fill="var(--green)" rx="1"/>
+                  <line x1="294" y1="12" x2="294" y2="48" stroke="var(--green)"/><rect x="290" y="14" width="8" height="24" fill="var(--green)" rx="1"/>
+                </g>
+                <text x="8" y="16" font-family="JetBrains Mono" font-size="8" fill="var(--t3)">5.44</text>
+                <text x="8" y="50" font-family="JetBrains Mono" font-size="8" fill="var(--t3)">5.42</text>
+                <text x="8" y="84" font-family="JetBrains Mono" font-size="8" fill="var(--t3)">5.40</text>
+              </svg>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-h">Order Book</div>
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--t3);margin-bottom:6px;padding:0 4px;"><span>Price (BRL)</span><span>Amount</span><span>Total</span></div>
+            <div class="ob-row" style="color:var(--green);"><div class="bar" style="width:85%;background:var(--green);"></div><span>5.4210</span><span>12,450</span><span>67,501</span></div>
+            <div class="ob-row" style="color:var(--green);"><div class="bar" style="width:60%;background:var(--green);"></div><span>5.4205</span><span>8,320</span><span>45,091</span></div>
+            <div class="ob-row" style="color:var(--green);"><div class="bar" style="width:95%;background:var(--green);"></div><span>5.4200</span><span>45,100</span><span>244,442</span></div>
+            <div style="text-align:center;padding:8px;font-family:var(--fm);font-size:18px;font-weight:600;color:var(--gold);">5.4200 <span style="font-size:10px;color:var(--t3);font-weight:400;">= $0.1845</span></div>
+            <div class="ob-row" style="color:var(--red);"><div class="bar" style="width:75%;background:var(--red);"></div><span>5.4195</span><span>22,800</span><span>123,565</span></div>
+            <div class="ob-row" style="color:var(--red);"><div class="bar" style="width:55%;background:var(--red);"></div><span>5.4190</span><span>15,600</span><span>84,536</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:12px;">
+            <div class="tabs" style="margin-bottom:12px;">
+              <div class="tab active" onclick="tabClick(this)" style="flex:1;text-align:center;">Buy</div>
+              <div class="tab" onclick="tabClick(this)" style="flex:1;text-align:center;">Sell</div>
+            </div>
+            <div class="tabs" style="margin-bottom:12px;">
+              <div class="tab active" onclick="tabClick(this)">Limit</div>
+              <div class="tab" onclick="tabClick(this)">Market</div>
+              <div class="tab" onclick="tabClick(this)">Stop</div>
+            </div>
+            <div class="field"><label>Price (BRL)</label><input type="text" value="5.4200" inputmode="decimal" style="font-family:var(--fm);"></div>
+            <div class="field"><label>Amount (USDT)</label><input type="text" value="10,000" inputmode="decimal" style="font-family:var(--fm);"></div>
+            <div style="display:flex;gap:4px;margin:8px 0;">
+              <button class="btn-sm" style="flex:1;" onclick="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'">25%</button>
+              <button class="btn-sm" style="flex:1;">50%</button>
+              <button class="btn-sm" style="flex:1;">75%</button>
+              <button class="btn-sm" style="flex:1;">100%</button>
+            </div>
+            <div class="fee-box" style="margin:10px 0;">
+              <div class="fee-row"><span>Total</span><span class="mono">R$ 54,200.00</span></div>
+              <div class="fee-row"><span>Fee (0.1%)</span><span class="mono">R$ 54.20</span></div>
+              <div class="fee-row"><span>Available</span><span class="mono" style="color:var(--green);">R$ 234,180</span></div>
+            </div>
+            <button class="btn-gold" style="background:var(--green);margin-top:0;" onclick="toast('Order placed: Buy 10,000 USDT @ 5.4200')">Buy USDT</button>
+          </div>
+          <div class="card">
+            <div class="card-h">Open Orders <span style="color:var(--t3);font-weight:400;text-transform:none;letter-spacing:0;">0</span></div>
+            <div style="text-align:center;padding:20px;color:var(--t3);font-size:12px;"><i data-lucide="inbox" width="22" height="22" style="display:block;margin:0 auto 8px;opacity:.25;"></i>No open orders</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ CARD ═══ -->
+    <div class="screen" id="s-card">
+      <div class="g g2">
+        <div>
+          <div class="debit-card" style="margin-bottom:14px;">
+            <div style="font-family:var(--fd);font-size:10px;letter-spacing:.18em;color:var(--t2);">ONSTACK</div>
+            <div style="width:34px;height:26px;border-radius:5px;background:linear-gradient(135deg,#d4a853,#c49234);margin:12px 0 16px;"></div>
+            <div style="font-family:var(--fm);font-size:15px;letter-spacing:.10em;color:var(--t1);margin-bottom:12px;">4392 ---- ---- 7841</div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+              <div><div style="font-size:9px;color:var(--t2);letter-spacing:.06em;text-transform:uppercase;">GUILHERME PRADO</div><div style="font-family:var(--fm);font-size:10px;color:var(--t3);">09/28</div></div>
+              <div style="font-size:13px;font-weight:700;color:var(--gold);">VISA</div>
+            </div>
+          </div>
+          <div class="g g2">
+            <div class="card"><div class="kpi-label">Card Balance</div><div class="kpi-val" style="font-size:18px;">$12,450</div><div class="kpi-change" style="color:var(--t3);font-size:10px;">USDC backed</div></div>
+            <div class="card"><div class="kpi-label">Spent (MTD)</div><div class="kpi-val" style="font-size:18px;">$3,842</div><div class="kpi-change" style="color:var(--t3);font-size:10px;">47 transactions</div></div>
+          </div>
+          <button class="btn-gold" style="margin-top:12px;" onclick="toast('Top-up initiated via USDC')">Top Up Card</button>
+          <button class="btn-ghost">Freeze Card</button>
+        </div>
+        <div class="card">
+          <div class="card-h">Recent Transactions <a>View All</a></div>
+          <div class="wl-item">
+            <div class="wl-left"><div class="wl-icon" style="background:var(--gold-g);color:var(--gold);"><i data-lucide="shopping-cart" width="14" height="14"></i></div><div><div class="wl-name">Amazon US</div><div class="wl-pair">Today, 14:32 -- Auto USDC->USD</div></div></div>
+            <div class="wl-right"><div class="wl-price down">-$342.89</div></div>
+          </div>
+          <div class="wl-item">
+            <div class="wl-left"><div class="wl-icon" style="background:var(--blue-bg);color:var(--blue);"><i data-lucide="plane" width="14" height="14"></i></div><div><div class="wl-name">Latam Airlines</div><div class="wl-pair">Yesterday -- Auto USDC->BRL</div></div></div>
+            <div class="wl-right"><div class="wl-price down">-$1,245</div></div>
+          </div>
+          <div class="wl-item">
+            <div class="wl-left"><div class="wl-icon" style="background:var(--green-bg);color:var(--green);"><i data-lucide="wallet" width="14" height="14"></i></div><div><div class="wl-name">Card Top-up</div><div class="wl-pair">Mar 17 -- From USDC wallet</div></div></div>
+            <div class="wl-right"><div class="wl-price up">+$5,000</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ EARN ═══ -->
+    <div class="screen" id="s-earn">
+      <div class="g g2" style="margin-bottom:12px;">
+        <div class="card"><div class="kpi-label">Total Invested</div><div class="kpi-val">$45,200</div><div class="kpi-change" style="color:var(--t3);">Across 3 products</div></div>
+        <div class="card"><div class="kpi-label">Interest (MTD)</div><div class="kpi-val" style="color:var(--green);">$1,247.80</div><div class="kpi-change" style="color:var(--gold);">Avg 5.8% APY</div></div>
+      </div>
+      <div class="g g3">
+        <div class="earn-card">
+          <div style="padding:18px;border-bottom:1px solid var(--border);">
+            <div style="font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Fixed Income</div>
+            <div style="font-size:15px;font-weight:600;margin-bottom:4px;font-family:var(--fd);letter-spacing:.02em;">FIDC Tokenizado</div>
+            <div style="font-size:11px;color:var(--t3);line-height:1.5;">Brazilian credit rights. CVM registered. Monthly payout.</div>
+          </div>
+          <div style="padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">
+            <div><div style="font-family:var(--fm);font-size:24px;font-weight:600;color:var(--green);">8.2%</div><div style="font-size:10px;color:var(--t3);">APY -- Min $1,000</div></div>
+            <button style="padding:10px 20px;background:var(--gold);color:#111;font-weight:600;font-size:12px;border-radius:var(--r-sm);border:none;cursor:pointer;min-height:44px;" onclick="toast('Investing in FIDC Tokenizado...')">Invest</button>
+          </div>
+        </div>
+        <div class="earn-card">
+          <div style="padding:18px;border-bottom:1px solid var(--border);">
+            <div style="font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Stablecoin Yield</div>
+            <div style="font-size:15px;font-weight:600;margin-bottom:4px;font-family:var(--fd);letter-spacing:.02em;">USDC Lending</div>
+            <div style="font-size:11px;color:var(--t3);line-height:1.5;">Matrixport institutional lending. Daily accrual.</div>
+          </div>
+          <div style="padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">
+            <div><div style="font-family:var(--fm);font-size:24px;font-weight:600;color:var(--green);">5.4%</div><div style="font-size:10px;color:var(--t3);">APY -- Min $100</div></div>
+            <button style="padding:10px 20px;background:var(--gold);color:#111;font-weight:600;font-size:12px;border-radius:var(--r-sm);border:none;cursor:pointer;min-height:44px;" onclick="toast('Investing in USDC Lending...')">Invest</button>
+          </div>
+        </div>
+        <div class="earn-card">
+          <div style="padding:18px;border-bottom:1px solid var(--border);">
+            <div style="font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Real World Assets</div>
+            <div style="font-size:15px;font-weight:600;margin-bottom:4px;font-family:var(--fd);letter-spacing:.02em;">CRI/CRA Tokenizado</div>
+            <div style="font-size:11px;color:var(--t3);line-height:1.5;">Real estate & agribusiness. CVM regulated.</div>
+          </div>
+          <div style="padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">
+            <div><div style="font-family:var(--fm);font-size:24px;font-weight:600;color:var(--green);">12.4%</div><div style="font-size:10px;color:var(--t3);">APY -- Min $5,000</div></div>
+            <button style="padding:10px 20px;background:var(--gold);color:#111;font-weight:600;font-size:12px;border-radius:var(--r-sm);border:none;cursor:pointer;min-height:44px;" onclick="toast('Investing in CRI/CRA...')">Invest</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ COMPLIANCE ═══ -->
+    <div class="screen" id="s-compliance">
+      <div class="g g4" style="margin-bottom:12px;">
+        <div class="card"><div class="kpi-label">KYC Status</div><div style="font-size:14px;font-weight:600;color:var(--green);display:flex;align-items:center;gap:4px;"><i data-lucide="check-circle" width="14" height="14"></i> Verified</div></div>
+        <div class="card"><div class="kpi-label">BACEN Reports</div><div class="kpi-val" style="font-size:18px;">247</div><div style="font-size:10px;color:var(--green);">All auto-filed</div></div>
+        <div class="card"><div class="kpi-label">IOF Collected</div><div class="kpi-val" style="font-size:18px;">R$ 18,420</div><div style="font-size:10px;color:var(--t3);">YTD</div></div>
+        <div class="card"><div class="kpi-label">SPSAV</div><div style="font-size:14px;font-weight:600;color:var(--green);display:flex;align-items:center;gap:4px;"><i data-lucide="check-circle" width="14" height="14"></i> Authorized</div></div>
+      </div>
+      <div class="card">
+        <div class="card-h">Regulatory Filings <div class="tag">Auto</div></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Report</th><th>Type</th><th>Period</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>BACEN FX Report</td><td class="mono">RDE-IED</td><td>Mar 2026</td><td><span class="badge badge-green">Filed</span></td></tr>
+              <tr><td>IOF Collection</td><td class="mono">IOF-C</td><td>Mar 2026</td><td><span class="badge badge-green">Filed</span></td></tr>
+              <tr><td>Siscoserv</td><td class="mono">NBS</td><td>Q1 2026</td><td><span class="badge badge-warn">Pending</span></td></tr>
+              <tr><td>IRRF Withholding</td><td class="mono">IRRF-R</td><td>Mar 2026</td><td><span class="badge badge-green">Filed</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ACTIVITY ═══ -->
+    <div class="screen" id="s-activity">
+      <div class="tabs">
+        <div class="tab active" onclick="tabClick(this)">All</div>
+        <div class="tab" onclick="tabClick(this)">Transfers</div>
+        <div class="tab" onclick="tabClick(this)">Exchange</div>
+        <div class="tab" onclick="tabClick(this)">Card</div>
+        <div class="tab" onclick="tabClick(this)">Yield</div>
+      </div>
+      <div class="card">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Date</th><th>Type</th><th>Description</th><th>Amount</th><th>Status</th><th>TX</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">Mar 23, 16:42</td><td><span class="badge badge-gold">RemitFX</span></td><td>BRL -> USDC</td><td class="mono">R$ 50,000</td><td><span class="badge badge-green">Settled</span></td><td class="mono" style="color:var(--gold);cursor:pointer;" onclick="copyTx()">0x8f2a..b3</td></tr>
+              <tr><td class="mono">Mar 23, 14:32</td><td><span class="badge badge-gold">Card</span></td><td>Amazon US</td><td class="mono">-$342.89</td><td><span class="badge badge-green">Approved</span></td><td class="mono" style="color:var(--t3);">--</td></tr>
+              <tr><td class="mono">Mar 23, 10:15</td><td><span class="badge badge-green">Deposit</span></td><td>PIX -- BB</td><td class="mono">R$ 120,000</td><td><span class="badge badge-green">Confirmed</span></td><td class="mono" style="color:var(--t3);">PIX-2847</td></tr>
+              <tr><td class="mono">Mar 22, 22:10</td><td><span class="badge badge-blue">Exchange</span></td><td>USDC -> USDT</td><td class="mono">$25,000</td><td><span class="badge badge-green">Filled</span></td><td class="mono" style="color:var(--gold);cursor:pointer;">0x3c1d..a8</td></tr>
+              <tr><td class="mono">Mar 22, 09:15</td><td><span class="badge badge-gold">Card</span></td><td>Latam Airlines</td><td class="mono">-$1,245</td><td><span class="badge badge-green">Approved</span></td><td class="mono" style="color:var(--t3);">--</td></tr>
+              <tr><td class="mono">Mar 21, 08:00</td><td><span class="badge badge-green">Yield</span></td><td>FIDC Interest</td><td class="mono">+$89.40</td><td><span class="badge badge-green">Credited</span></td><td class="mono" style="color:var(--gold);">0x91ef..c2</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ API KEYS ═══ -->
+    <div class="screen" id="s-apikeys">
+      <div class="card" style="margin-bottom:14px;">
+        <div class="card-h">Your API Keys</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--bg);border-radius:var(--r-sm);margin-bottom:10px;border:1px solid var(--border);gap:12px;flex-wrap:wrap;">
+          <div style="min-width:0;"><div style="font-size:13px;font-weight:500;">Production Key</div><div class="mono" style="font-size:11px;color:var(--t3);margin-top:2px;overflow:hidden;text-overflow:ellipsis;">onsk_live_------------3f8a</div></div>
+          <div style="display:flex;gap:6px;flex-shrink:0;">
+            <button class="btn-sm" onclick="toast('API key copied')">Copy</button>
+            <button style="padding:8px 14px;font-size:11px;border-radius:var(--r-sm);cursor:pointer;border:1px solid rgba(220,38,38,.25);background:var(--red-bg);color:var(--red);min-height:36px;">Revoke</button>
+          </div>
+        </div>
+        <button class="btn-ghost" style="width:auto;padding:10px 16px;font-size:11px;margin-top:0;">+ Generate New Key</button>
+      </div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:.12em;color:var(--t3);text-transform:uppercase;margin:18px 0 10px;">Exchange Integrations</div>
+      <div class="g g3">
+        <div class="api-card" onclick="toast('Binance connected')"><div class="api-logo" style="color:#f3ba2f;">B</div><div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;">Binance</div><div style="font-size:10px;color:var(--t3);">Spot + Futures API</div></div><span class="badge badge-green" style="flex-shrink:0;">Connected</span></div>
+        <div class="api-card" onclick="toast('Bybit connected')"><div class="api-logo" style="color:#f7a600;">Bb</div><div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;">Bybit</div><div style="font-size:10px;color:var(--t3);">Unified Trading API</div></div><span class="badge badge-green" style="flex-shrink:0;">Connected</span></div>
+        <div class="api-card" onclick="toast('Setting up OKX...')"><div class="api-logo" style="color:var(--t1);">OKX</div><div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;">OKX</div><div style="font-size:10px;color:var(--t3);">Trading + Earn API</div></div><span class="badge badge-gold" style="flex-shrink:0;">Setup</span></div>
+        <div class="api-card" onclick="toast('Setting up Bitget...')"><div class="api-logo" style="color:#00f0ff;">Bg</div><div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;">Bitget</div><div style="font-size:10px;color:var(--t3);">Copy Trading API</div></div><span class="badge badge-gold" style="flex-shrink:0;">Setup</span></div>
+        <div class="api-card" style="opacity:.5;cursor:not-allowed;"><div class="api-logo" style="color:#6b4bff;">Kr</div><div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;">Kraken</div><div style="font-size:10px;color:var(--t3);">REST + WebSocket</div></div><span style="flex-shrink:0;font-size:10px;color:var(--t3);">Soon</span></div>
+        <div class="api-card" style="opacity:.5;cursor:not-allowed;"><div class="api-logo" style="color:#0052ff;">Cb</div><div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;">Coinbase</div><div style="font-size:10px;color:var(--t3);">Advanced Trade API</div></div><span style="flex-shrink:0;font-size:10px;color:var(--t3);">Soon</span></div>
+      </div>
+    </div>
+
+    <!-- ═══ SETTINGS ═══ -->
+    <div class="screen" id="s-settings">
+      <div class="tabs">
+        <div class="tab active" onclick="tabClick(this)">General</div>
+        <div class="tab" onclick="tabClick(this)">Security</div>
+        <div class="tab" onclick="tabClick(this)">Notifications</div>
+      </div>
+      <div class="g g2">
+        <div class="card">
+          <div class="card-h">Preferences</div>
+          <div class="field"><label>Language</label><select><option>English</option><option>Portugues (BR)</option><option>Espanol</option></select></div>
+          <div class="field"><label>Currency Display</label><select><option>USD ($)</option><option>BRL (R$)</option><option>EUR</option></select></div>
+          <div class="field"><label>Time Zone</label><select><option>America/Sao_Paulo (GMT-3)</option><option>Asia/Abu_Dhabi (GMT+4)</option></select></div>
+          <button class="btn-gold" style="margin-top:4px;" onclick="toast('Settings saved')">Save Changes</button>
+        </div>
+        <div class="card">
+          <div class="card-h">Appearance</div>
+          <div style="display:flex;gap:8px;">
+            <div style="flex:1;padding:16px;background:var(--bg);border:2px solid var(--gold);border-radius:var(--r-sm);text-align:center;cursor:pointer;font-size:12px;min-height:56px;display:flex;align-items:center;justify-content:center;gap:6px;" onclick="setTheme('dark')"><i data-lucide="moon" width="14" height="14"></i> Dark</div>
+            <div style="flex:1;padding:16px;background:#f4f2ed;border:2px solid var(--border);border-radius:var(--r-sm);text-align:center;cursor:pointer;font-size:12px;color:#333;min-height:56px;display:flex;align-items:center;justify-content:center;gap:6px;" onclick="setTheme('light')"><i data-lucide="sun" width="14" height="14"></i> Light</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PROFILE ═══ -->
+    <div class="screen" id="s-profile">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap;">
+        <div style="width:60px;height:60px;border-radius:50%;background:var(--gold-g);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:22px;color:var(--gold);border:2px solid rgba(240,140,0,.3);flex-shrink:0;">GP</div>
+        <div>
+          <h3 style="font-size:18px;font-family:var(--fd);letter-spacing:.04em;">Guilherme Prado</h3>
+          <div style="font-size:12px;color:var(--t2);margin-top:2px;">CEO & Founder -- Enterprise Account</div>
+          <div style="font-size:11px;color:var(--gold);margin-top:2px;">guilherme@onstack.io</div>
+        </div>
+      </div>
+      <div class="g g3" style="margin-bottom:12px;">
+        <div class="card"><div class="kpi-label">Account Type</div><div style="font-size:14px;font-weight:600;">Enterprise</div></div>
+        <div class="card"><div class="kpi-label">KYC Level</div><div style="font-size:14px;font-weight:600;color:var(--green);display:flex;align-items:center;gap:4px;"><i data-lucide="check-circle" width="14" height="14"></i> Level 3</div></div>
+        <div class="card"><div class="kpi-label">Member Since</div><div style="font-size:14px;font-weight:600;">Jan 2026</div></div>
+      </div>
+      <div class="g g2">
+        <div class="card">
+          <div class="card-h">Personal Info</div>
+          <div class="field"><label>Full Name</label><input type="text" value="Guilherme Prado"></div>
+          <div class="field"><label>CPF</label><input type="text" value="---.---.---42"></div>
+          <div class="field"><label>Phone</label><input type="text" value="+55 11 94745-1677"></div>
+          <button class="btn-gold" style="margin-top:4px;" onclick="toast('Profile updated')">Update Profile</button>
+        </div>
+        <div class="card">
+          <div class="card-h">Company Info</div>
+          <div class="field"><label>Company</label><input type="text" value="OnStack Tecnologia Ltda."></div>
+          <div class="field"><label>CNPJ</label><input type="text" value="--.---.---/0001-89"></div>
+          <div class="field"><label>Jurisdiction</label><input type="text" value="Brazil (BACEN) + ADGM"></div>
+          <button class="btn-ghost" style="margin-top:4px;">Request Limit Increase</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- BOTTOM NAV (mobile) -->
+  <nav class="bottom-nav" id="bottom-nav" aria-label="Quick navigation">
+    <div class="bn-item active" data-screen="dashboard" onclick="bnGo('dashboard',this)" role="button" tabindex="0" onkeydown="if(event.key==='Enter')this.click()"><i data-lucide="layout-dashboard" width="20" height="20"></i><span>Dashboard</span></div>
+    <div class="bn-item" data-screen="send" onclick="bnGo('send',this)" role="button" tabindex="0" onkeydown="if(event.key==='Enter')this.click()"><i data-lucide="send" width="20" height="20"></i><span>Send</span></div>
+    <div class="bn-item" data-screen="exchange" onclick="bnGo('exchange',this)" role="button" tabindex="0" onkeydown="if(event.key==='Enter')this.click()"><i data-lucide="arrow-left-right" width="20" height="20"></i><span>Exchange</span></div>
+    <div class="bn-item" data-screen="earn" onclick="bnGo('earn',this)" role="button" tabindex="0" onkeydown="if(event.key==='Enter')this.click()"><i data-lucide="trending-up" width="20" height="20"></i><span>Earn</span></div>
+    <div class="bn-item" onclick="openSidebar()" role="button" aria-label="More options"><i data-lucide="menu" width="20" height="20"></i><span>More</span></div>
+  </nav>
+
+</div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+/* ══════════════════════════════════════════════
+   THEME
+   ══════════════════════════════════════════════ */
+function toggleTheme() {
+  var t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  setTheme(t);
+}
+function setTheme(t) {
+  document.documentElement.dataset.theme = t;
+  var icons = document.querySelectorAll('.theme-icon-el');
+  icons.forEach(function(icon) {
+    icon.setAttribute('data-lucide', t === 'dark' ? 'moon' : 'sun');
+  });
+  lucide.createIcons();
+  toast('Theme: ' + t.charAt(0).toUpperCase() + t.slice(1));
+}
+
+/* ══════════════════════════════════════════════
+   SIDEBAR (mobile)
+   ══════════════════════════════════════════════ */
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebar-backdrop').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-backdrop').classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+/* ══════════════════════════════════════════════
+   NAVIGATION
+   ══════════════════════════════════════════════ */
+var titles = {
+  dashboard:'Dashboard', send:'Send Money', exchange:'Exchange Hub',
+  card:'OnStack Card', earn:'Earn & RWA', compliance:'Compliance',
+  activity:'Activity', apikeys:'API Keys', settings:'Settings', profile:'Profile'
+};
+
+function go(id, el) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('s-' + id).classList.add('active');
+  // Update sidebar active state
+  document.querySelectorAll('.sb-item').forEach(function(s) { s.classList.remove('active'); });
+  if (el) {
+    el.classList.add('active');
+  } else {
+    var match = document.querySelector('.sb-item[data-screen="' + id + '"]');
+    if (match) match.classList.add('active');
+  }
+  // Update bottom nav active state
+  document.querySelectorAll('.bn-item').forEach(function(b) { b.classList.remove('active'); });
+  var bnMatch = document.querySelector('.bn-item[data-screen="' + id + '"]');
+  if (bnMatch) bnMatch.classList.add('active');
+  // Update page title
+  document.getElementById('page-title').textContent = titles[id] || id;
+  if (id === 'send') sendGo(1);
+  // Close sidebar on mobile
+  closeSidebar();
+  // Scroll content to top
+  var content = document.querySelector('.content');
+  if (content) content.scrollTop = 0;
+  lucide.createIcons();
+}
+
+function bnGo(id, el) {
+  go(id, null);
+}
+
+/* ══════════════════════════════════════════════
+   SEND FLOW
+   ══════════════════════════════════════════════ */
+function sendGo(n) {
+  document.querySelectorAll('.send-panel').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('sp' + n).classList.add('active');
+  for (var i = 1; i <= 3; i++) {
+    var l = document.getElementById('sl' + i);
+    l.className = 'send-step' + (i < n ? ' done' : i === n ? ' active' : '');
+  }
+  lucide.createIcons();
+}
+
+function calcReceive() {
+  var v = parseFloat(document.querySelector('.amount-input').value.replace(/,/g, '')) || 0;
+  var net = v - (v * 0.006) - (v * 0.0038);
+  document.getElementById('recv-val').textContent = (net / 5.42).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+/* ══════════════════════════════════════════════
+   LOGIN
+   ══════════════════════════════════════════════ */
+function showTwoFA() {
+  document.getElementById('login-form').style.display = 'none';
+  document.getElementById('twofa').style.display = 'block';
+  document.querySelector('#twofa-inputs input').focus();
+}
+
+function tfaNext(el, i) {
+  if (el.value.length === 1) {
+    var inputs = document.querySelectorAll('#twofa-inputs input');
+    if (i < 5) inputs[i + 1].focus();
+    if (i === 5) doLogin();
+  }
+}
+
+function doLogin() {
+  var btn = document.querySelector('#twofa .btn-primary');
+  if (btn) { btn.textContent = 'Authenticating...'; btn.style.opacity = '.7'; btn.style.pointerEvents = 'none'; }
+  setTimeout(function() {
+    document.getElementById('login').classList.add('hidden');
+    setTimeout(animateKPIs, 200);
+  }, 600);
+}
+
+/* ══════════════════════════════════════════════
+   TOAST
+   ══════════════════════════════════════════════ */
+function toast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2600);
+}
+
+function copyTx() {
+  if (navigator.clipboard) navigator.clipboard.writeText('0x8f2a1c3d4e5f6789abcdef0123456789abcdb391');
+  toast('TX hash copied to clipboard');
+}
+
+/* ══════════════════════════════════════════════
+   TABS
+   ══════════════════════════════════════════════ */
+function tabClick(el) {
+  el.parentElement.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  el.classList.add('active');
+}
+
+/* ══════════════════════════════════════════════
+   KPI COUNTER ANIMATION
+   ══════════════════════════════════════════════ */
+function animateKPIs() {
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('[data-count]').forEach(function(el) {
+    var target = parseFloat(el.dataset.count);
+    var prefix = el.dataset.prefix || '';
+    if (reduced) {
+      el.textContent = prefix + target.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return;
+    }
+    var start = performance.now();
+    var dur = 1600;
+    (function run(now) {
+      var p = Math.min((now - start) / dur, 1);
+      var e = 1 - Math.pow(1 - p, 3);
+      el.textContent = prefix + (e * target).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      if (p < 1) requestAnimationFrame(run);
+    })(performance.now());
+  });
+}
+
+/* ══════════════════════════════════════════════
+   TICKER
+   ══════════════════════════════════════════════ */
+var pairs = [
+  {p:'BRL/USD',v:'0.1845',c:'+0.12%',u:true}, {p:'BRL/USDT',v:'5.4200',c:'+0.08%',u:true},
+  {p:'BTC/USD',v:'67,842',c:'+2.41%',u:true}, {p:'ETH/USD',v:'3,521',c:'+1.82%',u:true},
+  {p:'SOL/USD',v:'186.4',c:'+4.21%',u:true}, {p:'MORPH/USD',v:'0.384',c:'+12.6%',u:true},
+  {p:'BRL/EUR',v:'0.1698',c:'-0.05%',u:false}, {p:'BRL/GBP',v:'0.1452',c:'+0.03%',u:true}
+];
+var tickerEl = document.getElementById('ticker');
+var h = '';
+for (var r = 0; r < 2; r++) pairs.forEach(function(p) {
+  h += '<div class="tick"><b>' + p.p + '</b> ' + p.v + ' <span class="' + (p.u ? 'up' : 'down') + '">' + p.c + '</span></div>';
+});
+tickerEl.innerHTML = h;
+
+/* ══════════════════════════════════════════════
+   RATE TIMER
+   ══════════════════════════════════════════════ */
+var rateS = 47;
+setInterval(function() {
+  rateS--;
+  if (rateS <= 0) rateS = 60;
+  var el = document.getElementById('rate-timer');
+  if (el) {
+    el.textContent = rateS + 's';
+    el.style.color = rateS < 10 ? 'var(--red)' : 'var(--green)';
+  }
+}, 1000);
+
+/* ══════════════════════════════════════════════
+   MEDIA QUERY LISTENER (show/hide bottom nav)
+   ══════════════════════════════════════════════ */
+var mq = window.matchMedia('(min-width: 768px)');
+function handleMQ(e) {
+  if (e.matches) {
+    // Desktop: ensure sidebar is visible (not via .open class)
+    closeSidebar();
+  }
+}
+mq.addEventListener('change', handleMQ);
+
+/* ══════════════════════════════════════════════
+   INIT
+   ══════════════════════════════════════════════ */
+lucide.createIcons();
+</script>
+</body>
+</html>
