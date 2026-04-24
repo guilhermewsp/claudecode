@@ -4208,15 +4208,65 @@ footer {
   /* CTA não precisa de margin-bottom sem o painel abaixo */
   .product-card .shiny-btn { margin-bottom: 0 !important; }
 
-  /* -------- FLOW STEPS (Como Funciona) -------- */
-  section#como .flow-step { padding: 18px 16px !important; gap: 12px !important; min-height: auto !important; }
-  section#como .flow-icon { margin-top: 0 !important; }
-  section#como .flow-icon svg { width: 36px !important; height: 36px !important; stroke-width: 1.6 !important; }
-  .flow-title { font-size: 1.125rem !important; line-height: 1.3 !important; margin-top: 2px !important; }
-  .flow-desc { font-size: 0.875rem !important; line-height: 1.5 !important; }
-  .flow-num { font-size: 34px !important; }
-  section#como .flow-num { font-size: 13px !important; }
-  section#como .flow-chip { font-size: 10px !important; padding: 4px 9px !important; }
+  /* -------- FLOW STEPS (Como Funciona) --------
+     v14.1: grid 2 linhas — linha 1: [num] [icon] ... [chip]
+                            linha 2: título
+                            linha 3: descrição
+     Número grande (32px) + ícone ao lado, chip à direita. */
+  section#como .flow-step {
+    display: grid !important;
+    grid-template-areas:
+      "num icon chip"
+      "title title title"
+      "desc desc desc" !important;
+    grid-template-columns: auto auto 1fr !important;
+    column-gap: 12px !important;
+    row-gap: 10px !important;
+    padding: 18px 16px !important;
+    min-height: auto !important;
+    align-items: center !important;
+  }
+  section#como .flow-step-top { display: contents !important; }
+  section#como .flow-num {
+    grid-area: num !important;
+    font-size: 32px !important;
+    line-height: 1 !important;
+    font-weight: 300 !important;
+    align-self: center !important;
+  }
+  section#como .flow-icon {
+    grid-area: icon !important;
+    align-self: center !important;
+    margin: 0 !important;
+    opacity: 1 !important;
+    color: var(--gold) !important;
+    width: auto !important; height: auto !important;
+  }
+  section#como .flow-icon svg {
+    width: 28px !important;
+    height: 28px !important;
+    stroke-width: 1.6 !important;
+  }
+  section#como .flow-chip {
+    grid-area: chip !important;
+    justify-self: end !important;
+    align-self: center !important;
+    font-size: 10px !important;
+    padding: 4px 9px !important;
+  }
+  section#como .flow-title {
+    grid-area: title !important;
+    font-size: 1.125rem !important;
+    line-height: 1.3 !important;
+    margin-top: 2px !important;
+  }
+  section#como .flow-desc {
+    grid-area: desc !important;
+    font-size: 0.875rem !important;
+    line-height: 1.5 !important;
+  }
+  /* flow-step-mid tinha translateY(18px) no desktop — zera no mobile */
+  section#como .flow-step-mid { transform: none !important; }
 
   /* -------- GRID-3 (Prova Operacional / features genéricas) -------- */
   .grid-3 .tilt-card .tilt-inner { padding: 18px !important; gap: 10px !important; }
