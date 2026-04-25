@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ØNSTACK — Investor Synopsis</title>
+<meta name="description" content="ØNSTACK — Smart Digital FX Hub. The only regulated FX + Stablecoin infrastructure in Brazil. Capturing $363.8B in cross-border flows at 73% lower cost.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://0nstack.io/synopsis/">
+<meta property="og:title" content="ØNSTACK — Smart Digital FX Hub">
+<meta property="og:description" content="The only regulated FX + Stablecoin infrastructure in Brazil — capturing $363.8B in cross-border flows at 73% lower cost. Investor Synopsis.">
+<meta property="og:image" content="https://0nstack.io/output/assets/og-synopsis.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ØNSTACK — Smart Digital FX Hub">
+<meta name="twitter:description" content="The only regulated FX + Stablecoin infrastructure in Brazil — capturing $363.8B in cross-border flows at 73% lower cost.">
+<meta name="twitter:image" content="https://0nstack.io/output/assets/og-synopsis.png">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #f08c00;
+  --gold-d: #c7841a;
+  --dark: #0A0A0C;
+  --dark2: #101012;
+  --dark3: #18181C;
+  --t1: #F5F0EB;
+  --t2: #9E9A94;
+  --t3: #5C5955;
+  --green: #34D399;
+  --fd: 'Oxanium', sans-serif;
+  --fb: 'Plus Jakarta Sans', sans-serif;
+  --fm: 'JetBrains Mono', monospace;
+  --ease: cubic-bezier(0.4,0,0.2,1);
+}
+
+*,*::before,*::after { margin:0;padding:0;box-sizing:border-box; }
+
+body {
+  font-family: var(--fb);
+  background: var(--dark);
+  color: var(--t1);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+/* Grain */
+body::after {
+  content:'';position:fixed;inset:0;z-index:9990;pointer-events:none;opacity:.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat:repeat;background-size:128px;
+}
+
+.deck { position:fixed;inset:0; }
+
+/* Progress bar */
+.progress { position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold-d),var(--gold));z-index:1000;transition:width .5s var(--ease);box-shadow:0 0 10px rgba(240,140,0,.4); }
+
+/* Slide */
+.s {
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:clamp(44px,5.5vh,68px) clamp(24px,5vw,80px) clamp(72px,9vh,96px);
+  text-align:center;
+  opacity:0;pointer-events:none;visibility:hidden;
+  transform:scale(.97) translateY(6px);filter:brightness(.9);
+  transition:opacity .55s var(--ease),transform .55s var(--ease),filter .55s var(--ease),visibility 0s linear .55s;
+  overflow-y:auto;overflow-x:hidden;
+  scrollbar-width:none;
+}
+.s::-webkit-scrollbar { display:none; }
+.s.active { opacity:1;pointer-events:all;visibility:visible;transform:scale(1) translateY(0);filter:brightness(1);transition:opacity .55s var(--ease),transform .55s var(--ease),filter .55s var(--ease),visibility 0s linear 0s; }
+
+/* Auto-play timer bar */
+.timer-bar {
+  position:fixed;bottom:0;left:0;height:3px;background:var(--gold);z-index:1001;
+  transition:width linear;
+  box-shadow:0 0 8px rgba(240,140,0,.3);
+}
+
+/* Glows */
+.glow-tr::after { content:'';position:absolute;top:-25%;right:-15%;width:500px;height:500px;background:radial-gradient(ellipse,rgba(240,140,0,.05) 0%,transparent 65%);pointer-events:none;animation:gf 12s ease-in-out infinite; }
+.glow-bl::before { content:'';position:absolute;bottom:-20%;left:-10%;width:400px;height:400px;background:radial-gradient(ellipse,rgba(240,140,0,.035) 0%,transparent 65%);pointer-events:none;animation:gf 15s ease-in-out infinite reverse; }
+@keyframes gf { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(20px,-15px) scale(1.05)} }
+
+/* Animations */
+@keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+@keyframes revealUp { from{opacity:0;transform:translateY(20px) scale(.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+@keyframes shimmer { 0%{background-position:-200% center} 100%{background-position:200% center} }
+@keyframes float { 0%,100%{transform:translate(0,0)} 50%{transform:translate(0,-8px)} }
+@keyframes countUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+@keyframes pulse { 0%,100%{opacity:.3;transform:scale(1)} 50%{opacity:0;transform:scale(1.2)} }
+@keyframes slideLeft { from{opacity:0;transform:translateX(40px)} to{opacity:1;transform:translateX(0)} }
+@keyframes slideRight { from{opacity:0;transform:translateX(-40px)} to{opacity:1;transform:translateX(0)} }
+@keyframes typing { from{width:0} to{width:100%} }
+@keyframes blink { 50%{border-color:transparent} }
+@keyframes barGrow { from{width:0} to{width:var(--bar-w)} }
+@keyframes barGrowLegacy { from{width:0} to{width:var(--bar-w-legacy)} }
+@keyframes savingsPulse { 0%{box-shadow:0 0 0 0 rgba(52,211,153,.3)} 70%{box-shadow:0 0 0 10px rgba(52,211,153,0)} 100%{box-shadow:0 0 0 0 rgba(52,211,153,0)} }
+@keyframes scaleUp { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+
+.s.active .anim-up { animation:fadeUp .7s var(--ease) .1s forwards; }
+.s.active .anim-reveal { animation:revealUp .7s var(--ease) .15s forwards; }
+.s.active .anim-delay-1 { animation:revealUp .6s var(--ease) .2s forwards; }
+.s.active .anim-delay-2 { animation:revealUp .6s var(--ease) .35s forwards; }
+.s.active .anim-delay-3 { animation:revealUp .6s var(--ease) .5s forwards; }
+.s.active .anim-delay-4 { animation:revealUp .6s var(--ease) .65s forwards; }
+.s.active .anim-delay-5 { animation:revealUp .6s var(--ease) .8s forwards; }
+.s.active .anim-delay-6 { animation:revealUp .6s var(--ease) .95s forwards; }
+.s.active .anim-left { animation:slideRight .7s var(--ease) .2s forwards; }
+.s.active .anim-right { animation:slideLeft .7s var(--ease) .3s forwards; }
+.s.active .anim-scale { animation:scaleUp .7s var(--ease) .3s forwards; }
+.anim-up,.anim-reveal,.anim-delay-1,.anim-delay-2,.anim-delay-3,.anim-delay-4,.anim-delay-5,.anim-delay-6,.anim-left,.anim-right,.anim-scale { opacity:0; }
+
+/* Typing effect */
+.typing-wrap { display:inline-block;overflow:hidden;white-space:nowrap;border-right:2px solid var(--gold);width:0; }
+.s.active .typing-wrap { animation:typing 2.5s steps(30,end) .5s forwards,blink .7s step-end 2.5s 6; }
+
+/* Cost comparison bars */
+.cost-bar { height:clamp(36px,5vh,48px);border-radius:8px;display:flex;align-items:center;padding:0 clamp(10px,1.5vw,16px);font-family:var(--fm);font-weight:700;position:relative;overflow:hidden;width:0; }
+.s.active .cost-bar-legacy { animation:barGrow 1.2s var(--ease) .4s forwards; }
+.s.active .cost-bar-onstack { animation:barGrow .8s var(--ease) .7s forwards; }
+.cost-bar-legacy { --bar-w:100%;background:linear-gradient(90deg,rgba(248,113,113,.15),rgba(248,113,113,.08));border:1px solid rgba(248,113,113,.2); }
+.cost-bar-onstack { --bar-w:27%;background:linear-gradient(90deg,rgba(240,140,0,.2),rgba(240,140,0,.08));border:1px solid rgba(240,140,0,.3); }
+
+/* Savings badge */
+.savings-badge { animation:savingsPulse 2s ease-in-out 1.5s 3; }
+
+.gold-shimmer {
+  background:linear-gradient(90deg,var(--gold) 0%,#ffd280 45%,var(--gold) 55%,var(--gold) 100%);
+  background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.s.active .gold-shimmer { animation:shimmer 3s ease-in-out .8s 1 forwards; }
+
+/* Typography */
+.eyebrow { font-size:clamp(11px,1.1vw,13px);font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:clamp(10px,1.5vh,18px); }
+h1 { font-family:var(--fd);font-size:clamp(36px,5.4vw,68px);font-weight:700;letter-spacing:-.02em;line-height:1.02; }
+h2 { font-family:var(--fd);font-size:clamp(26px,3.4vw,46px);font-weight:600;letter-spacing:-.02em;line-height:1.1; }
+.lead { font-size:clamp(14px,1.4vw,18px);color:var(--t2);line-height:1.65;max-width:660px;margin:0 auto; }
+.gold { color:var(--gold); }
+.mono { font-family:var(--fm); }
+
+/* Cards */
+.card {
+  background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:12px;
+  padding:clamp(16px,2vh,24px) clamp(16px,2vw,28px);position:relative;overflow:hidden;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:transform .4s var(--ease),box-shadow .4s var(--ease);
+}
+.card::before { content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 10%,rgba(255,255,255,.08) 50%,transparent 90%); }
+.card:hover { transform:translateY(-3px);box-shadow:0 8px 40px rgba(0,0,0,.4),0 0 60px rgba(240,140,0,.04); }
+.card-gold { border-color:rgba(240,140,0,.2);background:rgba(240,140,0,.03); }
+
+/* Metric */
+.metric { font-family:var(--fm);font-size:clamp(32px,4.4vw,56px);font-weight:700;color:var(--gold);line-height:1; }
+.metric-sm { font-family:var(--fm);font-size:clamp(22px,2.6vw,32px);font-weight:700;line-height:1; }
+
+/* Nav */
+.nav {
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:1000;
+  display:flex;align-items:center;gap:8px;
+  background:rgba(10,10,12,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.06);border-radius:40px;padding:6px 14px;
+  box-shadow:0 4px 24px rgba(0,0,0,.4);
+}
+.nav-btn {
+  width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);color:var(--t2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .3s var(--ease);font-size:14px;
+}
+.nav-btn:hover { background:rgba(240,140,0,.1);border-color:rgba(240,140,0,.3);color:var(--gold); }
+.counter { font-family:var(--fm);font-size:10px;color:var(--t3);min-width:40px;text-align:center; }
+
+/* Autoplay toggle */
+.auto-btn {
+  width:36px;height:36px;border-radius:50%;border:1px solid rgba(240,140,0,.2);
+  background:rgba(240,140,0,.08);color:var(--gold);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .3s var(--ease);font-size:12px;
+}
+.auto-btn.paused { border-color:rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:var(--t3); }
+
+/* Demo iframe */
+.demo-frame {
+  width:100%;max-width:900px;height:clamp(350px,55vh,520px);
+  border:1px solid rgba(255,255,255,.08);border-radius:16px;
+  overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.5),0 0 0 1px rgba(240,140,0,.05);
+  background:var(--dark2);position:relative;
+  transition:all .4s cubic-bezier(0,0,.2,1);
+}
+.demo-frame iframe { width:100%;height:100%;border:none; }
+.demo-frame.fullscreen {
+  position:fixed;inset:0;z-index:9999;max-width:none;height:100%;
+  border-radius:0;border:none;box-shadow:none;
+}
+.demo-frame.fullscreen .demo-close {
+  display:flex;
+}
+.demo-close {
+  display:none;position:absolute;top:12px;right:12px;z-index:10000;
+  width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.7);
+  border:1px solid rgba(255,255,255,.15);color:white;font-size:18px;
+  align-items:center;justify-content:center;cursor:pointer;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  touch-action:manipulation;
+}
+
+/* Dots */
+.dots { display:flex;gap:6px;justify-content:center;margin-top:auto;padding-top:16px; }
+.dot { width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.12);cursor:pointer;transition:all .3s var(--ease); }
+.dot.active { background:var(--gold);box-shadow:0 0 8px rgba(240,140,0,.4);width:20px;border-radius:3px; }
+
+/* ═══ LinkedIn button ═══ */
+.linkedin-btn {
+  display:inline-flex;align-items:center;justify-content:center;gap:5px;
+  margin-top:10px;padding:5px 12px;border-radius:6px;
+  background:rgba(10,102,194,.1);border:1px solid rgba(10,102,194,.2);
+  font-size:11px;font-weight:600;color:#5BA3D9;
+  text-decoration:none;transition:all .25s var(--ease);
+  touch-action:manipulation;min-height:30px;
+}
+.linkedin-btn:hover { background:rgba(10,102,194,.2);color:#7DBDE8;border-color:rgba(10,102,194,.35); }
+.linkedin-btn svg { flex-shrink:0; }
+
+/* ═══ MOBILE RESPONSIVE ═══ */
+@media (max-width:768px) {
+  /* Base slide: tighter padding, centered, room for nav */
+  .s { padding:clamp(36px,4.5vh,52px) clamp(14px,4vw,24px) clamp(64px,11vh,84px); }
+  h1 { font-size:clamp(32px,7.6vw,48px); }
+  h2 { font-size:clamp(23px,5.6vw,34px); margin-bottom:clamp(10px,1.5vh,16px) !important; line-height:1.15; }
+  .lead { font-size:clamp(14px,3.6vw,17px); margin-bottom:clamp(12px,2vh,18px) !important; line-height:1.55; }
+  .eyebrow { font-size:clamp(10px,2.6vw,12px); margin-bottom:clamp(6px,1vh,12px) !important; }
+  .metric { font-size:clamp(28px,7.5vw,40px); }
+  .metric-sm { font-size:clamp(19px,5vw,25px); }
+
+  /* Remove blur on mobile to prevent rendering artifacts */
+  .card { backdrop-filter:none !important; -webkit-backdrop-filter:none !important; background:rgba(255,255,255,.04) !important; border-radius:10px; }
+  .card-gold { background:rgba(240,140,0,.05) !important; }
+  .card:hover { transform:none; box-shadow:none; }
+  .card::before { display:none; }
+
+  /* ── 01 Hero ── */
+  .s#s1 div[style*="display:flex;gap:clamp"] { flex-wrap:wrap; gap:16px !important; justify-content:center; }
+  .s#s1 .metric-sm { font-size:clamp(20px,5.5vw,26px); }
+
+  /* ── 02 Problem / Catalysts ── */
+  .s#s2 { overflow-y:auto !important; justify-content:flex-start !important; padding-top:clamp(28px,3.5vh,40px) !important; }
+  .s#s2 > div[style*="grid-template-columns"] { grid-template-columns:1fr !important; gap:10px !important; max-width:100% !important; }
+  .s#s2 .card { padding:12px 16px !important; display:flex; align-items:center; gap:12px; text-align:left !important; }
+  .s#s2 .card .metric { font-size:clamp(24px,6.2vw,32px) !important; margin-bottom:2px !important; }
+  .s#s2 .card div[style*="font-size:13px"] { font-size:13px !important; }
+  .s#s2 .card div[style*="font-size:11px"] { font-size:11px !important; }
+  .s#s2 > div[style*="margin-top"] { margin-top:10px !important; }
+  .s#s2 > div[style*="margin-top"] span { font-size:10px !important; padding:5px 12px !important; }
+
+  /* ── 03 Solution ── */
+  .s#s3 { justify-content:flex-start !important; padding-top:clamp(28px,3.5vh,40px) !important; }
+  .s#s3 h2 { font-size:clamp(20px,5.2vw,28px) !important; margin-bottom:4px !important; }
+  .s#s3 .lead { font-size:13px !important; margin-bottom:clamp(10px,1.5vh,16px) !important; }
+  .s#s3 > div:last-child { grid-template-columns:1fr !important; gap:8px !important; max-width:100% !important; }
+  .s#s3 .card { padding:10px 14px !important; }
+  .s#s3 .card > div:first-child { width:32px !important; height:32px !important; margin:0 auto 6px !important; }
+  .s#s3 .card > div:first-child svg { width:14px !important; height:14px !important; }
+  .s#s3 .card > div[style*="font-size:16px"] { font-size:14px !important; margin-bottom:2px !important; }
+  .s#s3 .card > div[style*="font-size:12px"] { font-size:11px !important; }
+  .s#s3 .card > div[style*="margin-top:14px"] { margin-top:6px !important; padding-top:6px !important; }
+  .s#s3 .card span[style*="font-size:22px"] { font-size:18px !important; }
+  .s#s3 .card > div[style*="margin-top:14px"] div { font-size:10px !important; margin-top:0 !important; }
+
+  /* ── 04 Regulatory Moat ── */
+  .s#s4 > div:nth-child(4) { grid-template-columns:1fr !important; gap:10px !important; }
+  .s#s4 .card { padding:12px 16px !important; }
+  .s#s4 > div[style*="display:grid;grid-template-columns:1fr auto 1fr"] { grid-template-columns:1fr !important; gap:10px !important; }
+  .s#s4 > div[style*="display:grid;grid-template-columns:1fr auto 1fr"] > div:nth-child(2) { margin:0 auto; }
+  .s#s4 .card div[style*="font-size:28px"] { font-size:24px !important; }
+
+  /* ── 05 Market Opportunity TAM/SAM/SOM ── */
+  .s#s5 > div[style*="display:flex"] { flex-direction:column !important; gap:14px !important; align-items:center !important; }
+  .s#s5 svg { max-width:200px; margin:0 auto; }
+  .s#s5 .card { padding:12px 16px !important; }
+
+  /* ── 06 Tokenized Products (Yield) ── */
+  .s#s6 { justify-content:flex-start !important; padding-top:clamp(28px,3.5vh,40px) !important; }
+  .s#s6 h2 { font-size:clamp(20px,5vw,28px) !important; margin-bottom:4px !important; }
+  .s#s6 .lead { font-size:13px !important; margin-bottom:clamp(10px,1.5vh,16px) !important; }
+  .s#s6 > div[style*="grid-template-columns:repeat(3"] { grid-template-columns:1fr !important; gap:8px !important; }
+  .s#s6 .card { padding:10px 14px !important; }
+  .s#s6 .card > div:first-child { width:32px !important; height:32px !important; margin:0 auto 6px !important; }
+  .s#s6 .card > div:first-child svg { width:14px !important; height:14px !important; }
+  .s#s6 .card span[style*="font-size:24px"] { font-size:18px !important; }
+  .s#s6 .card div[style*="font-size:16px"] { font-size:14px !important; margin-bottom:2px !important; }
+  .s#s6 .card div[style*="font-size:12px"] { font-size:11px !important; }
+  .s#s6 .card div[style*="margin-top:12px"] { margin-top:6px !important; padding-top:6px !important; }
+  .s#s6 .card div[style*="margin-top:12px"] div { font-size:10px !important; margin-top:0 !important; }
+  .s#s6 > div[style*="margin-top:clamp(14px"] { margin-top:8px !important; padding:8px 14px !important; }
+  .s#s6 > div[style*="margin-top:clamp(14px"] div { font-size:11px !important; }
+
+  /* ── 07 Cost Comparison ── */
+  .cost-bar { height:clamp(34px,4.6vh,42px); }
+  .s#s7 div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns:1fr !important; gap:10px !important; }
+  .s#s7 .savings-badge { font-size:13px !important; }
+  .s#s7 .card div[style*="font-size:19px"] { font-size:17px !important; }
+
+  /* ── 08 Demo ── */
+  .s#s8 { padding:clamp(20px,3vh,32px) 6px clamp(50px,8vh,68px) !important; }
+  .s#s8 .eyebrow { margin-bottom:4px !important; }
+  .s#s8 h2 { font-size:clamp(20px,5.4vw,28px); margin-bottom:4px !important; }
+  .s#s8 .lead { display:none; }
+  .demo-frame { height:clamp(300px,58vh,460px); border-radius:10px; max-width:100%; }
+  .demo-frame iframe { transform-origin:top left; }
+  .demo-actions { flex-wrap:wrap; gap:10px !important; }
+  .demo-actions a, .demo-actions button { font-size:12px !important; padding:8px 16px !important; }
+
+  /* ── 09 Team ── */
+  .s#s9 { justify-content:flex-start !important; padding-top:clamp(28px,3.5vh,40px) !important; }
+  .s#s9 h2 { font-size:clamp(20px,5vw,28px) !important; margin-bottom:clamp(10px,1.5vh,16px) !important; }
+  .team-grid { grid-template-columns:1fr 1fr !important; gap:8px !important; }
+  .s#s9 .card { padding:12px 8px !important; text-align:center; }
+  .s#s9 div[style*="width:clamp(56px"] { width:52px !important; height:52px !important; margin-bottom:6px !important; }
+  .s#s9 div[style*="font-size:clamp(10px"] { font-size:10px !important; line-height:1.45 !important; }
+  .s#s9 div[style*="font-size:clamp(13px"] { font-size:13px !important; }
+  .s#s9 div[style*="font-size:10px;letter-spacing"] { font-size:9px !important; margin-bottom:4px !important; }
+  .linkedin-btn { font-size:9px; padding:3px 8px; margin-top:6px; min-height:24px; }
+  .s#s9 > div[style*="margin-top:clamp(12px"] {
+    flex-direction:row; flex-wrap:wrap; gap:6px !important;
+    justify-content:center; margin-top:10px !important;
+    padding:6px 8px; font-size:10px;
+  }
+  .s#s9 > div[style*="margin-top:clamp(12px"] > div { font-size:10px !important; gap:4px !important; }
+
+  /* ── 10 The Ask ── */
+  .s#s10 { overflow-y:auto !important; justify-content:flex-start !important; padding-top:clamp(28px,3.5vh,40px) !important; }
+  .s#s10 > div[style*="grid-template-columns:repeat(4"] { grid-template-columns:1fr 1fr !important; gap:10px !important; }
+  .s#s10 .card { padding:12px 12px !important; }
+  .s#s10 .card div[style*="font-size:12px"] { font-size:12px !important; }
+  .s#s10 .card div[style*="font-size:15px"] { font-size:14px !important; }
+  .s#s10 > div[style*="display:grid;grid-template-columns:repeat(3"] { grid-template-columns:1fr !important; }
+  .s#s10 > div[style*="display:grid;grid-template-columns:repeat(3"] > div { border-left:none !important; border-right:none !important; border-bottom:1px solid rgba(255,255,255,.06); padding:8px 0 !important; }
+
+  /* ── 11 Closing ── */
+  .s#s11 div[style*="display:flex;align-items:center;justify-content:center;gap"] {
+    flex-direction:column; gap:14px !important;
+  }
+  .s#s11 div[style*="padding:14px 24px"] { padding:12px 20px !important; }
+  .s#s11 div[style*="padding:18px 38px"] { padding:14px 28px !important; }
+
+  /* ── Nav bar ── */
+  .nav { bottom:env(safe-area-inset-bottom,12px); padding:8px 16px; gap:10px; }
+  .nav-btn, .auto-btn { width:44px; height:44px; font-size:16px; }
+  .counter { font-size:12px; min-width:48px; }
+}
+
+@media (max-width:420px) {
+  .s { padding:clamp(28px,3.5vh,40px) 12px clamp(56px,9vh,72px); }
+  h1 { font-size:clamp(28px,8.4vw,40px); }
+  h2 { font-size:clamp(20px,6vw,28px); }
+  .lead { font-size:clamp(13px,3.6vw,15px); }
+  .eyebrow { font-size:clamp(10px,2.8vw,12px); }
+
+  /* Tighter cards globally */
+  .card { padding:clamp(10px,1.8vh,16px) clamp(10px,3vw,16px) !important; }
+
+  /* Team: keep 2-col but compact */
+  .team-grid { grid-template-columns:1fr 1fr !important; gap:8px !important; }
+  .s#s9 .card { padding:10px 8px !important; }
+  .s#s9 div[style*="width:clamp(56px"] { width:48px !important; height:48px !important; }
+  .s#s9 div[style*="position:absolute;bottom:0;right:0"] { width:18px !important; height:18px !important; }
+  .s#s9 div[style*="position:absolute;bottom:0;right:0"] span { font-size:7px !important; }
+  .s#s9 div[style*="font-size:clamp(13px"] { font-size:12px !important; }
+  .s#s9 div[style*="font-size:10px;letter-spacing"] { font-size:9px !important; }
+  .linkedin-btn { font-size:9px; padding:3px 8px; min-height:24px; }
+
+  /* The Ask: single column */
+  .s#s10 > div:first-of-type { grid-template-columns:1fr !important; gap:8px !important; }
+
+  /* Yield: more compact */
+  .s#s6 .card span[style*="font-size:24px"],
+  .s#s6 .card span[style*="font-size:20px"] { font-size:18px !important; }
+
+  /* Hero metrics */
+  .s#s1 div[style*="display:flex;gap:clamp"] > div { min-width:0; }
+
+  /* S2 even smaller metrics */
+  .s#s2 .card .metric { font-size:clamp(22px,5.6vw,28px) !important; }
+}
+
+/* Safe area for iPhones with notch/dynamic island */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .nav { padding-bottom:calc(8px + env(safe-area-inset-bottom)); }
+  .s { padding-bottom:calc(60px + env(safe-area-inset-bottom)); }
+}
+
+/* dvh for proper mobile viewport */
+@supports (height: 100dvh) {
+  .deck { height:100dvh; }
+  body { height:100dvh; }
+}
+
+/* Touch action for faster taps */
+.nav-btn, .auto-btn, .dot { touch-action:manipulation; }
+
+@media (prefers-reduced-motion:reduce) {
+  .anim-up,.anim-reveal,.anim-delay-1,.anim-delay-2,.anim-delay-3,.anim-delay-4,.anim-delay-5,.anim-delay-6,.anim-left,.anim-right,.anim-scale,.gold-shimmer {
+    opacity:1!important;transform:none!important;animation:none!important;filter:none!important;
+  }
+  .gold-shimmer { -webkit-text-fill-color:var(--gold)!important;background:none!important; }
+  .s { transition:none !important; filter:none !important; transform:none !important; }
+  .s:not(.active) { opacity:0 !important; pointer-events:none !important; visibility:hidden !important; }
+  .s.active { opacity:1 !important; pointer-events:all !important; visibility:visible !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<div class="timer-bar" id="timerBar" style="width:0"></div>
+
+<div class="deck">
+
+<!-- ═══ 01 — HERO ═══ -->
+<div class="s active glow-tr glow-bl" id="s1">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(240,140,0,.04) 0%,transparent 55%);pointer-events:none;"></div>
+  <!-- Orbital rings -->
+  <svg style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);opacity:.03;pointer-events:none;" width="700" height="700" viewBox="0 0 700 700" fill="none">
+    <circle cx="350" cy="350" r="300" stroke="#f08c00" stroke-width=".5" stroke-dasharray="3 6"/>
+    <circle cx="350" cy="350" r="200" stroke="#f08c00" stroke-width=".5" stroke-dasharray="2 8"/>
+    <circle cx="350" cy="350" r="100" stroke="#f08c00" stroke-width=".5"/>
+  </svg>
+  <div style="position:relative;z-index:1;">
+    <div class="anim-up" style="display:inline-flex;gap:8px;margin-bottom:clamp(16px,3vh,32px);">
+      <span style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 16px;border-radius:20px;background:rgba(240,140,0,.1);color:var(--gold);">INVESTOR SYNOPSIS</span>
+      <span style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 16px;border-radius:20px;background:rgba(255,255,255,.05);color:var(--t3);">CONFIDENTIAL</span>
+    </div>
+    <div class="anim-reveal" style="font-family:var(--fd);font-size:clamp(48px,6.5vw,84px);font-weight:700;letter-spacing:.06em;line-height:1;margin-bottom:14px;"><span class="gold-shimmer">ONSTACK</span></div>
+    <h2 class="anim-delay-1"><span class="typing-wrap">Smart Digital FX Hub</span></h2>
+    <p class="lead anim-delay-2" style="margin-top:14px;">Regulated cross-border infrastructure — FX + stablecoin rails in one API. <strong style="color:var(--t1);">73% cheaper</strong> than SWIFT. Pre-licensed via M&A.</p>
+    <div class="anim-delay-3" style="display:flex;gap:clamp(20px,3.5vw,40px);justify-content:center;margin-top:clamp(28px,4.5vh,48px);">
+      <div><div class="metric-sm gold">$363.8B</div><div style="font-size:12px;color:var(--t3);margin-top:6px;">SAM</div></div>
+      <div style="width:1px;background:rgba(255,255,255,.08);"></div>
+      <div><div class="metric-sm" style="color:var(--t1);">70%+</div><div style="font-size:12px;color:var(--t3);margin-top:6px;">Gross Margin</div></div>
+      <div style="width:1px;background:rgba(255,255,255,.08);"></div>
+      <div><div class="metric-sm" style="color:var(--green);">EBITDA Y2</div><div style="font-size:12px;color:var(--t3);margin-top:6px;">Positive</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 02 — THE PROBLEM ═══ -->
+<div class="s glow-tr" id="s2">
+  <div class="eyebrow anim-up">Why Now</div>
+  <h2 class="anim-reveal" style="margin-bottom:clamp(16px,2.5vh,28px);">Brazil's $363B Cross-Border Market Has <span class="gold">No Modern Infrastructure</span></h2>
+  <p class="lead anim-delay-1" style="margin-bottom:clamp(16px,2vh,24px);">Three structural shifts are creating a once-in-a-decade window.</p>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,1.6vw,20px);max-width:880px;width:100%;">
+    <div class="card card-gold anim-delay-2" style="text-align:center;">
+      <div class="metric" style="margin-bottom:8px;">R$316B</div>
+      <div style="font-size:13px;color:var(--t2);font-weight:600;line-height:1.4;">Stablecoin volume in Brazil (2024)</div>
+      <div style="font-size:11px;color:var(--gold);margin-top:8px;">Source: Chainalysis LATAM Report 2024</div>
+    </div>
+    <div class="card anim-delay-3" style="text-align:center;">
+      <div class="metric" style="margin-bottom:8px;color:var(--t1);">3.65%</div>
+      <div style="font-size:13px;color:var(--t2);font-weight:600;line-height:1.4;">Avg. cross-border cost (SWIFT)</div>
+      <div style="font-size:11px;color:var(--t3);margin-top:8px;">Source: World Bank Remittance Prices 2024</div>
+    </div>
+    <div class="card anim-delay-4" style="text-align:center;">
+      <div class="metric" style="margin-bottom:8px;color:#F87171;">18-24mo</div>
+      <div style="font-size:13px;color:var(--t2);font-weight:600;line-height:1.4;">To get a BCB FX license from scratch</div>
+      <div style="font-size:11px;color:var(--t3);margin-top:8px;">No API-first player combines FX + stablecoin rails</div>
+    </div>
+  </div>
+  <div class="anim-delay-5" style="margin-top:clamp(14px,2.2vh,22px);max-width:760px;display:flex;gap:clamp(8px,1.2vw,14px);flex-wrap:wrap;justify-content:center;">
+    <span style="font-size:11px;padding:6px 14px;border-radius:20px;background:rgba(240,140,0,.08);color:var(--gold);border:1px solid rgba(240,140,0,.15);">BACEN SPSAV framework (Res. 519-521)</span>
+    <span style="font-size:11px;padding:6px 14px;border-radius:20px;background:rgba(255,255,255,.03);color:var(--t2);border:1px solid rgba(255,255,255,.06);">Stablecoins replacing SWIFT for settlement</span>
+    <span style="font-size:11px;padding:6px 14px;border-radius:20px;background:rgba(255,255,255,.03);color:var(--t2);border:1px solid rgba(255,255,255,.06);">Small FX brokers exiting — M&A window open</span>
+  </div>
+</div>
+
+<!-- ═══ 03 — THE SOLUTION ═══ -->
+<div class="s glow-bl" id="s3">
+  <div class="eyebrow anim-up">Our Solution</div>
+  <h2 class="anim-reveal" style="margin-bottom:6px;">Three Revenue Lines, <span class="gold-shimmer">One Licensed Platform</span></h2>
+  <p class="lead anim-delay-1" style="margin-bottom:clamp(20px,3vh,32px);">B2B API for fintechs, brokerages, and iGaming operators. BCB regulated. Stablecoin settlement in minutes.</p>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.7vw,22px);max-width:880px;width:100%;">
+    <div class="card card-gold anim-delay-2" style="text-align:center;">
+      <div style="width:44px;height:44px;border-radius:12px;background:rgba(240,140,0,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><path d="M21 12V7H5a2 2 0 010-4h14v4"/><path d="M3 5v14a2 2 0 002 2h16v-5"/></svg>
+      </div>
+      <div style="font-size:16px;font-weight:700;color:var(--t1);margin-bottom:6px;">RemitFX</div>
+      <div style="font-size:12px;color:var(--t3);">Smart Hedged Remittance</div>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(240,140,0,.1);">
+        <span style="font-family:var(--fm);font-size:22px;font-weight:700;color:var(--gold);">0.80%</span>
+        <div style="font-size:11px;color:var(--t3);margin-top:2px;">take rate / 70%+ margin</div>
+      </div>
+    </div>
+    <div class="card card-gold anim-delay-3" style="text-align:center;">
+      <div style="width:44px;height:44px;border-radius:12px;background:rgba(240,140,0,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>
+      </div>
+      <div style="font-size:16px;font-weight:700;color:var(--t1);margin-bottom:6px;">iGamingRails</div>
+      <div style="font-size:12px;color:var(--t3);">iGaming Settlement</div>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(240,140,0,.1);">
+        <span style="font-family:var(--fm);font-size:22px;font-weight:700;color:var(--gold);">1.00%</span>
+        <div style="font-size:11px;color:var(--t3);margin-top:2px;">take rate / 75% margin</div>
+      </div>
+    </div>
+    <div class="card card-gold anim-delay-4" style="text-align:center;">
+      <div style="width:44px;height:44px;border-radius:12px;background:rgba(240,140,0,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      </div>
+      <div style="font-size:16px;font-weight:700;color:var(--t1);margin-bottom:6px;">Exchange Hub</div>
+      <div style="font-size:12px;color:var(--t3);">Institutional Custody</div>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(240,140,0,.1);">
+        <span style="font-family:var(--fm);font-size:22px;font-weight:700;color:var(--gold);">0.60%</span>
+        <div style="font-size:11px;color:var(--t3);margin-top:2px;">fee / $50M+ deposits</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 04 — REGULATORY MOAT ═══ -->
+<div class="s glow-tr" id="s4">
+  <div class="eyebrow anim-up">Why Now</div>
+  <h2 class="anim-reveal" style="margin-bottom:clamp(20px,3vh,32px);"><span class="gold-shimmer">18-Month</span> Regulatory Moat</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2vw,24px);max-width:760px;width:100%;">
+    <div class="card anim-left" style="border-color:rgba(248,113,113,.15);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F87171" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        <span style="font-size:13px;font-weight:700;color:#F87171;letter-spacing:.04em;">NEW VENTURES</span>
+      </div>
+      <div style="font-size:28px;font-weight:700;color:var(--t1);margin-bottom:6px;">24 Months</div>
+      <div style="font-size:13px;color:var(--t3);line-height:1.55;">Docs + BACEN Queue + Setup<br>Before generating any revenue</div>
+    </div>
+    <div class="card card-gold anim-right">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <span style="font-size:13px;font-weight:700;color:var(--green);letter-spacing:.04em;">ONSTACK (Acquisition)</span>
+      </div>
+      <div style="font-size:28px;font-weight:700;color:var(--gold);margin-bottom:6px;">3 Months</div>
+      <div style="font-size:13px;color:var(--t3);line-height:1.55;">Acquire established FX group (est. 1991)<br>60k clients · 180k+ transactions · R$4.1M rev</div>
+    </div>
+  </div>
+  <div class="anim-delay-3" style="margin-top:clamp(16px,2.4vh,24px);max-width:760px;width:100%;">
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(10px,1.5vw,18px);align-items:center;">
+      <div style="text-align:center;">
+        <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#F87171;margin-bottom:8px;font-weight:600;">Legacy FX (have license)</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.55;">Wise · dLocal · Ebury · BS2<br><span style="color:var(--t3);opacity:.75;">No stablecoin rails · 18-24mo to add</span></div>
+      </div>
+      <div style="width:44px;height:44px;border-radius:50%;background:rgba(240,140,0,.1);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span style="font-size:10px;font-weight:800;color:var(--gold);">0nS</span>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;font-weight:600;">Crypto Native (have SPSAV)</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.55;">Foxbit · Bitso · Parfin<br><span style="color:var(--t3);opacity:.75;">No FX license · 12-18mo to get</span></div>
+      </div>
+    </div>
+    <div style="margin-top:12px;padding:10px 18px;background:rgba(240,140,0,.04);border:1px solid rgba(240,140,0,.1);border-radius:8px;text-align:center;">
+      <div style="font-size:13px;color:var(--t2);line-height:1.5;"><span style="color:var(--gold);font-weight:700;">OnStack sits at the intersection</span> — acquiring an FX license while building native stablecoin rails from day one.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 05 — MARKET OPPORTUNITY (TAM/SAM/SOM) ═══ -->
+<div class="s glow-bl glow-tr" id="s5">
+  <div class="eyebrow anim-up">Market Opportunity</div>
+  <h2 class="anim-reveal" style="margin-bottom:clamp(16px,2.5vh,28px);">Market Sizing: <span class="gold-shimmer">Bottom-Up</span> to $4M Revenue Y3</h2>
+  <div style="display:flex;align-items:center;gap:clamp(24px,4vw,48px);max-width:800px;width:100%;">
+    <!-- Concentric circles -->
+    <div class="anim-scale" style="flex-shrink:0;position:relative;width:clamp(180px,26vw,260px);height:clamp(180px,26vw,260px);">
+      <svg viewBox="0 0 260 260" width="100%" height="100%">
+        <!-- TAM -->
+        <circle cx="130" cy="130" r="124" fill="none" stroke="rgba(240,140,0,.1)" stroke-width="1"/>
+        <circle cx="130" cy="130" r="124" fill="rgba(240,140,0,.03)"/>
+        <text x="130" y="30" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="rgba(240,140,0,.5)">TAM</text>
+        <!-- SAM -->
+        <circle cx="130" cy="145" r="80" fill="none" stroke="rgba(240,140,0,.2)" stroke-width="1.5"/>
+        <circle cx="130" cy="145" r="80" fill="rgba(240,140,0,.05)"/>
+        <text x="130" y="90" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="rgba(240,140,0,.7)">SAM</text>
+        <!-- SOM -->
+        <circle cx="130" cy="160" r="36" fill="rgba(240,140,0,.12)" stroke="var(--gold)" stroke-width="2"/>
+        <text x="130" y="157" text-anchor="middle" font-family="JetBrains Mono" font-size="11" font-weight="700" fill="#f08c00">SOM</text>
+        <text x="130" y="170" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="rgba(240,140,0,.7)">$500M</text>
+        <!-- Pulse on SOM -->
+        <circle cx="130" cy="160" r="36" fill="none" stroke="var(--gold)" stroke-width="1" opacity=".3">
+          <animate attributeName="r" values="36;48;36" dur="3s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+    <!-- Data cards -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:clamp(10px,1.4vh,16px);">
+      <div class="card anim-delay-1" style="display:flex;align-items:center;gap:14px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:rgba(240,140,0,.2);border:1.5px solid rgba(240,140,0,.4);flex-shrink:0;"></div>
+        <div style="flex:1;">
+          <div style="font-size:12px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;font-weight:600;">TAM — Global Cross-Border</div>
+          <div style="display:flex;align-items:baseline;gap:5px;margin-top:2px;"><span style="font-family:var(--fm);font-size:clamp(22px,2.8vw,32px);font-weight:700;color:var(--t1);" data-count="2300" data-prefix="$" data-separator=",">$0</span><span style="font-size:13px;font-weight:600;color:var(--t2);">Billion</span></div>
+          <div style="font-size:11px;color:var(--t3);margin-top:2px;">B2B payments + remittances · McKinsey 2024</div>
+        </div>
+      </div>
+      <div class="card card-gold anim-delay-2" style="display:flex;align-items:center;gap:14px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:rgba(240,140,0,.4);border:1.5px solid var(--gold);flex-shrink:0;"></div>
+        <div style="flex:1;">
+          <div style="font-size:12px;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;font-weight:600;">SAM — Brazil Addressable</div>
+          <div style="display:flex;align-items:baseline;gap:5px;margin-top:2px;"><span style="font-family:var(--fm);font-size:clamp(22px,2.8vw,32px);font-weight:700;color:var(--gold);" data-count="363" data-prefix="$" data-separator=",">$0</span><span style="font-size:13px;font-weight:600;color:var(--gold);opacity:.75;">Billion</span></div>
+          <div style="font-size:11px;color:var(--t3);margin-top:2px;">FX outflows $197B + iGaming $89B + crypto $77B · BCB/BACEN 2024</div>
+        </div>
+      </div>
+      <div class="card anim-delay-3" style="display:flex;align-items:center;gap:14px;border-color:rgba(52,211,153,.15);background:rgba(52,211,153,.02);">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
+        <div style="flex:1;">
+          <div style="font-size:12px;color:var(--green);text-transform:uppercase;letter-spacing:.08em;font-weight:600;">SOM — Year 3 Target</div>
+          <div style="display:flex;align-items:baseline;gap:5px;margin-top:2px;"><span style="font-family:var(--fm);font-size:clamp(22px,2.8vw,32px);font-weight:700;color:var(--green);">$500M</span><span style="font-size:13px;font-weight:600;color:var(--green);opacity:.75;">GMV</span></div>
+          <div style="font-size:11px;color:var(--t3);margin-top:2px;">~50 B2B clients × $10M avg. GMV · ~$4M revenue</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 06 — TOKENIZED PRODUCTS ═══ -->
+<div class="s glow-tr" id="s6">
+  <div class="eyebrow anim-up">Phase 2 · Tokenized Products</div>
+  <h2 class="anim-reveal" style="margin-bottom:4px;">Brazilian Yield for <span class="gold-shimmer">Global Distribution</span></h2>
+  <p class="lead anim-delay-1" style="margin-bottom:clamp(16px,2.5vh,24px);">Post-traction: tokenize FIDCs, CDBs and credit products — distribute via global brokerages using our licensed FX rails.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,1.7vw,20px);max-width:880px;width:100%;">
+    <div class="card card-gold anim-delay-2" style="text-align:center;">
+      <div style="width:44px;height:44px;border-radius:12px;background:rgba(240,140,0,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      </div>
+      <div style="font-size:16px;font-weight:700;color:var(--t1);margin-bottom:6px;">FIDC Tokenizado</div>
+      <div style="font-size:12px;color:var(--t3);line-height:1.5;">Credit rights on-chain. CVM registered. Monthly payout.</div>
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(240,140,0,.1);">
+        <span style="font-family:var(--fm);font-size:24px;font-weight:700;color:var(--green);">8.2%</span>
+        <div style="font-size:11px;color:var(--t3);margin-top:2px;">APY · Min $1,000</div>
+      </div>
+    </div>
+    <div class="card card-gold anim-delay-3" style="text-align:center;">
+      <div style="width:44px;height:44px;border-radius:12px;background:rgba(240,140,0,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+      </div>
+      <div style="font-size:16px;font-weight:700;color:var(--t1);margin-bottom:6px;">CDB On-Chain</div>
+      <div style="font-size:12px;color:var(--t3);line-height:1.5;">BRL-denominated yield for global allocators. DI-rate collateral.</div>
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(240,140,0,.1);">
+        <span style="font-family:var(--fm);font-size:24px;font-weight:700;color:var(--green);">CDI+2%</span>
+        <div style="font-size:11px;color:var(--t3);margin-top:2px;">R$1.3T market · 27.7% CAGR</div>
+      </div>
+    </div>
+    <div class="card card-gold anim-delay-4" style="text-align:center;">
+      <div style="width:44px;height:44px;border-radius:12px;background:rgba(240,140,0,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>
+      </div>
+      <div style="font-size:16px;font-weight:700;color:var(--t1);margin-bottom:6px;">CRI/CRA Tokenizado</div>
+      <div style="font-size:12px;color:var(--t3);line-height:1.5;">Real estate & agribusiness. CVM regulated. Global distribution.</div>
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(240,140,0,.1);">
+        <span style="font-family:var(--fm);font-size:24px;font-weight:700;color:var(--green);">12.4%</span>
+        <div style="font-size:11px;color:var(--t3);margin-top:2px;">APY · Min $5,000</div>
+      </div>
+    </div>
+  </div>
+  <div class="anim-delay-5" style="margin-top:clamp(14px,2.2vh,22px);padding:12px 24px;background:rgba(240,140,0,.04);border:1px solid rgba(240,140,0,.1);border-radius:8px;max-width:680px;">
+    <div style="font-size:13px;color:var(--t2);text-align:center;line-height:1.5;"><span style="color:var(--gold);font-weight:700;">Why Brazil?</span> Selic/CDI rates are 3-5x above US Treasuries. Latent global demand for compliant, high-yield BRL exposure on-chain.</div>
+  </div>
+</div>
+
+<!-- ═══ 07 — COST COMPARISON ═══ -->
+<div class="s glow-bl" id="s7">
+  <div class="eyebrow anim-up">Unit Economics</div>
+  <h2 class="anim-reveal" style="margin-bottom:4px;">Cost of a Cross-Border Transfer</h2>
+  <p class="lead anim-delay-1" style="margin-bottom:clamp(20px,2.8vh,32px);font-size:14px;">Transfer Size: <span style="color:var(--t1);font-family:var(--fm);font-weight:700;">US$100,000</span></p>
+
+  <div style="max-width:760px;width:100%;">
+    <!-- Legacy bar -->
+    <div class="anim-delay-2" style="margin-bottom:clamp(8px,1.2vh,12px);">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;">
+        <span style="font-size:13px;color:#F87171;font-weight:600;">SWIFT / Legacy Banks</span>
+        <span style="font-family:var(--fm);font-size:clamp(20px,2.4vw,26px);font-weight:700;color:#F87171;">$3,655</span>
+      </div>
+      <div class="cost-bar cost-bar-legacy">
+        <span style="font-size:12px;color:rgba(248,113,113,.8);position:absolute;right:14px;">3.65% of transfer</span>
+      </div>
+    </div>
+
+    <!-- OnStack bar -->
+    <div class="anim-delay-3" style="margin-bottom:clamp(16px,2.2vh,22px);">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;">
+        <span style="font-size:13px;color:var(--gold);font-weight:600;">0nStack</span>
+        <span style="font-family:var(--fm);font-size:clamp(20px,2.4vw,26px);font-weight:700;color:var(--gold);">$984</span>
+      </div>
+      <div class="cost-bar cost-bar-onstack">
+        <span style="font-size:12px;color:rgba(240,140,0,.85);position:absolute;right:14px;">0.98%</span>
+      </div>
+    </div>
+
+    <!-- Savings + Settlement row -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2.2vw,22px);">
+      <div class="card card-gold anim-delay-4 savings-badge" style="text-align:center;border-color:rgba(52,211,153,.2);background:rgba(52,211,153,.04);">
+        <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px;font-weight:600;">Client Savings</div>
+        <div style="font-family:var(--fm);font-size:clamp(28px,3.4vw,40px);font-weight:700;color:var(--green);line-height:1;" data-count="2671" data-prefix="$" data-separator=",">$0</div>
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;color:var(--green);margin-top:6px;">73% cost reduction</div>
+      </div>
+      <div class="card anim-delay-5" style="text-align:center;">
+        <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:8px;font-weight:600;">Settlement Speed</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:14px;">
+          <div>
+            <div style="font-size:12px;color:#F87171;margin-bottom:3px;">Legacy</div>
+            <div style="font-family:var(--fm);font-size:19px;font-weight:700;color:var(--t2);text-decoration:line-through;">1-5 days</div>
+          </div>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <div>
+            <div style="font-size:12px;color:var(--gold);margin-bottom:3px;">0nStack</div>
+            <div style="font-family:var(--fm);font-size:19px;font-weight:700;color:var(--gold);">&lt;5 min</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="anim-delay-6" style="margin-top:clamp(12px,1.8vh,18px);font-size:10px;color:var(--t3);text-align:center;opacity:.7;line-height:1.5;">
+      Legacy cost: World Bank Remittance Prices Worldwide Q4 2024. OnStack cost: projected from stablecoin settlement model (spread + gas + hedging). Subject to final product configuration.
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 08 — DEMO ═══ -->
+<div class="s" id="s8" style="padding-top:clamp(40px,5vh,60px);padding-bottom:clamp(30px,4vh,48px);">
+  <div class="eyebrow anim-up">Platform Preview</div>
+  <h2 class="anim-reveal" style="margin-bottom:clamp(12px,2vh,20px);">See the <span class="gold-shimmer">Product</span></h2>
+  <p class="lead anim-delay-1" style="margin-bottom:clamp(14px,2vh,22px);font-size:14px;">Fully functional platform — send remittances, trade FX, manage compliance. All in one interface.</p>
+  <div class="demo-frame anim-delay-2" id="demoFrame">
+    <button class="demo-close" onclick="toggleDemoFullscreen()" aria-label="Close fullscreen">✕</button>
+    <iframe src="/demo/" loading="lazy" title="OnStack Platform Demo" id="demoIframe"></iframe>
+  </div>
+  <div class="anim-delay-3 demo-actions" style="margin-top:clamp(10px,1.4vh,16px);display:flex;gap:12px;justify-content:center;">
+    <a href="/demo/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;padding:10px 22px;background:rgba(240,140,0,.08);border:1px solid rgba(240,140,0,.2);border-radius:8px;font-size:13px;font-weight:600;color:var(--gold);cursor:pointer;transition:all .3s var(--ease);text-decoration:none;touch-action:manipulation;" onmouseover="this.style.background='rgba(240,140,0,.15)'" onmouseout="this.style.background='rgba(240,140,0,.08)'">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M14 10l6.1-6.1M10 5H5a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-5"/></svg>
+      Open Full Demo
+    </a>
+    <button onclick="toggleDemoFullscreen()" style="display:inline-flex;align-items:center;gap:7px;padding:10px 22px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;font-size:13px;font-weight:600;color:var(--t2);cursor:pointer;transition:all .3s var(--ease);touch-action:manipulation;" onmouseover="this.style.borderColor='rgba(255,255,255,.15)'" onmouseout="this.style.borderColor='rgba(255,255,255,.08)'">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
+      Fullscreen
+    </button>
+  </div>
+</div>
+
+<!-- ═══ 09 — TEAM ═══ -->
+<div class="s glow-tr" id="s9">
+  <div class="eyebrow anim-up">Founding Team</div>
+  <h2 class="anim-reveal" style="margin-bottom:clamp(16px,2.5vh,28px);">The Team That Brought <span class="gold-shimmer">Bybit & Bitget</span> to Brazil</h2>
+  <div class="team-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(10px,1.5vw,18px);max-width:820px;width:100%;">
+    <!-- Guilherme Prado -->
+    <div class="card anim-delay-1" style="text-align:center;padding:clamp(14px,2vh,22px) clamp(10px,1vw,16px);">
+      <div style="width:clamp(56px,7vh,80px);height:clamp(56px,7vh,80px);border-radius:50%;margin:0 auto clamp(8px,1vh,12px);position:relative;">
+        <div style="position:absolute;inset:-2px;border-radius:50%;background:linear-gradient(135deg,var(--gold),rgba(240,140,0,.2),var(--gold));padding:2px;"><div style="width:100%;height:100%;border-radius:50%;background:var(--dark);"></div></div>
+        <img src="/output/assets/founder-guilherme-prado.jpg" alt="Guilherme Prado" style="width:100%;height:100%;object-fit:cover;object-position:center 25%;border-radius:50%;position:relative;z-index:1;">
+        <div style="position:absolute;bottom:0;right:0;z-index:2;width:20px;height:20px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;border:2px solid var(--dark);"><span style="font-size:9px;font-weight:800;color:var(--dark);">CEO</span></div>
+      </div>
+      <div style="font-size:clamp(13px,1.4vw,16px);font-weight:700;color:var(--t1);">Guilherme Prado</div>
+      <div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;font-weight:600;">CEO & Founder</div>
+      <div style="font-size:clamp(10px,1vw,12px);color:var(--t3);line-height:1.55;"><strong style="color:var(--t1);">Led Bybit LATAM launch</strong><br>Now Bitget BR Country Manager<br>BACEN/CVM relationship network</div>
+      <a href="https://www.linkedin.com/in/guilhermeprado" target="_blank" rel="noopener" class="linkedin-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</a>
+    </div>
+    <!-- Gustavo Silva -->
+    <div class="card anim-delay-2" style="text-align:center;padding:clamp(14px,2vh,22px) clamp(10px,1vw,16px);">
+      <div style="width:clamp(56px,7vh,80px);height:clamp(56px,7vh,80px);border-radius:50%;margin:0 auto clamp(8px,1vh,12px);position:relative;">
+        <div style="position:absolute;inset:-2px;border-radius:50%;background:linear-gradient(135deg,var(--gold),rgba(240,140,0,.2),var(--gold));padding:2px;"><div style="width:100%;height:100%;border-radius:50%;background:var(--dark);"></div></div>
+        <img src="/output/assets/founder-gustavo-silva.png" alt="Gustavo Silva" style="width:100%;height:100%;object-fit:cover;object-position:center 15%;border-radius:50%;position:relative;z-index:1;">
+        <div style="position:absolute;bottom:0;right:0;z-index:2;width:20px;height:20px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;border:2px solid var(--dark);"><span style="font-size:9px;font-weight:800;color:var(--dark);">CTO</span></div>
+      </div>
+      <div style="font-size:clamp(13px,1.4vw,16px);font-weight:700;color:var(--t1);">Gustavo Silva</div>
+      <div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;font-weight:600;">CTO</div>
+      <div style="font-size:clamp(10px,1vw,12px);color:var(--t3);line-height:1.55;">Sr. Engineer: Autodesk, Nokia, Huawei<br>Low-latency infra & FX systems<br>20+ years distributed systems</div>
+    </div>
+    <!-- Patrick Duarte -->
+    <div class="card anim-delay-3" style="text-align:center;padding:clamp(14px,2vh,22px) clamp(10px,1vw,16px);">
+      <div style="width:clamp(56px,7vh,80px);height:clamp(56px,7vh,80px);border-radius:50%;margin:0 auto clamp(8px,1vh,12px);position:relative;">
+        <div style="position:absolute;inset:-2px;border-radius:50%;background:linear-gradient(135deg,var(--gold),rgba(240,140,0,.2),var(--gold));padding:2px;"><div style="width:100%;height:100%;border-radius:50%;background:var(--dark);"></div></div>
+        <img src="/output/assets/founder-patrick-duarte.jpg" alt="Patrick Duarte" style="width:100%;height:100%;object-fit:cover;object-position:center 15%;border-radius:50%;position:relative;z-index:1;">
+        <div style="position:absolute;bottom:0;right:0;z-index:2;width:20px;height:20px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;border:2px solid var(--dark);"><span style="font-size:9px;font-weight:800;color:var(--dark);">COO</span></div>
+      </div>
+      <div style="font-size:clamp(13px,1.4vw,16px);font-weight:700;color:var(--t1);">Patrick Duarte</div>
+      <div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;font-weight:600;">COO</div>
+      <div style="font-size:clamp(10px,1vw,12px);color:var(--t3);line-height:1.55;">18+ years ops & consulting<br>Crypto/payments/fintech ops<br>MBA IE Business School</div>
+      <a href="https://www.linkedin.com/in/patricksilveira/" target="_blank" rel="noopener" class="linkedin-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</a>
+    </div>
+    <!-- Guilherme E. -->
+    <div class="card anim-delay-4" style="text-align:center;padding:clamp(14px,2vh,22px) clamp(10px,1vw,16px);">
+      <div style="width:clamp(56px,7vh,80px);height:clamp(56px,7vh,80px);border-radius:50%;margin:0 auto clamp(8px,1vh,12px);position:relative;">
+        <div style="position:absolute;inset:-2px;border-radius:50%;background:linear-gradient(135deg,var(--gold),rgba(240,140,0,.2),var(--gold));padding:2px;"><div style="width:100%;height:100%;border-radius:50%;background:var(--dark);"></div></div>
+        <img src="/output/assets/founder-guilherme-e.jpg" alt="Guilherme E." style="width:100%;height:100%;object-fit:cover;object-position:center 20%;border-radius:50%;position:relative;z-index:1;">
+        <div style="position:absolute;bottom:0;right:0;z-index:2;width:20px;height:20px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;border:2px solid var(--dark);"><span style="font-size:9px;font-weight:800;color:var(--dark);">CMO</span></div>
+      </div>
+      <div style="font-size:clamp(13px,1.4vw,16px);font-weight:700;color:var(--t1);">Guilherme E.</div>
+      <div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;font-weight:600;">CMO</div>
+      <div style="font-size:clamp(10px,1vw,12px);color:var(--t3);line-height:1.55;">10+ years BR financial market<br>Product & Growth Leadership<br>Multi-country expansion strategy</div>
+      <a href="https://www.linkedin.com/in/guilherme-emmanouilides/" target="_blank" rel="noopener" class="linkedin-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</a>
+    </div>
+  </div>
+  <div class="anim-delay-5" style="margin-top:clamp(12px,1.8vh,22px);display:flex;align-items:center;gap:clamp(12px,1.8vw,24px);justify-content:center;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t2);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Launched 2 top-10 exchanges in Brazil</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t2);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>60+ years combined in FX/crypto/infra</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t2);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Hiring: CFO + Head of Compliance (funded)</div>
+  </div>
+</div>
+
+<!-- ═══ 10 — THE ASK ═══ -->
+<div class="s glow-tr glow-bl" id="s10">
+  <div class="eyebrow anim-up">The Ask</div>
+  <h2 class="anim-reveal" style="margin-bottom:6px;">R$12M Seed Round</h2>
+  <p class="lead anim-delay-1" style="margin-bottom:clamp(16px,2.5vh,24px);">Post-money SAFE · R$40-50M cap · Proceeds: 80% acquisition & integration, 20% product + team</p>
+  <!-- Milestones -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.4vw,18px);max-width:860px;width:100%;">
+    <div class="card anim-delay-2" style="text-align:center;">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:8px;font-weight:600;">M0-3</div>
+      <div style="font-size:15px;font-weight:700;color:var(--t1);margin-bottom:6px;">Acquisition</div>
+      <div style="font-size:12px;color:var(--t3);line-height:1.5;">BCB-authorized FX group<br>35+ yrs · 60k clients · R$4.1M rev</div>
+    </div>
+    <div class="card anim-delay-3" style="text-align:center;">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:8px;font-weight:600;">M3-6</div>
+      <div style="font-size:15px;font-weight:700;color:var(--t1);margin-bottom:6px;">MVP Launch</div>
+      <div style="font-size:12px;color:var(--t3);line-height:1.5;">API live · first B2B clients<br>R$20M GMV target</div>
+    </div>
+    <div class="card anim-delay-4" style="text-align:center;">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:8px;font-weight:600;">M6-12</div>
+      <div style="font-size:15px;font-weight:700;color:var(--t1);margin-bottom:6px;">Scale</div>
+      <div style="font-size:12px;color:var(--t3);line-height:1.5;">R$21-127M GMV<br>R$3.1-7.3M revenue</div>
+    </div>
+    <div class="card card-gold anim-delay-5" style="text-align:center;">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;font-weight:600;">Y2</div>
+      <div style="font-size:15px;font-weight:700;color:var(--gold);margin-bottom:6px;">EBITDA+</div>
+      <div style="font-size:12px;color:var(--t3);line-height:1.5;">R$189-451M GMV<br>R$9.3-31.9M revenue</div>
+    </div>
+  </div>
+  <!-- Financial summary -->
+  <div class="anim-delay-6" style="margin-top:clamp(16px,2.4vh,24px);max-width:760px;width:100%;">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px 20px;background:rgba(255,255,255,.015);border:1px solid rgba(255,255,255,.06);border-radius:10px;">
+      <div style="text-align:center;">
+        <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);font-weight:600;">M&A Target Revenue</div>
+        <div style="font-family:var(--fm);font-size:18px;font-weight:700;color:var(--t1);margin-top:4px;">R$4.1M</div>
+        <div style="font-size:10px;color:var(--t3);margin-top:2px;">2024 · 48.6% op. margin</div>
+      </div>
+      <div style="text-align:center;border-left:1px solid rgba(255,255,255,.06);border-right:1px solid rgba(255,255,255,.06);">
+        <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);font-weight:600;">Breakeven</div>
+        <div style="font-family:var(--fm);font-size:18px;font-weight:700;color:var(--gold);margin-top:4px;">Month 14</div>
+        <div style="font-size:10px;color:var(--t3);margin-top:2px;">Burn 7.2x → 1x in 18mo</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);font-weight:600;">Take Rate</div>
+        <div style="font-family:var(--fm);font-size:18px;font-weight:700;color:var(--green);margin-top:4px;">0.7-1.0%</div>
+        <div style="font-size:10px;color:var(--t3);margin-top:2px;">70%+ gross margin</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 11 — CLOSING ═══ -->
+<div class="s glow-tr glow-bl" id="s11">
+  <div style="position:absolute;inset:0;pointer-events:none;">
+    <svg style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);opacity:.03;" width="600" height="600" viewBox="0 0 600 600" fill="none">
+      <circle cx="300" cy="300" r="250" stroke="#f08c00" stroke-width=".5" stroke-dasharray="3 6"/>
+      <circle cx="300" cy="300" r="170" stroke="#f08c00" stroke-width=".5" stroke-dasharray="2 8"/>
+      <circle cx="300" cy="300" r="90" stroke="#f08c00" stroke-width=".5"/>
+    </svg>
+  </div>
+  <div style="position:relative;z-index:1;">
+    <div class="eyebrow anim-up">Let's Build Together</div>
+    <h1 class="anim-reveal" style="margin-bottom:clamp(12px,2vh,20px);"><span class="gold-shimmer">Licensed in 3. Revenue in 6. EBITDA in 18.</span></h1>
+    <p class="lead anim-delay-1" style="margin-bottom:clamp(24px,4vh,40px);">Pre-licensed FX infrastructure. 73% cost advantage. M&A target identified. The window to build Brazil's cross-border backbone is open.</p>
+    <div class="anim-delay-2" style="display:flex;align-items:center;justify-content:center;gap:clamp(16px,2.4vw,28px);">
+      <div style="animation:float 4s ease-in-out infinite;padding:14px 24px;background:rgba(240,140,0,.06);border:1px solid rgba(240,140,0,.15);border-radius:12px;text-align:center;">
+        <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);font-weight:600;">Opportunity Window</div>
+        <div style="font-family:var(--fm);font-size:clamp(24px,2.8vw,34px);font-weight:700;color:var(--gold);margin-top:4px;">8 Months</div>
+      </div>
+      <div style="padding:18px 38px;background:linear-gradient(135deg,var(--gold),var(--gold-d));border-radius:12px;text-align:center;box-shadow:0 4px 24px rgba(240,140,0,.25);cursor:pointer;transition:transform .3s var(--ease),box-shadow .3s var(--ease);" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 32px rgba(240,140,0,.35)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 24px rgba(240,140,0,.25)'">
+        <div style="font-family:var(--fd);font-size:clamp(18px,1.8vw,22px);font-weight:700;color:var(--dark);margin-bottom:5px;">Let's Talk?</div>
+        <div style="font-size:13px;color:rgba(0,0,0,.6);font-weight:500;">guilherme.emmanouilides@0nstack.io</div>
+        <div style="font-size:12px;color:rgba(0,0,0,.5);font-weight:500;margin-top:3px;">+55 11 99856-9900</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- Nav -->
+<nav class="nav">
+  <button class="nav-btn" onclick="go(-1)">&#8592;</button>
+  <span class="counter"><span id="cur">1</span> / <span id="tot">11</span></span>
+  <button class="nav-btn" onclick="go(1)">&#8594;</button>
+  <button class="auto-btn" id="autoBtn" onclick="toggleAuto()" title="Auto-play">&#9654;</button>
+</nav>
+
+<script>
+const slides = document.querySelectorAll('.s');
+const total = slides.length;
+let idx = 0;
+let autoPlay = true;
+let autoInterval;
+const SLIDE_DURATION = 8000; // 8s per slide
+let timerStart;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  idx = ((i % total) + total) % total;
+  slides[idx].classList.add('active');
+  document.getElementById('cur').textContent = idx + 1;
+  document.getElementById('progress').style.width = ((idx + 1) / total * 100) + '%';
+  resetTimer();
+}
+
+function go(d) { show(idx + d); }
+
+function resetTimer() {
+  if (!autoPlay) return;
+  clearInterval(autoInterval);
+  timerStart = Date.now();
+  const bar = document.getElementById('timerBar');
+  bar.style.transition = 'none';
+  bar.style.width = '0';
+  requestAnimationFrame(() => {
+    bar.style.transition = `width ${SLIDE_DURATION}ms linear`;
+    bar.style.width = '100%';
+  });
+  autoInterval = setInterval(() => {
+    if (idx < total - 1) go(1);
+    else { toggleAuto(); }
+  }, SLIDE_DURATION);
+}
+
+function toggleAuto() {
+  autoPlay = !autoPlay;
+  const btn = document.getElementById('autoBtn');
+  const bar = document.getElementById('timerBar');
+  if (autoPlay) {
+    btn.innerHTML = '&#9654;';
+    btn.classList.remove('paused');
+    resetTimer();
+  } else {
+    btn.innerHTML = '&#10074;&#10074;';
+    btn.classList.add('paused');
+    clearInterval(autoInterval);
+    bar.style.transition = 'none';
+    bar.style.width = '0';
+  }
+}
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); }
+  if (e.key === 'ArrowLeft') go(-1);
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(total - 1);
+});
+
+// Touch swipe (horizontal only, ignore vertical scroll)
+let tx, ty;
+document.addEventListener('touchstart', e => {
+  tx = e.touches[0].clientX;
+  ty = e.touches[0].clientY;
+}, {passive:true});
+document.addEventListener('touchend', e => {
+  if (tx == null) return;
+  const dx = e.changedTouches[0].clientX - tx;
+  const dy = e.changedTouches[0].clientY - ty;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 ? 1 : -1);
+  tx = ty = null;
+}, {passive:true});
+
+// Animated counters
+function animateCounters(slide) {
+  slide.querySelectorAll('[data-count]').forEach(el => {
+    if (el.dataset.animated) return;
+    el.dataset.animated = '1';
+    const target = parseInt(el.dataset.count);
+    const prefix = el.dataset.prefix || '';
+    const sep = el.dataset.separator;
+    const dur = 1500;
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      let v = Math.round(target * ease);
+      if (sep) v = v.toLocaleString('en-US');
+      el.textContent = prefix + v;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    setTimeout(() => requestAnimationFrame(tick), 600);
+  });
+}
+
+// Observe slide changes for counters
+const obs = new MutationObserver(muts => {
+  muts.forEach(m => {
+    if (m.target.classList.contains('active')) animateCounters(m.target);
+  });
+});
+slides.forEach(s => obs.observe(s, { attributes: true, attributeFilter: ['class'] }));
+
+// Demo fullscreen toggle
+function toggleDemoFullscreen() {
+  const frame = document.getElementById('demoFrame');
+  frame.classList.toggle('fullscreen');
+  // Pause autoplay while in fullscreen
+  if (frame.classList.contains('fullscreen')) {
+    if (autoPlay) toggleAuto();
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
+}
+
+// Init
+document.getElementById('tot').textContent = total;
+resetTimer();
+</script>
+</body>
+</html>
